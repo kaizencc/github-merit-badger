@@ -24,15 +24,16 @@ export class GithubApi {
     }
   }
 
-
-  public async setIssueLabels(issueNumber: number, labels: string[]) {
+  public async setPullRequestLabels(labels: string[]) {
     if (!labels.length) return;
-    await this.octokit.rest.issues.addLabels({
-      owner: this.repo.owner,
-      repo: this.repo.repo,
-      issue_number: issueNumber,
-      labels,
-    });
+    if (this.issueNumber !== undefined) {
+      await this.octokit.rest.issues.addLabels({
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        issue_number: this.issueNumber,
+        labels,
+      });
+    }
   }
 
 

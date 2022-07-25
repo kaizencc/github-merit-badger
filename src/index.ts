@@ -26,6 +26,8 @@ async function run() {
 
   const github: GithubApi = new GithubApi(token);
   console.log(github.getIssueNumber());
+
+  await github.setPullRequestLabels(labels).catch(error => console.log(error.message));
 }
 
 run().catch(error => {
