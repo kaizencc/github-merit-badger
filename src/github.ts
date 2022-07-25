@@ -40,4 +40,19 @@ export class GithubApi {
   public async getIssueNumber() {
     return this.issueNumber;
   }
+
+  public async getPRnums_all() {
+    // head props can be used below to filter PRs based on title(no big change type)
+    const prs = await this.octokit.rest.pulls.list({
+      owner: this.repo.owner,
+      repo: this.repo.repo,
+      state: 'all',
+      page: 100,
+    });
+    console.log(prs);
+    //const x = prs;
+
+  }
+
+
 }
