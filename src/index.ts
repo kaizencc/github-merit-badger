@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import { GithubApi } from './github';
 
 async function run() {
   console.log('hi');
@@ -22,6 +23,9 @@ async function run() {
   console.log(labels);
   console.log(buckets);
   console.log(category);
+
+  const github: GithubApi = new GithubApi(token);
+  console.log(github.getIssueNumber());
 }
 
 run().catch(error => {
