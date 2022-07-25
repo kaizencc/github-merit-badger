@@ -5,3 +5,7 @@ description: A GitHub Action for intern-hackathon
 runs:
   using: node16
   main: dist/index.js
+inputs:
+  github-token:
+    description: github token
+    required: true
