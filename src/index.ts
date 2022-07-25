@@ -24,12 +24,39 @@ async function run() {
   console.log(buckets);
   console.log(category);
 
+  const dummyVal = 5;
+  const setLabels = determinLabels(labels, buckets, dummyVal);
+
   const github: GithubApi = new GithubApi(token);
   console.log(github.getIssueNumber());
 
-  await github.setPullRequestLabels(labels).catch(error => console.log(error.message));
+  if (setLabels != []) {
+    await github.setPullRequestLabels(setLabels).catch(error => console.log(error.message)); // .catch(error => {core.setFailed(error.message);}); ?
+  }
 }
 
 run().catch(error => {
   core.setFailed(error.message);
 });
+
+function determinLabels(labels: string[], buckets: number[], value: number) {
+  if (value <= buckets[0]) {
+    return [];
+  }
+  let index = 0;
+  let result = [];
+
+  let i = 0;
+  while (i < buckets.length) {
+    if (value > buckets[i]) {
+      index = i;
+    }
+    if (value <= buckets[i]) {
+      break;
+    }
+    i += 1;
+  }
+
+  result.push(labels[index]);
+  return result;
+}

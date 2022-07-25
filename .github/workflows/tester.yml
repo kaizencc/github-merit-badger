@@ -16,6 +16,6 @@ jobs:
         id: contributor-badge
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'every-contributer, hot!!'
+          labels: 'every-contributer-new, hot!!-new'
           buckets: '0, 10'
           category: 'total'
