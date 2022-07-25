@@ -10,14 +10,18 @@ async function run() {
 
   console.log(labelsRaw);
   console.log(bucketsRaw);
-  console.log(category);
+  //console.log(category);
 
 
   // TODO: parse labels
+  const labels: string[] = labelsRaw.split(',');
 
   // TODO: parse buckets
-
+  const buckets: string[] = bucketsRaw.split(',');
   // TODO: print all inputs
+  console.log(labels);
+  console.log(buckets);
+  console.log(category);
 }
 
 run().catch(error => {
