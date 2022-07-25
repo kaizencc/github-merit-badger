@@ -11,5 +11,5 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: kaizencc/contributer-badge@main
-        id: contributer-badge
+      - uses: kaizencc/contributor-badge@main
+        id: contributor-badge
