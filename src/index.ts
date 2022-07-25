@@ -24,7 +24,7 @@ async function run() {
   console.log(buckets);
   console.log(category);
 
-  const dummyVal = 5;
+  const dummyVal = 15;
   const setLabels = determinLabels(labels, buckets, dummyVal);
 
   const github: GithubApi = new GithubApi(token);
