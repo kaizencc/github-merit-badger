@@ -9,6 +9,18 @@ const project = new GitHubActionTypeScriptProject({
         description: 'github token',
         required: true,
       },
+      'labels': {
+        description: 'posible labels',
+        required: true,
+      },
+      'buckets': {
+        description: 'bands corresponding 1-1 with labels',
+        required: true,
+      },
+      'category': {
+        description: 'category that buckets pertains to',
+        required: true,
+      },
     },
   },
   // deps: [],                /* Runtime dependencies of this module. */
