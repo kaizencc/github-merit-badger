@@ -47,7 +47,7 @@ export class GithubApi {
       owner: this.repo.owner,
       repo: this.repo.repo,
       state: 'all',
-      page: 100,
+      per_page: 100,
     });
     console.log(prs);
     //const x = prs;
