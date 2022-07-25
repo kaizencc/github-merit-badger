@@ -9,7 +9,7 @@ jobs:
   call-action:
     runs-on: ubuntu-latest
     permissions:
-      pull-request: write
+      pull-requests: write
     steps:
       - uses: kaizencc/contributer-badge@main
         id: contributer-badge
