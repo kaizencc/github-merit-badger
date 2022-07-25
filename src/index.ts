@@ -17,7 +17,7 @@ async function run() {
   const labels: string[] = labelsRaw.split(',');
 
   // TODO: parse buckets
-  const buckets: string[] = bucketsRaw.split(',');
+  const buckets: number[] = bucketsRaw.split(',').map(Number);
   // TODO: print all inputs
   console.log(labels);
   console.log(buckets);
