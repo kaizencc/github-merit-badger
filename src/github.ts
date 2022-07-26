@@ -58,7 +58,7 @@ export class GithubApi {
     await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
       owner: this.repo.owner,
       repo: this.repo.repo,
-      //state: 'all',
+      state: 'all',
       q: `is:pr author:${issueCreator}`,
     }).then((issues) => {
       console.log(issues);
