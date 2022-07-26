@@ -40,7 +40,9 @@ async function run() {
   console.log(numPRs);
   if (numPRs !== undefined) {
     console.log(numPRs);
-    const setLabels = determinLabels(labels, buckets, numPRs);
+
+    const index = determineIndex(buckets, numPRs);
+    const setLabels = determinLabel(labels, index);
 
     if (setLabels != []) {
       console.log(setLabels);
@@ -83,12 +85,27 @@ run().catch(error => {
   core.setFailed(error.message);
 });
 
-function determinLabels(labels: string[], buckets: number[], value: number) {
-  if (value <= buckets[0]) {
+function determinLabel(labels: string[], index: number) {
+  if (index === -1) {
     return [];
   }
+  return [labels[index]];
+}
+
+/* not being used yet
+function determineMeaning(meanings: string[], index: number) {
+  if (index === -1) {
+    return [];
+  }
+  return [meanings[index]];
+}
+*/
+
+function determineIndex(buckets: number[], value: number): number {
+  if (value <= buckets[0]) {
+    return -1;
+  }
   let index = 0;
-  let result = [];
 
   let i = 0;
   while (i < buckets.length) {
@@ -100,7 +117,5 @@ function determinLabels(labels: string[], buckets: number[], value: number) {
     }
     i += 1;
   }
-
-  result.push(labels[index]);
-  return result;
+  return index;
 }
