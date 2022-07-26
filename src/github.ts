@@ -54,16 +54,21 @@ export class GithubApi {
     return response.data;
   }
 
-  public async paginateData(issueCreator: string) {
-    await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
-      owner: this.repo.owner,
-      repo: this.repo.repo,
-      state: 'all',
-      //q: `is:pr author:${issueCreator}`,
-      creator: issueCreator,
-    }).then((issues) => {
-      console.log(issues);
+  public async paginateData() { // issueCreator: string) {
+    const issueCreator = await this.getIssueCreator().catch(error => {
+      core.setFailed(error.message);
     });
+    if (issueCreator !== undefined) {
+      await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        state: 'all',
+        //q: `is:pr author:${issueCreator}`,
+        creator: issueCreator,
+      }).then((issues) => {
+        console.log(issues);
+      });
+    }
   }
 
   public async getIssueCreator() {

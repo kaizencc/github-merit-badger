@@ -48,15 +48,16 @@ async function run() {
 
   console.log('\nReset\n');
 
-  const creator = await github.getIssueCreator().catch(error => {
+  /*const creator = await github.getIssueCreator().catch(error => {
     core.setFailed(error.message);
   });
+  */
 
-  if (creator !== undefined) {
-    await github.paginateData(creator).catch(error => {
-      core.setFailed(error.message);
-    });
-  }
+  //if (creator !== undefined) {
+  await github.paginateData().catch(error => {
+    core.setFailed(error.message);
+  });
+  //}
 
   //console.log(github.context.issue.owner);
   //const content = github.
