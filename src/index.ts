@@ -52,7 +52,7 @@ async function run() {
 
     // place to generste dynamic comments
     // it has user_name, labels and label meanings
-    const dynamicComments = 'welcome' + String(github.getIssueCreator()) + ', the CDK Team thanks you for being a ' + setLabels + 'to the CDK. This means that you have made ' + determineMeaning(meanings, index);
+    const dynamicComments = 'welcome' + JSON.stringify(github.getIssueCreator()) + ', the CDK Team thanks you for being a ' + setLabels + ' to the CDK. This means that you have made ' + determineMeaning(meanings, index);
     //console.log(dynamicComments);
     if (dynamicComments !== undefined) {
       await github.writePRComments(dynamicComments).catch(error => {core.setFailed(error.message);});
