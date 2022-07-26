@@ -54,7 +54,7 @@ export class GithubApi {
     return response.data;
   }
 
-  public async paginateData() { // issueCreator: string) {
+  public async paginateData(): Promise<number | undefined> { // issueCreator: string) {
     const issueCreator = await this.getIssueCreator().catch(error => {
       core.setFailed(error.message);
     });

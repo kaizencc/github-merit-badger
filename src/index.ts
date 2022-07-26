@@ -32,9 +32,11 @@ async function run() {
 
   const numPRs = await github.paginateData();
   if (numPRs !== undefined) {
+    console.log(numPRs);
     const setLabels = determinLabels(labels, buckets, numPRs);
 
     if (setLabels != []) {
+      console.log(setLabels);
       await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
     }
   }
