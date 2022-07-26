@@ -55,8 +55,8 @@ export class GithubApi {
 
   public async paginateData() {
     await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
-      owner: 'octokit',
-      repo: 'rest.js',
+      owner: this.repo.owner,
+      repo: this.repo.repo,
       //state: 'all',
       q: 'is:open',
     }).then((issues) => {
