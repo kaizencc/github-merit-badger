@@ -41,7 +41,7 @@ async function run() {
   console.log(data);
 
   if (data !== undefined) { // if (result instanceof Object) {
-    for (let i = 0; i < data.length; ) {
+    for (let i = 0; i < data.length; i += 1) {
       console.log(data[i].user?.login);
     }
   }
