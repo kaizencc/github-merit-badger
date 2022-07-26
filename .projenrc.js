@@ -17,6 +17,10 @@ const project = new GitHubActionTypeScriptProject({
         description: 'bands corresponding 1-1 with labels',
         required: true,
       },
+      'label-meanings': {
+        description: 'used in automated comment to explain the label',
+        required: true,
+      },
       'category': {
         description: 'category that buckets pertains to',
         required: true,

@@ -16,6 +16,7 @@ jobs:
         id: contributor-badge
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'more-power!, you-did-it'
-          buckets: '0, 8'
+          labels: 'more-power!,you-did-it'
+          buckets: '0,8'
+          label-meanings: 'Nice job, you've opened a PR! Open 3 to get a special label!|WOW! You've committed a lot, well done!'
           category: 'total'

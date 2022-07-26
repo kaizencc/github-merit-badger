@@ -7,6 +7,7 @@ async function run() {
   //console.log(token);
   const labelsRaw: string = core.getInput('labels');
   const bucketsRaw: string = core.getInput('buckets');
+  const meaningsRaw: string = core.getInput('label-meanings');
   //const category: string = core.getInput('category');
 
   //console.log(labelsRaw);
@@ -19,10 +20,15 @@ async function run() {
 
   // TODO: parse buckets
   const buckets: number[] = bucketsRaw.split(',').map(Number);
+
+  // parse label meanings
+  const meanings: string[] = meaningsRaw.split('|');
+
   // TODO: print all inputs
   //console.log(labels);
   //console.log(buckets);
   //console.log(category);
+  console.log(meanings);
 
   //const dummyVal = 0;
   //const setLabels = determinLabels(labels, buckets, dummyVal);
