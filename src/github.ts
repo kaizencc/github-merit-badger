@@ -54,18 +54,15 @@ export class GithubApi {
     return response.data;
   }
 
-  public async paginateData() {
-    const issueCreator = await this.getIssueCreator();
+  public async paginateData(issueCreator: string) {
     await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
       owner: this.repo.owner,
       repo: this.repo.repo,
-      state: 'all',
+      //state: 'all',
       q: `is:pr author:${issueCreator}`,
     }).then((issues) => {
       console.log(issues);
     });
-
-    //console.log(issueCreator);
   }
 
   public async getIssueCreator() {
