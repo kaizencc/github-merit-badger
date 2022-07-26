@@ -17,5 +17,5 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: 'more-power!, you-did-it'
-          buckets: '0, 10'
+          buckets: '0, 8'
           category: 'total'
