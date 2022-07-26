@@ -59,7 +59,8 @@ export class GithubApi {
       owner: this.repo.owner,
       repo: this.repo.repo,
       state: 'all',
-      q: `is:pr author:${issueCreator}`,
+      //q: `is:pr author:${issueCreator}`,
+      creator: issueCreator,
     }).then((issues) => {
       console.log(issues);
     });
