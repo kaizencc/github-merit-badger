@@ -48,6 +48,7 @@ async function run() {
       console.log(setLabels);
       await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
     }
+    await github.writePRComments();
   }
 
 
