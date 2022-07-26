@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import { GitHub } from '@actions/github/lib/utils';
 import { GithubApi } from './github';
 
 async function run() {
@@ -49,9 +50,12 @@ async function run() {
       await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
     }
 
-    const comment = determineMeaning(meanings, index);
-    if (comment !== undefined) {
-      await github.writePRComments(comment).catch(error => {core.setFailed(error.message);});
+    // place to generste dynamic comments
+    // it has user_name, labels and label meanings
+    const dynamicComments = 'welcome' + github.getIssueCreator() + ', the CDK Team thanks you for being a' + setLabels + 'to the CDK. This means that you have made' + determineMeaning(meanings, index);
+
+    if (dynamicComments !== undefined) {
+      await github.writePRComments(dynamicComments).catch(error => {core.setFailed(error.message);});
     }
   }
 
