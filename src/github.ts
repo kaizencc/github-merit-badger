@@ -22,21 +22,80 @@ export class GithubApi {
     } else {
       core.setFailed('Error retrieving issue number');
     }
+
   }
 
-
-  public async setIssueLabels(issueNumber: number, labels: string[]) {
+  public async setPullRequestLabels(labels: string[]) {
     if (!labels.length) return;
-    await this.octokit.rest.issues.addLabels({
-      owner: this.repo.owner,
-      repo: this.repo.repo,
-      issue_number: issueNumber,
-      labels,
-    });
+    if (this.issueNumber !== undefined) {
+      await this.octokit.rest.issues.addLabels({
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        issue_number: this.issueNumber,
+        labels,
+      });
+    }
   }
 
 
   public async getIssueNumber() {
     return this.issueNumber;
   }
+
+  public async getPullsData(page: number=1) {
+    // head props can be used below to filter PRs based on title(no big change type)
+    const response = await this.octokit.rest.pulls.list({
+      owner: this.repo.owner,
+      repo: this.repo.repo,
+      state: 'all',
+      per_page: 100,
+      page: page,
+    });
+    return response.data;
+  }
+
+  public async paginateData(): Promise<number | undefined> { // issueCreator: string) {
+    let numPRs = undefined;
+    const issueCreator = await this.getIssueCreator().catch(error => {
+      core.setFailed(error.message);
+    });
+    if (issueCreator !== undefined) {
+      await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        state: 'all',
+        //q: `is:pr author:${issueCreator}`,
+        creator: issueCreator,
+      }).then((issues) => {
+        issues = issues.filter(isPull => isPull.pull_request); // unlimited opportunity to filter more here
+        //console.log(issues);
+        console.log(`${issueCreator} has made ${issues.length} PRs`);
+        numPRs = issues.length;
+      });
+    }
+    return numPRs;
+  }
+
+  public async getIssueCreator() {
+    if (this.issueNumber !== undefined) {
+      const { data } = await this.octokit.rest.issues.get({
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        issue_number: this.issueNumber,
+      });
+      return data.user?.login;
+    } else {return undefined;}
+  }
+
+  public async writePRComments(comment: string) {
+    if (this.issueNumber !== undefined) {
+      await this.octokit.rest.issues.createComment({
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        issue_number: this.issueNumber,
+        body: comment,
+      });
+    }
+  }
+
 }

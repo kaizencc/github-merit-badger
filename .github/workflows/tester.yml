@@ -16,6 +16,7 @@ jobs:
         id: contributor-badge
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'every-contributer'
-          buckets: '0'
+          labels: 'getting-started,all-star'
+          buckets: '0,2'
+          label-meanings: 'Nice job, you''ve opened a PR! Open 3 to get a special label!|WOW! You''ve committed a lot, well done!'
           category: 'total'
