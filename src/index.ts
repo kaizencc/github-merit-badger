@@ -46,6 +46,11 @@ async function run() {
     }
   }
 
+  console.log('\nReset\n');
+  await github.paginateData().catch(error => {
+    core.setFailed(error.message);
+  });
+
 }
 
 run().catch(error => {
