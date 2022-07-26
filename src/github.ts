@@ -67,10 +67,12 @@ export class GithubApi {
         creator: issueCreator,
       }).then((issues) => {
         issues = issues.filter(isPull => isPull.pull_request); // unlimited opportunity to filter more here
-        console.log(issues);
+        //console.log(issues);
         console.log(`${issueCreator} has made ${issues.length} PRs`);
+        return issues.length;
       });
     }
+    return undefined;
   }
 
   public async getIssueCreator() {

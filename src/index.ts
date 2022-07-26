@@ -24,29 +24,35 @@ async function run() {
   //console.log(buckets);
   //console.log(category);
 
-  const dummyVal = 0;
-  const setLabels = determinLabels(labels, buckets, dummyVal);
+  //const dummyVal = 0;
+  //const setLabels = determinLabels(labels, buckets, dummyVal);
 
   const github: GithubApi = new GithubApi(token);
   //console.log(github.getIssueNumber());
 
-  if (setLabels != []) {
-    await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
-  }
+  const numPRs = await github.paginateData();
+  if (numPRs !== undefined) {
+    const setLabels = determinLabels(labels, buckets, numPRs);
 
-  const data = await github.getPullsData().catch(error => {
-    core.setFailed(error.message);
-  });
-
-  //console.log(data);
-
-  if (data !== undefined) { // if (result instanceof Object) {
-    for (let i = 0; i < data.length; i += 1) {
-      console.log(data[i].user?.login);
+    if (setLabels != []) {
+      await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
     }
   }
 
-  console.log('\nReset\n');
+
+  //const data = await github.getPullsData().catch(error => {
+  //  core.setFailed(error.message);
+  //});
+
+  //console.log(data);
+
+  //if (data !== undefined) { // if (result instanceof Object) {
+  //  for (let i = 0; i < data.length; i += 1) {
+  //    console.log(data[i].user?.login);
+  //  }
+  //}
+
+  //console.log('\nReset\n');
 
   /*const creator = await github.getIssueCreator().catch(error => {
     core.setFailed(error.message);
@@ -54,9 +60,9 @@ async function run() {
   */
 
   //if (creator !== undefined) {
-  await github.paginateData().catch(error => {
-    core.setFailed(error.message);
-  });
+  //await github.paginateData().catch(error => {
+  //  core.setFailed(error.message);
+  //});
   //}
 
   //console.log(github.context.issue.owner);
