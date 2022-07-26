@@ -40,6 +40,12 @@ async function run() {
 
   console.log(data);
 
+  if (data !== undefined) { // if (result instanceof Object) {
+    for (let i = 0; i < data.length; ) {
+      console.log(data[i].user?.login);
+    }
+  }
+
 }
 
 run().catch(error => {
