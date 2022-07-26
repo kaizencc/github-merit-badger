@@ -31,6 +31,7 @@ async function run() {
   //console.log(github.getIssueNumber());
 
   const numPRs = await github.paginateData();
+  console.log(numPRs);
   if (numPRs !== undefined) {
     console.log(numPRs);
     const setLabels = determinLabels(labels, buckets, numPRs);

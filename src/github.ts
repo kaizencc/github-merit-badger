@@ -55,6 +55,7 @@ export class GithubApi {
   }
 
   public async paginateData(): Promise<number | undefined> { // issueCreator: string) {
+    let numPRs = undefined;
     const issueCreator = await this.getIssueCreator().catch(error => {
       core.setFailed(error.message);
     });
@@ -69,10 +70,10 @@ export class GithubApi {
         issues = issues.filter(isPull => isPull.pull_request); // unlimited opportunity to filter more here
         //console.log(issues);
         console.log(`${issueCreator} has made ${issues.length} PRs`);
-        return issues.length;
+        numPRs = issues.length;
       });
     }
-    return undefined;
+    return numPRs;
   }
 
   public async getIssueCreator() {
