@@ -31,9 +31,14 @@ async function run() {
   console.log(github.getIssueNumber());
 
   if (setLabels != []) {
-    await github.setPullRequestLabels(setLabels).catch(error => console.log(error.message)); // .catch(error => {core.setFailed(error.message);}); ?
+    await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
   }
-  console.log(github.getPullsData());
+
+  const data = await github.getPullsData().catch(error => {
+    core.setFailed(error.message);
+  });
+
+  console.log(data);
 
 }
 
