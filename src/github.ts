@@ -62,7 +62,7 @@ export class GithubApi {
     }).then((issues) => {
       console.log(issues);
     });
-
+    console.log(github.context.issue.owner);
   }
 
 }

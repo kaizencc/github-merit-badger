@@ -51,6 +51,8 @@ async function run() {
     core.setFailed(error.message);
   });
 
+  //console.log(github.context.issue.owner);
+
 }
 
 run().catch(error => {
