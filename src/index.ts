@@ -48,7 +48,11 @@ async function run() {
       console.log(setLabels);
       await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
     }
-    console.log(github.writePRComments());
+
+    const comment = determineMeaning(meanings, index);
+    if (comment !== undefined) {
+      await github.writePRComments(comment).catch(error => {core.setFailed(error.message);});
+    }
   }
 
 
@@ -93,14 +97,14 @@ function determinLabel(labels: string[], index: number) {
   return [labels[index]];
 }
 
-/* not being used yet
+
 function determineMeaning(meanings: string[], index: number) {
   if (index === -1) {
-    return [];
+    return undefined;
   }
-  return [meanings[index]];
+  return meanings[index];
 }
-*/
+
 
 function determineIndex(buckets: number[], value: number): number {
   if (value <= buckets[0]) {

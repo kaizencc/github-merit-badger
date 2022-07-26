@@ -87,13 +87,13 @@ export class GithubApi {
     } else {return undefined;}
   }
 
-  public async writePRComments() {
+  public async writePRComments(comment: string) {
     if (this.issueNumber !== undefined) {
       await this.octokit.rest.issues.createComment({
         owner: this.repo.owner,
         repo: this.repo.repo,
         issue_number: this.issueNumber,
-        body: 'hello, this is for test',
+        body: comment,
       });
     }
   }
