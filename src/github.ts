@@ -22,6 +22,7 @@ export class GithubApi {
     } else {
       core.setFailed('Error retrieving issue number');
     }
+
   }
 
   public async setPullRequestLabels(labels: string[]) {
@@ -62,7 +63,19 @@ export class GithubApi {
     }).then((issues) => {
       console.log(issues);
     });
-    console.log(github.context.issue.owner);
+    const issueCreator = await this.getIssueCreator();
+    console.log(issueCreator);
+  }
+
+  public async getIssueCreator() {
+    if (this.issueNumber !== undefined) {
+      const { data } = await this.octokit.rest.issues.get({
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        issue_number: this.issueNumber,
+      });
+      return data.user?.login;
+    } else {return undefined;}
   }
 
 }
