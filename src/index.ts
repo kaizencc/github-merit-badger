@@ -33,7 +33,7 @@ async function run() {
   if (setLabels != []) {
     await github.setPullRequestLabels(setLabels).catch(error => console.log(error.message)); // .catch(error => {core.setFailed(error.message);}); ?
   }
-  console.log(github.getPRnums_all());
+  console.log(github.getPullsData());
 
 }
 
