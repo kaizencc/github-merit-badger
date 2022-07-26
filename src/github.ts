@@ -67,6 +67,7 @@ export class GithubApi {
         creator: issueCreator,
       }).then((issues) => {
         console.log(issues);
+        console.log('\n\n');
       });
     }
   }
