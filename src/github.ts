@@ -66,8 +66,9 @@ export class GithubApi {
         //q: `is:pr author:${issueCreator}`,
         creator: issueCreator,
       }).then((issues) => {
-        issues = issues.filter(isPull => isPull.pull_request);
+        issues = issues.filter(isPull => isPull.pull_request); // unlimited opportunity to filter more here
         console.log(issues);
+        console.log(`${issueCreator} has made ${issues.length} PRs`);
       });
     }
   }
