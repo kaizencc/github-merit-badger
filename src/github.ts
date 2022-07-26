@@ -66,8 +66,8 @@ export class GithubApi {
         //q: `is:pr author:${issueCreator}`,
         creator: issueCreator,
       }).then((issues) => {
+        issues = issues.filter(isPull => isPull.pull_request);
         console.log(issues);
-        console.log('\n\n');
       });
     }
   }
