@@ -54,8 +54,8 @@ export class GithubApi {
     return response.data;
   }
 
-  public async paginateData(): Promise<number | undefined> { // issueCreator: string) {
-    let numPRs = undefined;
+  public async paginateData() { // issueCreator: string) {
+    let issueStr = undefined;
     const issueCreator = await this.getIssueCreator().catch(error => {
       core.setFailed(error.message);
     });
@@ -71,10 +71,10 @@ export class GithubApi {
         // for test purpose, comment off if you need to check issues
         //console.log(issues);
         //console.log(`${issueCreator} has made ${issues.length} PRs`);
-        numPRs = issues;
+        issueStr = issues;
       });
     }
-    return numPRs;
+    return issueStr;
   }
 
   public async getTotalPRs(issue: string[]): Promise<number | undefined> {

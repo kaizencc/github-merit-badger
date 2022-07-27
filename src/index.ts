@@ -39,25 +39,28 @@ async function run() {
 
 
   if (category === 'total') {
-    const numPRs = await github.paginateData(); // TODO: change from old behavior to new
-    console.log(numPRs);
-    if (numPRs !== undefined) {
+    const issues = await github.paginateData().catch(error => {core.setFailed(error.message);});
+    if (issues !== undefined) {
+      const numPRs = await github.getTotalPRs(issues); // TODO: change from old behavior to new
       console.log(numPRs);
+      if (numPRs !== undefined) {
+        console.log(numPRs);
 
-      const index = determineIndex(buckets, numPRs);
-      const setLabels = determinLabel(labels, index);
+        const index = determineIndex(buckets, numPRs);
+        const setLabels = determinLabel(labels, index);
 
-      if (setLabels != []) {
-        console.log(setLabels);
-        await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
-      }
+        if (setLabels != []) {
+          console.log(setLabels);
+          await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
+        }
 
-      // place to generste dynamic comments
-      // it has user_name, labels and label meanings
-      const dynamicComments = 'welcome ' + await github.getIssueCreator().catch(error => {core.setFailed(error.message);}) + ', the CDK Team thanks you for being a ' + setLabels + ' to the CDK. This means that you have made ' + determineMeaning(meanings, index);
-      //console.log(dynamicComments);
-      if (dynamicComments !== undefined) {
-        await github.writePRComments(dynamicComments).catch(error => {core.setFailed(error.message);});
+        // place to generste dynamic comments
+        // it has user_name, labels and label meanings
+        const dynamicComments = 'welcome ' + await github.getIssueCreator().catch(error => {core.setFailed(error.message);}) + ', the CDK Team thanks you for being a ' + setLabels + ' to the CDK. This means that you have made ' + determineMeaning(meanings, index);
+        //console.log(dynamicComments);
+        if (dynamicComments !== undefined) {
+          await github.writePRComments(dynamicComments).catch(error => {core.setFailed(error.message);});
+        }
       }
     }
 
