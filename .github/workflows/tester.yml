@@ -13,7 +13,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: kaizencc/contributor-badge@main
-        id: contributor-badge
+        id: contributor-badge-total
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: 'getting-started,all-star'
@@ -21,7 +21,7 @@ jobs:
           label-meanings: 'Nice job, you''ve opened a PR! Open 3 to get a special label!|WOW! You''ve committed a lot, well done!'
           category: 'total'
       - uses: kaizencc/contributor-badge@main
-        id: contributor-badge
+        id: contributor-badge-hotlist
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: 'good-start,heating-up,on :fire:'
