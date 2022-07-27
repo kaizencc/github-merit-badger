@@ -1,3 +1,4 @@
-User|Total Contributions|Contributions in last 30 days
+Contributor|Total PRs|Merged contributions in last 30 days
 -|-|-
-User1|2|1
+parker|123|54
+abc|999|99
