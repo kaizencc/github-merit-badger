@@ -68,13 +68,27 @@ export class GithubApi {
         creator: issueCreator,
       }).then((issues) => {
         issues = issues.filter(isPull => isPull.pull_request); // unlimited opportunity to filter more here
-        console.log(issues);
-        console.log(`${issueCreator} has made ${issues.length} PRs`);
-        numPRs = issues.length;
+        // for test purpose, comment off if you need to check issues
+        //console.log(issues);
+        //console.log(`${issueCreator} has made ${issues.length} PRs`);
+        numPRs = issues;
       });
     }
     return numPRs;
   }
+
+  public async getTotalPRs(issue: string[]): Promise<number | undefined> {
+    const numPRs = issue.length;
+    //console.log(`${issueCreator} has made ${numPRs} PRs`);
+    return numPRs;
+  }
+
+  /*
+  public async getTimedPRs(issue: object, days: number) {
+
+    return true;
+  }
+  */
 
   public async getIssueCreator() {
     if (this.issueNumber !== undefined) {
