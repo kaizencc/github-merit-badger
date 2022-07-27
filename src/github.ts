@@ -54,33 +54,35 @@ export class GithubApi {
     return response.data;
   }
 
-  public async paginateData() { // issueCreator: string) {
-    let issueStr = undefined;
+  public async getPulls() { // issueCreator: string) {
+    let result = undefined;
     const issueCreator = await this.getIssueCreator().catch(error => {
       core.setFailed(error.message);
     });
     if (issueCreator !== undefined) {
-      await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
+      const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
         owner: this.repo.owner,
         repo: this.repo.repo,
         state: 'all',
         //q: `is:pr author:${issueCreator}`,
         creator: issueCreator,
-      }).then((issues) => {
-        issues = issues.filter(isPull => isPull.pull_request); // unlimited opportunity to filter more here
-        // for test purpose, comment off if you need to check issues
-        //console.log(issues);
-        //console.log(`${issueCreator} has made ${issues.length} PRs`);
-        issueStr = issues;
-      });
+      }).catch(error => {core.setFailed(error.message);});
+      if (issues !== undefined) {
+        result = issues.filter(isPull => isPull.pull_request);
+      }
     }
-    return issueStr;
+    return result;
   }
 
-  public async getTotalPRs(issue: string[]): Promise<number | undefined> {
-    const numPRs = issue.length;
+  public async getMerged(): Promise<number | undefined> {
+    const pulls = await this.getPulls().catch(error => {core.setFailed(error.message);});
+    if (pulls !== undefined) {
+      const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+      return mergedPRs.length;
+    }
+    return undefined;
     //console.log(`${issueCreator} has made ${numPRs} PRs`);
-    return numPRs;
+    //return numPRs;
   }
 
   /*
