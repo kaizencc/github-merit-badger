@@ -161,8 +161,14 @@ export class GithubApi {
     const daysAgo = new Date();
     daysAgo.setDate(daysAgo.getDate() - numDays);
     console.log('daysAgo: ' + daysAgo);
-    const diff = new Date(date).getDay() - daysAgo.getDay();
+    console.log(new Date(date).getDay());
+    console.log(date.getDay());
+    console.log(daysAgo.getDay());
+    const diff = date.getDay() - daysAgo.getDay();
+    const diff2 = (new Date(date).getDay() - daysAgo.getDay());
+
     console.log('diff: ' + diff);
+    console.log('diff2: ' + diff2);
     return diff >= 0;
   }
 
