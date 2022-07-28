@@ -189,14 +189,23 @@ export class GithubApi {
     } else {return undefined;}
   }
 
-  public async writePRComments(comment: string, searchWords: RegExp) {
+  public async writePRComments(comment: string, searchWords?: RegExp) {
     if (this.issueNumber !== undefined) {
-      if (await this.getCommentId(this.issueNumber, searchWords)) {
-        // need to fetch the least recent comment, need a function
-        const id = await this.getCommentId(this.issueNumber, searchWords);
-        if (id) {
-          this.updateComment(id, comment).catch(error => {
-            core.setFailed(error.message);
+      if (searchWords !== undefined) {
+        if (await this.getCommentId(this.issueNumber, searchWords)) {
+          // need to fetch the least recent comment, need a function
+          const id = await this.getCommentId(this.issueNumber, searchWords);
+          if (id) {
+            this.updateComment(id, comment).catch(error => {
+              core.setFailed(error.message);
+            });
+          }
+        } else {
+          await this.octokit.rest.issues.createComment({
+            owner: this.repo.owner,
+            repo: this.repo.repo,
+            issue_number: this.issueNumber,
+            body: comment,
           });
         }
       } else {
