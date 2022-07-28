@@ -88,7 +88,9 @@ async function run() {
     if (recentMerges !== undefined) {
       const usernames = recentMerges.filter(hasLogin => hasLogin.user?.login).map(login => login.user?.login);
       console.log(usernames);
-      //const hotlist = getHotlist(usernames);
+      if (usernames !== undefined) {
+        getHotlist(usernames);
+      }
     }
 
 
@@ -136,4 +138,29 @@ function determineIndex(buckets: number[], value: number): number {
   return index;
 }
 
+function getHotlist(usernames: (string | undefined)[] ) {
+  let hotlist: { [username: string]: number } = {};
+  let notlist: Map<string, number> = new Map<string, number>;
+  for (let i = 0; i < usernames.length; i += 1) {
+    let name = usernames[i];
+    if (name !== undefined) {
+      if (name in hotlist) {
+        hotlist[name] += 1;
+      } else {
+        hotlist[name] = 1;
+      }
 
+      if (notlist.has(name)) {
+        const value = notlist.get(name);
+        if (value !== undefined) {
+          notlist.set(name, value + 1);
+        }
+      } else {
+        notlist.set(name, 1);
+      }
+    }
+  }
+  console.log(hotlist);
+  console.log(notlist);
+  console.log(Array.from(notlist));
+}
