@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 //import { GitHub } from '@actions/github/lib/utils';
+import { Heap } from 'heap-js';
 import { GithubApi } from './github';
-//import { Heap } from 'heap-js';
 
 async function run() {
 
@@ -89,7 +89,14 @@ async function run() {
       const usernames = recentMerges.filter(hasLogin => hasLogin.user?.login).map(login => login.user?.login);
       console.log(usernames);
       if (usernames !== undefined) {
-        getHotlist(usernames);
+        const hotlist = getHotlist(usernames);
+        if (hotlist !== undefined) {
+          const minHeap = new Heap(compareFunction);
+          minHeap.init(hotlist);
+          for (const value of minHeap) {
+            console.log('Next top value is', value);
+          }
+        }
       }
     }
 
@@ -138,29 +145,26 @@ function determineIndex(buckets: number[], value: number): number {
   return index;
 }
 
-function getHotlist(usernames: (string | undefined)[] ) {
-  let hotlist: { [username: string]: number } = {};
-  let notlist: Map<string, number> = new Map<string, number>;
+export function getHotlist(usernames: (string | undefined)[]) {
+  let hotlist: Map<string, number> = new Map<string, number>;
   for (let i = 0; i < usernames.length; i += 1) {
-    let name = usernames[i];
-    if (name !== undefined) {
-      if (name in hotlist) {
-        hotlist[name] += 1;
-      } else {
-        hotlist[name] = 1;
-      }
-
-      if (notlist.has(name)) {
-        const value = notlist.get(name);
+    let username = usernames[i];
+    if (username !== undefined) {
+      if (hotlist.has(username)) {
+        let value = hotlist.get(username);
         if (value !== undefined) {
-          notlist.set(name, value + 1);
+          hotlist.set(username, value + 1);
         }
       } else {
-        notlist.set(name, 1);
+        hotlist.set(username, 1);
       }
+    } else {
+      return undefined;
     }
   }
-  console.log(hotlist);
-  console.log(notlist);
-  console.log(Array.from(notlist));
+  return Array.from(hotlist);
+}
+
+export function compareFunction(a: (string | number)[], b: (string | number)[]) {
+  return a[1] >= b[1] ? -1 : 1;
 }

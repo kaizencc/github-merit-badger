@@ -278,10 +278,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.compareFunction = exports.getHotlist = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 //import { GitHub } from '@actions/github/lib/utils';
+const heap_js_1 = __nccwpck_require__(8973);
 const github_1 = __nccwpck_require__(5928);
-//import { Heap } from 'heap-js';
 async function run() {
     const token = core.getInput('github-token');
     const labelsRaw = core.getInput('labels');
@@ -351,7 +352,14 @@ async function run() {
             const usernames = recentMerges.filter(hasLogin => { var _a; return (_a = hasLogin.user) === null || _a === void 0 ? void 0 : _a.login; }).map(login => { var _a; return (_a = login.user) === null || _a === void 0 ? void 0 : _a.login; });
             console.log(usernames);
             if (usernames !== undefined) {
-                getHotlist(usernames);
+                const hotlist = getHotlist(usernames);
+                if (hotlist !== undefined) {
+                    const minHeap = new heap_js_1.Heap(compareFunction);
+                    minHeap.init(hotlist);
+                    for (const value of minHeap) {
+                        console.log('Next top value is', value);
+                    }
+                }
             }
         }
     }
@@ -392,33 +400,32 @@ function determineIndex(buckets, value) {
     return index;
 }
 function getHotlist(usernames) {
-    let hotlist = {};
-    let notlist = new Map;
+    let hotlist = new Map;
     for (let i = 0; i < usernames.length; i += 1) {
-        let name = usernames[i];
-        if (name !== undefined) {
-            if (name in hotlist) {
-                hotlist[name] += 1;
-            }
-            else {
-                hotlist[name] = 1;
-            }
-            if (notlist.has(name)) {
-                const value = notlist.get(name);
+        let username = usernames[i];
+        if (username !== undefined) {
+            if (hotlist.has(username)) {
+                let value = hotlist.get(username);
                 if (value !== undefined) {
-                    notlist.set(name, value + 1);
+                    hotlist.set(username, value + 1);
                 }
             }
             else {
-                notlist.set(name, 1);
+                hotlist.set(username, 1);
             }
         }
+        else {
+            return undefined;
+        }
     }
-    console.log(hotlist);
-    console.log(notlist);
-    console.log(Array.from(notlist));
+    return Array.from(hotlist);
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFzQztBQUN0QyxxREFBcUQ7QUFDckQscUNBQXFDO0FBQ3JDLGlDQUFpQztBQUVqQyxLQUFLLFVBQVUsR0FBRztJQUVoQixNQUFNLEtBQUssR0FBVyxJQUFJLENBQUMsUUFBUSxDQUFDLGNBQWMsQ0FBQyxDQUFDO0lBQ3BELE1BQU0sU0FBUyxHQUFXLElBQUksQ0FBQyxRQUFRLENBQUMsUUFBUSxDQUFDLENBQUM7SUFDbEQsTUFBTSxVQUFVLEdBQVcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsQ0FBQztJQUNwRCxNQUFNLFdBQVcsR0FBVyxJQUFJLENBQUMsUUFBUSxDQUFDLGdCQUFnQixDQUFDLENBQUM7SUFDNUQsTUFBTSxRQUFRLEdBQVcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxVQUFVLENBQUMsQ0FBQztJQUVuRCxlQUFlO0lBQ2YsTUFBTSxNQUFNLEdBQWEsU0FBUyxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsQ0FBQztJQUU5QyxnQkFBZ0I7SUFDaEIsTUFBTSxPQUFPLEdBQWEsVUFBVSxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsTUFBTSxDQUFDLENBQUM7SUFFNUQsdUJBQXVCO0lBQ3ZCLE1BQU0sUUFBUSxHQUFhLFdBQVcsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUM7SUFFbEQsTUFBTSxNQUFNLEdBQWMsSUFBSSxrQkFBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBRS9DLElBQUksUUFBUSxLQUFLLE9BQU8sRUFBRTtRQUN4QiwwRkFBMEY7UUFDMUYsNkJBQTZCO1FBQzdCLE1BQU0sTUFBTSxHQUFHLE1BQU0sTUFBTSxDQUFDLFNBQVMsRUFBRSxDQUFDLEtBQUssQ0FBQyxLQUFLLENBQUMsRUFBRSxHQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUEsQ0FBQyxDQUFDLENBQUM7UUFDekYsTUFBTSxTQUFTLEdBQUcsTUFBTSxhQUFOLE1BQU0sdUJBQU4sTUFBTSxDQUFFLE1BQU0sQ0FBQztRQUNqQyxPQUFPLENBQUMsR0FBRyxDQUFDLFNBQVMsQ0FBQyxDQUFDO1FBQ3ZCLElBQUksU0FBUyxLQUFLLFNBQVMsRUFBRTtZQUMzQix5QkFBeUI7WUFFekIsTUFBTSxLQUFLLEdBQUcsY0FBYyxDQUFDLE9BQU8sRUFBRSxTQUFTLENBQUMsQ0FBQztZQUNqRCxNQUFNLFNBQVMsR0FBRyxjQUFjLENBQUMsTUFBTSxFQUFFLEtBQUssQ0FBQyxDQUFDO1lBRWhELElBQUksU0FBUyxJQUFJLEVBQUUsRUFBRTtnQkFDbkIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxTQUFTLENBQUMsQ0FBQztnQkFDdkIsTUFBTSxNQUFNLENBQUMsb0JBQW9CLENBQUMsU0FBUyxDQUFDLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxFQUFFLEdBQUUsSUFBSSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQSxDQUFDLENBQUMsQ0FBQyxDQUFDLHVEQUF1RDthQUN2SjtZQUVELHFDQUFxQztZQUNyQyw4Q0FBOEM7WUFDOUMsTUFBTSxlQUFlLEdBQUcseUJBQXlCLEdBQUcsVUFBVSxHQUFHLE1BQU0sTUFBTSxDQUFDLGVBQWUsRUFBRSxDQUFDLEtBQUssQ0FBQyxLQUFLLENBQUMsRUFBRSxHQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUEsQ0FBQyxDQUFDLEdBQUcsd0NBQXdDLEdBQUcsU0FBUyxHQUFHLDZDQUE2QyxHQUFHLGdCQUFnQixDQUFDLFFBQVEsRUFBRSxLQUFLLENBQUMsQ0FBQztZQUM1UiwrQkFBK0I7WUFDL0IsSUFBSSxlQUFlLEtBQUssU0FBUyxFQUFFO2dCQUNqQyxNQUFNLE1BQU0sQ0FBQyxlQUFlLENBQUMsZUFBZSxDQUFDLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxFQUFFLEdBQUUsSUFBSSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQSxDQUFDLENBQUMsQ0FBQzthQUNoRztTQUNGO1FBQ0QsR0FBRztRQUdILDJEQUEyRDtRQUMzRCxrQ0FBa0M7UUFDbEMsS0FBSztRQUVMLG9CQUFvQjtRQUVwQiw4REFBOEQ7UUFDOUQsOENBQThDO1FBQzlDLHVDQUF1QztRQUN2QyxLQUFLO1FBQ0wsR0FBRztRQUVILDJCQUEyQjtRQUUzQjs7O1VBR0U7UUFFRiw4QkFBOEI7UUFDOUIsOENBQThDO1FBQzlDLGtDQUFrQztRQUNsQyxLQUFLO1FBQ0wsR0FBRztRQUVILDBDQUEwQztRQUMxQyx5QkFBeUI7S0FDMUI7U0FBTSxJQUFJLFFBQVEsS0FBSyxTQUFTLEVBQUU7UUFDakMsTUFBTSxJQUFJLEdBQVcsTUFBTSxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztRQUNuRCx1Q0FBdUM7UUFDdkMseUVBQXlFO1FBQ3pFLGlEQUFpRDtRQUNqRCxNQUFNLFlBQVksR0FBRyxNQUFNLE1BQU0sQ0FBQyxlQUFlLENBQUMsSUFBSSxFQUFFLEtBQUssQ0FBQyxDQUFDLEtBQUssQ0FBQyxLQUFLLENBQUMsRUFBRSxHQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUEsQ0FBQyxDQUFDLENBQUM7UUFDaEgsNEJBQTRCO1FBRTVCLElBQUksWUFBWSxLQUFLLFNBQVMsRUFBRTtZQUM5QixNQUFNLFNBQVMsR0FBRyxZQUFZLENBQUMsTUFBTSxDQUFDLFFBQVEsQ0FBQyxFQUFFLFdBQUMsT0FBQSxNQUFBLFFBQVEsQ0FBQyxJQUFJLDBDQUFFLEtBQUssQ0FBQSxFQUFBLENBQUMsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLEVBQUUsV0FBQyxPQUFBLE1BQUEsS0FBSyxDQUFDLElBQUksMENBQUUsS0FBSyxDQUFBLEVBQUEsQ0FBQyxDQUFDO1lBQ3hHLE9BQU8sQ0FBQyxHQUFHLENBQUMsU0FBUyxDQUFDLENBQUM7WUFDdkIsSUFBSSxTQUFTLEtBQUssU0FBUyxFQUFFO2dCQUMzQixVQUFVLENBQUMsU0FBUyxDQUFDLENBQUM7YUFDdkI7U0FDRjtLQUdGO1NBQU07UUFDTCxhQUFhO0tBQ2Q7QUFDSCxDQUFDO0FBRUQsR0FBRyxFQUFFLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxFQUFFO0lBQ2xCLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFDO0FBQ2hDLENBQUMsQ0FBQyxDQUFDO0FBRUgsU0FBUyxjQUFjLENBQUMsTUFBZ0IsRUFBRSxLQUFhO0lBQ3JELElBQUksS0FBSyxLQUFLLENBQUMsQ0FBQyxFQUFFO1FBQ2hCLE9BQU8sRUFBRSxDQUFDO0tBQ1g7SUFDRCxPQUFPLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7QUFDekIsQ0FBQztBQUdELFNBQVMsZ0JBQWdCLENBQUMsUUFBa0IsRUFBRSxLQUFhO0lBQ3pELElBQUksS0FBSyxLQUFLLENBQUMsQ0FBQyxFQUFFO1FBQ2hCLE9BQU8sU0FBUyxDQUFDO0tBQ2xCO0lBQ0QsT0FBTyxRQUFRLENBQUMsS0FBSyxDQUFDLENBQUM7QUFDekIsQ0FBQztBQUdELFNBQVMsY0FBYyxDQUFDLE9BQWlCLEVBQUUsS0FBYTtJQUN0RCxJQUFJLEtBQUssSUFBSSxPQUFPLENBQUMsQ0FBQyxDQUFDLEVBQUU7UUFDdkIsT0FBTyxDQUFDLENBQUMsQ0FBQztLQUNYO0lBQ0QsSUFBSSxLQUFLLEdBQUcsQ0FBQyxDQUFDO0lBRWQsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0lBQ1YsT0FBTyxDQUFDLEdBQUcsT0FBTyxDQUFDLE1BQU0sRUFBRTtRQUN6QixJQUFJLEtBQUssR0FBRyxPQUFPLENBQUMsQ0FBQyxDQUFDLEVBQUU7WUFDdEIsS0FBSyxHQUFHLENBQUMsQ0FBQztTQUNYO1FBQ0QsSUFBSSxLQUFLLElBQUksT0FBTyxDQUFDLENBQUMsQ0FBQyxFQUFFO1lBQ3ZCLE1BQU07U0FDUDtRQUNELENBQUMsSUFBSSxDQUFDLENBQUM7S0FDUjtJQUNELE9BQU8sS0FBSyxDQUFDO0FBQ2YsQ0FBQztBQUVELFNBQVMsVUFBVSxDQUFDLFNBQWlDO0lBQ25ELElBQUksT0FBTyxHQUFtQyxFQUFFLENBQUM7SUFDakQsSUFBSSxPQUFPLEdBQXdCLElBQUksR0FBbUIsQ0FBQztJQUMzRCxLQUFLLElBQUksQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEdBQUcsU0FBUyxDQUFDLE1BQU0sRUFBRSxDQUFDLElBQUksQ0FBQyxFQUFFO1FBQzVDLElBQUksSUFBSSxHQUFHLFNBQVMsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUN4QixJQUFJLElBQUksS0FBSyxTQUFTLEVBQUU7WUFDdEIsSUFBSSxJQUFJLElBQUksT0FBTyxFQUFFO2dCQUNuQixPQUFPLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO2FBQ3BCO2lCQUFNO2dCQUNMLE9BQU8sQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7YUFDbkI7WUFFRCxJQUFJLE9BQU8sQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLEVBQUU7Z0JBQ3JCLE1BQU0sS0FBSyxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLENBQUM7Z0JBQ2hDLElBQUksS0FBSyxLQUFLLFNBQVMsRUFBRTtvQkFDdkIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLEVBQUUsS0FBSyxHQUFHLENBQUMsQ0FBQyxDQUFDO2lCQUM5QjthQUNGO2lCQUFNO2dCQUNMLE9BQU8sQ0FBQyxHQUFHLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDO2FBQ3RCO1NBQ0Y7S0FDRjtJQUNELE9BQU8sQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUM7SUFDckIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQztJQUNyQixPQUFPLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQztBQUNuQyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgY29yZSBmcm9tICdAYWN0aW9ucy9jb3JlJztcbi8vaW1wb3J0IHsgR2l0SHViIH0gZnJvbSAnQGFjdGlvbnMvZ2l0aHViL2xpYi91dGlscyc7XG5pbXBvcnQgeyBHaXRodWJBcGkgfSBmcm9tICcuL2dpdGh1Yic7XG4vL2ltcG9ydCB7IEhlYXAgfSBmcm9tICdoZWFwLWpzJztcblxuYXN5bmMgZnVuY3Rpb24gcnVuKCkge1xuXG4gIGNvbnN0IHRva2VuOiBzdHJpbmcgPSBjb3JlLmdldElucHV0KCdnaXRodWItdG9rZW4nKTtcbiAgY29uc3QgbGFiZWxzUmF3OiBzdHJpbmcgPSBjb3JlLmdldElucHV0KCdsYWJlbHMnKTtcbiAgY29uc3QgYnVja2V0c1Jhdzogc3RyaW5nID0gY29yZS5nZXRJbnB1dCgnYnVja2V0cycpO1xuICBjb25zdCBtZWFuaW5nc1Jhdzogc3RyaW5nID0gY29yZS5nZXRJbnB1dCgnbGFiZWwtbWVhbmluZ3MnKTtcbiAgY29uc3QgY2F0ZWdvcnk6IHN0cmluZyA9IGNvcmUuZ2V0SW5wdXQoJ2NhdGVnb3J5Jyk7XG5cbiAgLy8gcGFyc2UgbGFiZWxzXG4gIGNvbnN0IGxhYmVsczogc3RyaW5nW10gPSBsYWJlbHNSYXcuc3BsaXQoJywnKTtcblxuICAvLyBwYXJzZSBidWNrZXRzXG4gIGNvbnN0IGJ1Y2tldHM6IG51bWJlcltdID0gYnVja2V0c1Jhdy5zcGxpdCgnLCcpLm1hcChOdW1iZXIpO1xuXG4gIC8vIHBhcnNlIGxhYmVsIG1lYW5pbmdzXG4gIGNvbnN0IG1lYW5pbmdzOiBzdHJpbmdbXSA9IG1lYW5pbmdzUmF3LnNwbGl0KCd8Jyk7XG5cbiAgY29uc3QgZ2l0aHViOiBHaXRodWJBcGkgPSBuZXcgR2l0aHViQXBpKHRva2VuKTtcblxuICBpZiAoY2F0ZWdvcnkgPT09ICd0b3RhbCcpIHtcbiAgICAvL2NvbnN0IGlzc3VlcyA9IGF3YWl0IGdpdGh1Yi5nZXRQdWxscygpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICAvL2lmIChpc3N1ZXMgIT09IHVuZGVmaW5lZCkge1xuICAgIGNvbnN0IG1lcmdlcyA9IGF3YWl0IGdpdGh1Yi5nZXRNZXJnZXMoKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4gICAgY29uc3QgbnVtTWVyZ2VkID0gbWVyZ2VzPy5sZW5ndGg7XG4gICAgY29uc29sZS5sb2cobnVtTWVyZ2VkKTtcbiAgICBpZiAobnVtTWVyZ2VkICE9PSB1bmRlZmluZWQpIHtcbiAgICAgIC8vY29uc29sZS5sb2cobnVtTWVyZ2VkKTtcblxuICAgICAgY29uc3QgaW5kZXggPSBkZXRlcm1pbmVJbmRleChidWNrZXRzLCBudW1NZXJnZWQpO1xuICAgICAgY29uc3Qgc2V0TGFiZWxzID0gZGV0ZXJtaW5lTGFiZWwobGFiZWxzLCBpbmRleCk7XG5cbiAgICAgIGlmIChzZXRMYWJlbHMgIT0gW10pIHtcbiAgICAgICAgY29uc29sZS5sb2coc2V0TGFiZWxzKTtcbiAgICAgICAgYXdhaXQgZ2l0aHViLnNldFB1bGxSZXF1ZXN0TGFiZWxzKHNldExhYmVscykuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pOyAvLyAuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pOyA/XG4gICAgICB9XG5cbiAgICAgIC8vIHBsYWNlIHRvIGdlbmVyc3RlIGR5bmFtaWMgY29tbWVudHNcbiAgICAgIC8vIGl0IGhhcyB1c2VyX25hbWUsIGxhYmVscyBhbmQgbGFiZWwgbWVhbmluZ3NcbiAgICAgIGNvbnN0IGR5bmFtaWNDb21tZW50cyA9ICc8IS0tY29udHJpYnV0ZSBiYWRnZS0tPicgKyAnd2VsY29tZSAnICsgYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KSArICcsIHRoZSBDREsgVGVhbSB0aGFua3MgeW91IGZvciBiZWluZyBhICcgKyBzZXRMYWJlbHMgKyAnIHRvIHRoZSBDREsuIFRoaXMgbWVhbnMgdGhhdCB5b3UgaGF2ZSBtYWRlICcgKyBkZXRlcm1pbmVNZWFuaW5nKG1lYW5pbmdzLCBpbmRleCk7XG4gICAgICAvL2NvbnNvbGUubG9nKGR5bmFtaWNDb21tZW50cyk7XG4gICAgICBpZiAoZHluYW1pY0NvbW1lbnRzICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgYXdhaXQgZ2l0aHViLndyaXRlUFJDb21tZW50cyhkeW5hbWljQ29tbWVudHMpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICAgIH1cbiAgICB9XG4gICAgLy99XG5cblxuICAgIC8vY29uc3QgZGF0YSA9IGF3YWl0IGdpdGh1Yi5nZXRQdWxsc0RhdGEoKS5jYXRjaChlcnJvciA9PiB7XG4gICAgLy8gIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuICAgIC8vfSk7XG5cbiAgICAvL2NvbnNvbGUubG9nKGRhdGEpO1xuXG4gICAgLy9pZiAoZGF0YSAhPT0gdW5kZWZpbmVkKSB7IC8vIGlmIChyZXN1bHQgaW5zdGFuY2VvZiBPYmplY3QpIHtcbiAgICAvLyAgZm9yIChsZXQgaSA9IDA7IGkgPCBkYXRhLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgLy8gICAgY29uc29sZS5sb2coZGF0YVtpXS51c2VyPy5sb2dpbik7XG4gICAgLy8gIH1cbiAgICAvL31cblxuICAgIC8vY29uc29sZS5sb2coJ1xcblJlc2V0XFxuJyk7XG5cbiAgICAvKmNvbnN0IGNyZWF0b3IgPSBhd2FpdCBnaXRodWIuZ2V0SXNzdWVDcmVhdG9yKCkuY2F0Y2goZXJyb3IgPT4ge1xuICAgICAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG4gICAgfSk7XG4gICAgKi9cblxuICAgIC8vaWYgKGNyZWF0b3IgIT09IHVuZGVmaW5lZCkge1xuICAgIC8vYXdhaXQgZ2l0aHViLnBhZ2luYXRlRGF0YSgpLmNhdGNoKGVycm9yID0+IHtcbiAgICAvLyAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG4gICAgLy99KTtcbiAgICAvL31cblxuICAgIC8vY29uc29sZS5sb2coZ2l0aHViLmNvbnRleHQuaXNzdWUub3duZXIpO1xuICAgIC8vY29uc3QgY29udGVudCA9IGdpdGh1Yi5cbiAgfSBlbHNlIGlmIChjYXRlZ29yeSA9PT0gJ2hvdGxpc3QnKSB7XG4gICAgY29uc3QgZGF5czogbnVtYmVyID0gTnVtYmVyKGNvcmUuZ2V0SW5wdXQoJ2RheXMnKSk7XG4gICAgLy8gY2FsbCBkaWZmZXJlbnQgZnVuY3Rpb25zIGZyb20gZ2l0aHViXG4gICAgLy8gYWx0ZXJuYXRpdmVseSwgY2FuIGRldGVybWluZSBsYWJlbHMgKyBjb21tZW50IGFuZCBkbyBzZXR0aW5nIGluIDEgc3RlcFxuICAgIC8vIGFsc28gY29uc2lkZXIgZWRpdGluZyBjb21tZW50IGFzIGEgc3RyZWNoIGdvYWxcbiAgICBjb25zdCByZWNlbnRNZXJnZXMgPSBhd2FpdCBnaXRodWIuZ2V0UmVjZW50TWVyZ2VzKGRheXMsIGZhbHNlKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4gICAgLy9jb25zb2xlLmxvZyhyZWNlbnRNZXJnZXMpO1xuXG4gICAgaWYgKHJlY2VudE1lcmdlcyAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICBjb25zdCB1c2VybmFtZXMgPSByZWNlbnRNZXJnZXMuZmlsdGVyKGhhc0xvZ2luID0+IGhhc0xvZ2luLnVzZXI/LmxvZ2luKS5tYXAobG9naW4gPT4gbG9naW4udXNlcj8ubG9naW4pO1xuICAgICAgY29uc29sZS5sb2codXNlcm5hbWVzKTtcbiAgICAgIGlmICh1c2VybmFtZXMgIT09IHVuZGVmaW5lZCkge1xuICAgICAgICBnZXRIb3RsaXN0KHVzZXJuYW1lcyk7XG4gICAgICB9XG4gICAgfVxuXG5cbiAgfSBlbHNlIHtcbiAgICAvLyBkbyBub3RoaW5nXG4gIH1cbn1cblxucnVuKCkuY2F0Y2goZXJyb3IgPT4ge1xuICBjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTtcbn0pO1xuXG5mdW5jdGlvbiBkZXRlcm1pbmVMYWJlbChsYWJlbHM6IHN0cmluZ1tdLCBpbmRleDogbnVtYmVyKSB7XG4gIGlmIChpbmRleCA9PT0gLTEpIHtcbiAgICByZXR1cm4gW107XG4gIH1cbiAgcmV0dXJuIFtsYWJlbHNbaW5kZXhdXTtcbn1cblxuXG5mdW5jdGlvbiBkZXRlcm1pbmVNZWFuaW5nKG1lYW5pbmdzOiBzdHJpbmdbXSwgaW5kZXg6IG51bWJlcikge1xuICBpZiAoaW5kZXggPT09IC0xKSB7XG4gICAgcmV0dXJuIHVuZGVmaW5lZDtcbiAgfVxuICByZXR1cm4gbWVhbmluZ3NbaW5kZXhdO1xufVxuXG5cbmZ1bmN0aW9uIGRldGVybWluZUluZGV4KGJ1Y2tldHM6IG51bWJlcltdLCB2YWx1ZTogbnVtYmVyKTogbnVtYmVyIHtcbiAgaWYgKHZhbHVlIDw9IGJ1Y2tldHNbMF0pIHtcbiAgICByZXR1cm4gLTE7XG4gIH1cbiAgbGV0IGluZGV4ID0gMDtcblxuICBsZXQgaSA9IDA7XG4gIHdoaWxlIChpIDwgYnVja2V0cy5sZW5ndGgpIHtcbiAgICBpZiAodmFsdWUgPiBidWNrZXRzW2ldKSB7XG4gICAgICBpbmRleCA9IGk7XG4gICAgfVxuICAgIGlmICh2YWx1ZSA8PSBidWNrZXRzW2ldKSB7XG4gICAgICBicmVhaztcbiAgICB9XG4gICAgaSArPSAxO1xuICB9XG4gIHJldHVybiBpbmRleDtcbn1cblxuZnVuY3Rpb24gZ2V0SG90bGlzdCh1c2VybmFtZXM6IChzdHJpbmcgfCB1bmRlZmluZWQpW10gKSB7XG4gIGxldCBob3RsaXN0OiB7IFt1c2VybmFtZTogc3RyaW5nXTogbnVtYmVyIH0gPSB7fTtcbiAgbGV0IG5vdGxpc3Q6IE1hcDxzdHJpbmcsIG51bWJlcj4gPSBuZXcgTWFwPHN0cmluZywgbnVtYmVyPjtcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCB1c2VybmFtZXMubGVuZ3RoOyBpICs9IDEpIHtcbiAgICBsZXQgbmFtZSA9IHVzZXJuYW1lc1tpXTtcbiAgICBpZiAobmFtZSAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICBpZiAobmFtZSBpbiBob3RsaXN0KSB7XG4gICAgICAgIGhvdGxpc3RbbmFtZV0gKz0gMTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGhvdGxpc3RbbmFtZV0gPSAxO1xuICAgICAgfVxuXG4gICAgICBpZiAobm90bGlzdC5oYXMobmFtZSkpIHtcbiAgICAgICAgY29uc3QgdmFsdWUgPSBub3RsaXN0LmdldChuYW1lKTtcbiAgICAgICAgaWYgKHZhbHVlICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICBub3RsaXN0LnNldChuYW1lLCB2YWx1ZSArIDEpO1xuICAgICAgICB9XG4gICAgICB9IGVsc2Uge1xuICAgICAgICBub3RsaXN0LnNldChuYW1lLCAxKTtcbiAgICAgIH1cbiAgICB9XG4gIH1cbiAgY29uc29sZS5sb2coaG90bGlzdCk7XG4gIGNvbnNvbGUubG9nKG5vdGxpc3QpO1xuICBjb25zb2xlLmxvZyhBcnJheS5mcm9tKG5vdGxpc3QpKTtcbn1cbiJdfQ==
+exports.getHotlist = getHotlist;
+function compareFunction(a, b) {
+    return a[1] >= b[1] ? -1 : 1;
+}
+exports.compareFunction = compareFunction;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxvREFBc0M7QUFDdEMscURBQXFEO0FBQ3JELHFDQUErQjtBQUMvQixxQ0FBcUM7QUFFckMsS0FBSyxVQUFVLEdBQUc7SUFFaEIsTUFBTSxLQUFLLEdBQVcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxjQUFjLENBQUMsQ0FBQztJQUNwRCxNQUFNLFNBQVMsR0FBVyxJQUFJLENBQUMsUUFBUSxDQUFDLFFBQVEsQ0FBQyxDQUFDO0lBQ2xELE1BQU0sVUFBVSxHQUFXLElBQUksQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUFDLENBQUM7SUFDcEQsTUFBTSxXQUFXLEdBQVcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxnQkFBZ0IsQ0FBQyxDQUFDO0lBQzVELE1BQU0sUUFBUSxHQUFXLElBQUksQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLENBQUM7SUFFbkQsZUFBZTtJQUNmLE1BQU0sTUFBTSxHQUFhLFNBQVMsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUM7SUFFOUMsZ0JBQWdCO0lBQ2hCLE1BQU0sT0FBTyxHQUFhLFVBQVUsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBRTVELHVCQUF1QjtJQUN2QixNQUFNLFFBQVEsR0FBYSxXQUFXLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxDQUFDO0lBRWxELE1BQU0sTUFBTSxHQUFjLElBQUksa0JBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztJQUUvQyxJQUFJLFFBQVEsS0FBSyxPQUFPLEVBQUU7UUFDeEIsMEZBQTBGO1FBQzFGLDZCQUE2QjtRQUM3QixNQUFNLE1BQU0sR0FBRyxNQUFNLE1BQU0sQ0FBQyxTQUFTLEVBQUUsQ0FBQyxLQUFLLENBQUMsS0FBSyxDQUFDLEVBQUUsR0FBRSxJ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QUFPLENBQUMsQ0FBQztBQUM3QixDQUFDO0FBbEJELGdDQWtCQztBQUVELFNBQWdCLGVBQWUsQ0FBQyxDQUFzQixFQUFFLENBQXNCO0lBQzVFLE9BQU8sQ0FBQyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQUMvQixDQUFDO0FBRkQsMENBRUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgKiBhcyBjb3JlIGZyb20gJ0BhY3Rpb25zL2NvcmUnO1xuLy9pbXBvcnQgeyBHaXRIdWIgfSBmcm9tICdAYWN0aW9ucy9naXRodWIvbGliL3V0aWxzJztcbmltcG9ydCB7IEhlYXAgfSBmcm9tICdoZWFwLWpzJztcbmltcG9ydCB7IEdpdGh1YkFwaSB9IGZyb20gJy4vZ2l0aHViJztcblxuYXN5bmMgZnVuY3Rpb24gcnVuKCkge1xuXG4gIGNvbnN0IHRva2VuOiBzdHJpbmcgPSBjb3JlLmdldElucHV0KCdnaXRodWItdG9rZW4nKTtcbiAgY29uc3QgbGFiZWxzUmF3OiBzdHJpbmcgPSBjb3JlLmdldElucHV0KCdsYWJlbHMnKTtcbiAgY29uc3QgYnVja2V0c1Jhdzogc3RyaW5nID0gY29yZS5nZXRJbnB1dCgnYnVja2V0cycpO1xuICBjb25zdCBtZWFuaW5nc1Jhdzogc3RyaW5nID0gY29yZS5nZXRJbnB1dCgnbGFiZWwtbWVhbmluZ3MnKTtcbiAgY29uc3QgY2F0ZWdvcnk6IHN0cmluZyA9IGNvcmUuZ2V0SW5wdXQoJ2NhdGVnb3J5Jyk7XG5cbiAgLy8gcGFyc2UgbGFiZWxzXG4gIGNvbnN0IGxhYmVsczogc3RyaW5nW10gPSBsYWJlbHNSYXcuc3BsaXQoJywnKTtcblxuICAvLyBwYXJzZSBidWNrZXRzXG4gIGNvbnN0IGJ1Y2tldHM6IG51bWJlcltdID0gYnVja2V0c1Jhdy5zcGxpdCgnLCcpLm1hcChOdW1iZXIpO1xuXG4gIC8vIHBhcnNlIGxhYmVsIG1lYW5pbmdzXG4gIGNvbnN0IG1lYW5pbmdzOiBzdHJpbmdbXSA9IG1lYW5pbmdzUmF3LnNwbGl0KCd8Jyk7XG5cbiAgY29uc3QgZ2l0aHViOiBHaXRodWJBcGkgPSBuZXcgR2l0aHViQXBpKHRva2VuKTtcblxuICBpZiAoY2F0ZWdvcnkgPT09ICd0b3RhbCcpIHtcbiAgICAvL2NvbnN0IGlzc3VlcyA9IGF3YWl0IGdpdGh1Yi5nZXRQdWxscygpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICAvL2lmIChpc3N1ZXMgIT09IHVuZGVmaW5lZCkge1xuICAgIGNvbnN0IG1lcmdlcyA9IGF3YWl0IGdpdGh1Yi5nZXRNZXJnZXMoKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4gICAgY29uc3QgbnVtTWVyZ2VkID0gbWVyZ2VzPy5sZW5ndGg7XG4gICAgY29uc29sZS5sb2cobnVtTWVyZ2VkKTtcbiAgICBpZiAobnVtTWVyZ2VkICE9PSB1bmRlZmluZWQpIHtcbiAgICAgIC8vY29uc29sZS5sb2cobnVtTWVyZ2VkKTtcblxuICAgICAgY29uc3QgaW5kZXggPSBkZXRlcm1pbmVJbmRleChidWNrZXRzLCBudW1NZXJnZWQpO1xuICAgICAgY29uc3Qgc2V0TGFiZWxzID0gZGV0ZXJtaW5lTGFiZWwobGFiZWxzLCBpbmRleCk7XG5cbiAgICAgIGlmIChzZXRMYWJlbHMgIT0gW10pIHtcbiAgICAgICAgY29uc29sZS5sb2coc2V0TGFiZWxzKTtcbiAgICAgICAgYXdhaXQgZ2l0aHViLnNldFB1bGxSZXF1ZXN0TGFiZWxzKHNldExhYmVscykuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pOyAvLyAuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pOyA/XG4gICAgICB9XG5cbiAgICAgIC8vIHBsYWNlIHRvIGdlbmVyc3RlIGR5bmFtaWMgY29tbWVudHNcbiAgICAgIC8vIGl0IGhhcyB1c2VyX25hbWUsIGxhYmVscyBhbmQgbGFiZWwgbWVhbmluZ3NcbiAgICAgIGNvbnN0IGR5bmFtaWNDb21tZW50cyA9ICc8IS0tY29udHJpYnV0ZSBiYWRnZS0tPicgKyAnd2VsY29tZSAnICsgYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KSArICcsIHRoZSBDREsgVGVhbSB0aGFua3MgeW91IGZvciBiZWluZyBhICcgKyBzZXRMYWJlbHMgKyAnIHRvIHRoZSBDREsuIFRoaXMgbWVhbnMgdGhhdCB5b3UgaGF2ZSBtYWRlICcgKyBkZXRlcm1pbmVNZWFuaW5nKG1lYW5pbmdzLCBpbmRleCk7XG4gICAgICAvL2NvbnNvbGUubG9nKGR5bmFtaWNDb21tZW50cyk7XG4gICAgICBpZiAoZHluYW1pY0NvbW1lbnRzICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgYXdhaXQgZ2l0aHViLndyaXRlUFJDb21tZW50cyhkeW5hbWljQ29tbWVudHMpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICAgIH1cbiAgICB9XG4gICAgLy99XG5cblxuICAgIC8vY29uc3QgZGF0YSA9IGF3YWl0IGdpdGh1Yi5nZXRQdWxsc0RhdGEoKS5jYXRjaChlcnJvciA9PiB7XG4gICAgLy8gIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuICAgIC8vfSk7XG5cbiAgICAvL2NvbnNvbGUubG9nKGRhdGEpO1xuXG4gICAgLy9pZiAoZGF0YSAhPT0gdW5kZWZpbmVkKSB7IC8vIGlmIChyZXN1bHQgaW5zdGFuY2VvZiBPYmplY3QpIHtcbiAgICAvLyAgZm9yIChsZXQgaSA9IDA7IGkgPCBkYXRhLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgLy8gICAgY29uc29sZS5sb2coZGF0YVtpXS51c2VyPy5sb2dpbik7XG4gICAgLy8gIH1cbiAgICAvL31cblxuICAgIC8vY29uc29sZS5sb2coJ1xcblJlc2V0XFxuJyk7XG5cbiAgICAvKmNvbnN0IGNyZWF0b3IgPSBhd2FpdCBnaXRodWIuZ2V0SXNzdWVDcmVhdG9yKCkuY2F0Y2goZXJyb3IgPT4ge1xuICAgICAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG4gICAgfSk7XG4gICAgKi9cblxuICAgIC8vaWYgKGNyZWF0b3IgIT09IHVuZGVmaW5lZCkge1xuICAgIC8vYXdhaXQgZ2l0aHViLnBhZ2luYXRlRGF0YSgpLmNhdGNoKGVycm9yID0+IHtcbiAgICAvLyAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG4gICAgLy99KTtcbiAgICAvL31cblxuICAgIC8vY29uc29sZS5sb2coZ2l0aHViLmNvbnRleHQuaXNzdWUub3duZXIpO1xuICAgIC8vY29uc3QgY29udGVudCA9IGdpdGh1Yi5cbiAgfSBlbHNlIGlmIChjYXRlZ29yeSA9PT0gJ2hvdGxpc3QnKSB7XG4gICAgY29uc3QgZGF5czogbnVtYmVyID0gTnVtYmVyKGNvcmUuZ2V0SW5wdXQoJ2RheXMnKSk7XG4gICAgLy8gY2FsbCBkaWZmZXJlbnQgZnVuY3Rpb25zIGZyb20gZ2l0aHViXG4gICAgLy8gYWx0ZXJuYXRpdmVseSwgY2FuIGRldGVybWluZSBsYWJlbHMgKyBjb21tZW50IGFuZCBkbyBzZXR0aW5nIGluIDEgc3RlcFxuICAgIC8vIGFsc28gY29uc2lkZXIgZWRpdGluZyBjb21tZW50IGFzIGEgc3RyZWNoIGdvYWxcbiAgICBjb25zdCByZWNlbnRNZXJnZXMgPSBhd2FpdCBnaXRodWIuZ2V0UmVjZW50TWVyZ2VzKGRheXMsIGZhbHNlKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4gICAgLy9jb25zb2xlLmxvZyhyZWNlbnRNZXJnZXMpO1xuXG4gICAgaWYgKHJlY2VudE1lcmdlcyAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICBjb25zdCB1c2VybmFtZXMgPSByZWNlbnRNZXJnZXMuZmlsdGVyKGhhc0xvZ2luID0+IGhhc0xvZ2luLnVzZXI/LmxvZ2luKS5tYXAobG9naW4gPT4gbG9naW4udXNlcj8ubG9naW4pO1xuICAgICAgY29uc29sZS5sb2codXNlcm5hbWVzKTtcbiAgICAgIGlmICh1c2VybmFtZXMgIT09IHVuZGVmaW5lZCkge1xuICAgICAgICBjb25zdCBob3RsaXN0ID0gZ2V0SG90bGlzdCh1c2VybmFtZXMpO1xuICAgICAgICBpZiAoaG90bGlzdCAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgICAgY29uc3QgbWluSGVhcCA9IG5ldyBIZWFwKGNvbXBhcmVGdW5jdGlvbik7XG4gICAgICAgICAgbWluSGVhcC5pbml0KGhvdGxpc3QpO1xuICAgICAgICAgIGZvciAoY29uc3QgdmFsdWUgb2YgbWluSGVhcCkge1xuICAgICAgICAgICAgY29uc29sZS5sb2coJ05leHQgdG9wIHZhbHVlIGlzJywgdmFsdWUpO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cblxuXG4gIH0gZWxzZSB7XG4gICAgLy8gZG8gbm90aGluZ1xuICB9XG59XG5cbnJ1bigpLmNhdGNoKGVycm9yID0+IHtcbiAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG59KTtcblxuZnVuY3Rpb24gZGV0ZXJtaW5lTGFiZWwobGFiZWxzOiBzdHJpbmdbXSwgaW5kZXg6IG51bWJlcikge1xuICBpZiAoaW5kZXggPT09IC0xKSB7XG4gICAgcmV0dXJuIFtdO1xuICB9XG4gIHJldHVybiBbbGFiZWxzW2luZGV4XV07XG59XG5cblxuZnVuY3Rpb24gZGV0ZXJtaW5lTWVhbmluZyhtZWFuaW5nczogc3RyaW5nW10sIGluZGV4OiBudW1iZXIpIHtcbiAgaWYgKGluZGV4ID09PSAtMSkge1xuICAgIHJldHVybiB1bmRlZmluZWQ7XG4gIH1cbiAgcmV0dXJuIG1lYW5pbmdzW2luZGV4XTtcbn1cblxuXG5mdW5jdGlvbiBkZXRlcm1pbmVJbmRleChidWNrZXRzOiBudW1iZXJbXSwgdmFsdWU6IG51bWJlcik6IG51bWJlciB7XG4gIGlmICh2YWx1ZSA8PSBidWNrZXRzWzBdKSB7XG4gICAgcmV0dXJuIC0xO1xuICB9XG4gIGxldCBpbmRleCA9IDA7XG5cbiAgbGV0IGkgPSAwO1xuICB3aGlsZSAoaSA8IGJ1Y2tldHMubGVuZ3RoKSB7XG4gICAgaWYgKHZhbHVlID4gYnVja2V0c1tpXSkge1xuICAgICAgaW5kZXggPSBpO1xuICAgIH1cbiAgICBpZiAodmFsdWUgPD0gYnVja2V0c1tpXSkge1xuICAgICAgYnJlYWs7XG4gICAgfVxuICAgIGkgKz0gMTtcbiAgfVxuICByZXR1cm4gaW5kZXg7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBnZXRIb3RsaXN0KHVzZXJuYW1lczogKHN0cmluZyB8IHVuZGVmaW5lZClbXSkge1xuICBsZXQgaG90bGlzdDogTWFwPHN0cmluZywgbnVtYmVyPiA9IG5ldyBNYXA8c3RyaW5nLCBudW1iZXI+O1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHVzZXJuYW1lcy5sZW5ndGg7IGkgKz0gMSkge1xuICAgIGxldCB1c2VybmFtZSA9IHVzZXJuYW1lc1tpXTtcbiAgICBpZiAodXNlcm5hbWUgIT09IHVuZGVmaW5lZCkge1xuICAgICAgaWYgKGhvdGxpc3QuaGFzKHVzZXJuYW1lKSkge1xuICAgICAgICBsZXQgdmFsdWUgPSBob3RsaXN0LmdldCh1c2VybmFtZSk7XG4gICAgICAgIGlmICh2YWx1ZSAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgICAgaG90bGlzdC5zZXQodXNlcm5hbWUsIHZhbHVlICsgMSk7XG4gICAgICAgIH1cbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGhvdGxpc3Quc2V0KHVzZXJuYW1lLCAxKTtcbiAgICAgIH1cbiAgICB9IGVsc2Uge1xuICAgICAgcmV0dXJuIHVuZGVmaW5lZDtcbiAgICB9XG4gIH1cbiAgcmV0dXJuIEFycmF5LmZyb20oaG90bGlzdCk7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBjb21wYXJlRnVuY3Rpb24oYTogKHN0cmluZyB8IG51bWJlcilbXSwgYjogKHN0cmluZyB8IG51bWJlcilbXSkge1xuICByZXR1cm4gYVsxXSA+PSBiWzFdID8gLTEgOiAxO1xufVxuIl19
 
 /***/ }),
 
@@ -5033,6 +5040,929 @@ function checkEncoding(name) {
         .replace(/^us[\-_]?ascii$/i, 'ASCII')
         .toUpperCase();
 }
+
+
+/***/ }),
+
+/***/ 8973:
+/***/ (function(__unused_webpack_module, exports) {
+
+(function (global, factory) {
+     true ? factory(exports) :
+    0;
+})(this, (function (exports) { 'use strict';
+
+    var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        function verb(n) { return function (v) { return step([n, v]); }; }
+        function step(op) {
+            if (f) throw new TypeError("Generator is already executing.");
+            while (_) try {
+                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+                if (y = 0, t) op = [op[0] & 2, t.value];
+                switch (op[0]) {
+                    case 0: case 1: t = op; break;
+                    case 4: _.label++; return { value: op[1], done: false };
+                    case 5: _.label++; y = op[1]; op = [0]; continue;
+                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                    default:
+                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                        if (t[2]) _.ops.pop();
+                        _.trys.pop(); continue;
+                }
+                op = body.call(thisArg, _);
+            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+    };
+    var __read = (undefined && undefined.__read) || function (o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
+    };
+    var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+            if (ar || !(i in from)) {
+                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                ar[i] = from[i];
+            }
+        }
+        return to.concat(ar || Array.prototype.slice.call(from));
+    };
+    var toInt = function (n) { return ~~n; };
+    /**
+     * Heap
+     * @type {Class}
+     */
+    var Heap = /** @class */ (function () {
+        /**
+         * Heap instance constructor.
+         * @param  {Function} compare Optional comparison function, defaults to Heap.minComparator<number>
+         */
+        function Heap(compare) {
+            if (compare === void 0) { compare = Heap.minComparator; }
+            var _this = this;
+            this.compare = compare;
+            this.heapArray = [];
+            this._limit = 0;
+            /**
+             * Alias of add
+             */
+            this.offer = this.add;
+            /**
+             * Alias of peek
+             */
+            this.element = this.peek;
+            /**
+             * Alias of pop
+             */
+            this.poll = this.pop;
+            /**
+             * Returns the inverse to the comparison function.
+             * @return {Function}
+             */
+            this._invertedCompare = function (a, b) {
+                return -1 * _this.compare(a, b);
+            };
+        }
+        /*
+                  Static methods
+         */
+        /**
+         * Gets children indices for given index.
+         * @param  {Number} idx     Parent index
+         * @return {Array(Number)}  Array of children indices
+         */
+        Heap.getChildrenIndexOf = function (idx) {
+            return [idx * 2 + 1, idx * 2 + 2];
+        };
+        /**
+         * Gets parent index for given index.
+         * @param  {Number} idx  Children index
+         * @return {Number | undefined}      Parent index, -1 if idx is 0
+         */
+        Heap.getParentIndexOf = function (idx) {
+            if (idx <= 0) {
+                return -1;
+            }
+            var whichChildren = idx % 2 ? 1 : 2;
+            return Math.floor((idx - whichChildren) / 2);
+        };
+        /**
+         * Gets sibling index for given index.
+         * @param  {Number} idx  Children index
+         * @return {Number | undefined}      Sibling index, -1 if idx is 0
+         */
+        Heap.getSiblingIndexOf = function (idx) {
+            if (idx <= 0) {
+                return -1;
+            }
+            var whichChildren = idx % 2 ? 1 : -1;
+            return idx + whichChildren;
+        };
+        /**
+         * Min heap comparison function, default.
+         * @param  {any} a     First element
+         * @param  {any} b     Second element
+         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
+         */
+        Heap.minComparator = function (a, b) {
+            if (a > b) {
+                return 1;
+            }
+            else if (a < b) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        };
+        /**
+         * Max heap comparison function.
+         * @param  {any} a     First element
+         * @param  {any} b     Second element
+         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
+         */
+        Heap.maxComparator = function (a, b) {
+            if (b > a) {
+                return 1;
+            }
+            else if (b < a) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        };
+        /**
+         * Min number heap comparison function, default.
+         * @param  {Number} a     First element
+         * @param  {Number} b     Second element
+         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
+         */
+        Heap.minComparatorNumber = function (a, b) {
+            return a - b;
+        };
+        /**
+         * Max number heap comparison function.
+         * @param  {Number} a     First element
+         * @param  {Number} b     Second element
+         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
+         */
+        Heap.maxComparatorNumber = function (a, b) {
+            return b - a;
+        };
+        /**
+         * Default equality function.
+         * @param  {any} a    First element
+         * @param  {any} b    Second element
+         * @return {Boolean}  True if equal, false otherwise
+         */
+        Heap.defaultIsEqual = function (a, b) {
+            return a === b;
+        };
+        /**
+         * Prints a heap.
+         * @param  {Heap} heap Heap to be printed
+         * @returns {String}
+         */
+        Heap.print = function (heap) {
+            function deep(i) {
+                var pi = Heap.getParentIndexOf(i);
+                return Math.floor(Math.log2(pi + 1));
+            }
+            function repeat(str, times) {
+                var out = '';
+                for (; times > 0; --times) {
+                    out += str;
+                }
+                return out;
+            }
+            var node = 0;
+            var lines = [];
+            var maxLines = deep(heap.length - 1) + 2;
+            var maxLength = 0;
+            while (node < heap.length) {
+                var i = deep(node) + 1;
+                if (node === 0) {
+                    i = 0;
+                }
+                // Text representation
+                var nodeText = String(heap.get(node));
+                if (nodeText.length > maxLength) {
+                    maxLength = nodeText.length;
+                }
+                // Add to line
+                lines[i] = lines[i] || [];
+                lines[i].push(nodeText);
+                node += 1;
+            }
+            return lines
+                .map(function (line, i) {
+                var times = Math.pow(2, maxLines - i) - 1;
+                return (repeat(' ', Math.floor(times / 2) * maxLength) +
+                    line
+                        .map(function (el) {
+                        // centered
+                        var half = (maxLength - el.length) / 2;
+                        return repeat(' ', Math.ceil(half)) + el + repeat(' ', Math.floor(half));
+                    })
+                        .join(repeat(' ', times * maxLength)));
+            })
+                .join('\n');
+        };
+        /*
+                  Python style
+         */
+        /**
+         * Converts an array into an array-heap, in place
+         * @param  {Array}    arr      Array to be modified
+         * @param  {Function} compare  Optional compare function
+         * @return {Heap}              For convenience, it returns a Heap instance
+         */
+        Heap.heapify = function (arr, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = arr;
+            heap.init();
+            return heap;
+        };
+        /**
+         * Extract the peek of an array-heap
+         * @param  {Array}    heapArr  Array to be modified, should be a heap
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Returns the extracted peek
+         */
+        Heap.heappop = function (heapArr, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = heapArr;
+            return heap.pop();
+        };
+        /**
+         * Pushes a item into an array-heap
+         * @param  {Array}    heapArr  Array to be modified, should be a heap
+         * @param  {any}      item     Item to push
+         * @param  {Function} compare  Optional compare function
+         */
+        Heap.heappush = function (heapArr, item, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = heapArr;
+            heap.push(item);
+        };
+        /**
+         * Push followed by pop, faster
+         * @param  {Array}    heapArr  Array to be modified, should be a heap
+         * @param  {any}      item     Item to push
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Returns the extracted peek
+         */
+        Heap.heappushpop = function (heapArr, item, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = heapArr;
+            return heap.pushpop(item);
+        };
+        /**
+         * Replace peek with item
+         * @param  {Array}    heapArr  Array to be modified, should be a heap
+         * @param  {any}      item     Item as replacement
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Returns the extracted peek
+         */
+        Heap.heapreplace = function (heapArr, item, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = heapArr;
+            return heap.replace(item);
+        };
+        /**
+         * Return the `n` most valuable elements of a heap-like Array
+         * @param  {Array}    heapArr  Array, should be an array-heap
+         * @param  {number}   n        Max number of elements
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Elements
+         */
+        Heap.heaptop = function (heapArr, n, compare) {
+            if (n === void 0) { n = 1; }
+            var heap = new Heap(compare);
+            heap.heapArray = heapArr;
+            return heap.top(n);
+        };
+        /**
+         * Return the `n` least valuable elements of a heap-like Array
+         * @param  {Array}    heapArr  Array, should be an array-heap
+         * @param  {number}   n        Max number of elements
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Elements
+         */
+        Heap.heapbottom = function (heapArr, n, compare) {
+            if (n === void 0) { n = 1; }
+            var heap = new Heap(compare);
+            heap.heapArray = heapArr;
+            return heap.bottom(n);
+        };
+        /**
+         * Return the `n` most valuable elements of an iterable
+         * @param  {number}   n        Max number of elements
+         * @param  {Iterable} Iterable Iterable list of elements
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Elements
+         */
+        Heap.nlargest = function (n, iterable, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = __spreadArray([], __read(iterable), false);
+            heap.init();
+            return heap.top(n);
+        };
+        /**
+         * Return the `n` least valuable elements of an iterable
+         * @param  {number}   n        Max number of elements
+         * @param  {Iterable} Iterable Iterable list of elements
+         * @param  {Function} compare  Optional compare function
+         * @return {any}               Elements
+         */
+        Heap.nsmallest = function (n, iterable, compare) {
+            var heap = new Heap(compare);
+            heap.heapArray = __spreadArray([], __read(iterable), false);
+            heap.init();
+            return heap.bottom(n);
+        };
+        /*
+                  Instance methods
+         */
+        /**
+         * Adds an element to the heap. Aliases: `offer`.
+         * Same as: push(element)
+         * @param {any} element Element to be added
+         * @return {Boolean} true
+         */
+        Heap.prototype.add = function (element) {
+            this._sortNodeUp(this.heapArray.push(element) - 1);
+            this._applyLimit();
+            return true;
+        };
+        /**
+         * Adds an array of elements to the heap.
+         * Similar as: push(element, element, ...).
+         * @param {Array} elements Elements to be added
+         * @return {Boolean} true
+         */
+        Heap.prototype.addAll = function (elements) {
+            var _a;
+            var i = this.length;
+            (_a = this.heapArray).push.apply(_a, __spreadArray([], __read(elements), false));
+            for (var l = this.length; i < l; ++i) {
+                this._sortNodeUp(i);
+            }
+            this._applyLimit();
+            return true;
+        };
+        /**
+         * Return the bottom (lowest value) N elements of the heap.
+         *
+         * @param  {Number} n  Number of elements.
+         * @return {Array}     Array of length <= N.
+         */
+        Heap.prototype.bottom = function (n) {
+            if (n === void 0) { n = 1; }
+            if (this.heapArray.length === 0 || n <= 0) {
+                // Nothing to do
+                return [];
+            }
+            else if (this.heapArray.length === 1) {
+                // Just the peek
+                return [this.heapArray[0]];
+            }
+            else if (n >= this.heapArray.length) {
+                // The whole heap
+                return __spreadArray([], __read(this.heapArray), false);
+            }
+            else {
+                // Some elements
+                var result = this._bottomN_push(~~n);
+                return result;
+            }
+        };
+        /**
+         * Check if the heap is sorted, useful for testing purposes.
+         * @return {Undefined | Element}  Returns an element if something wrong is found, otherwise it's undefined
+         */
+        Heap.prototype.check = function () {
+            var _this = this;
+            return this.heapArray.find(function (el, j) { return !!_this.getChildrenOf(j).find(function (ch) { return _this.compare(el, ch) > 0; }); });
+        };
+        /**
+         * Remove all of the elements from this heap.
+         */
+        Heap.prototype.clear = function () {
+            this.heapArray = [];
+        };
+        /**
+         * Clone this heap
+         * @return {Heap}
+         */
+        Heap.prototype.clone = function () {
+            var cloned = new Heap(this.comparator());
+            cloned.heapArray = this.toArray();
+            cloned._limit = this._limit;
+            return cloned;
+        };
+        /**
+         * Returns the comparison function.
+         * @return {Function}
+         */
+        Heap.prototype.comparator = function () {
+            return this.compare;
+        };
+        /**
+         * Returns true if this queue contains the specified element.
+         * @param  {any}      o   Element to be found
+         * @param  {Function} fn  Optional comparison function, receives (element, needle)
+         * @return {Boolean}
+         */
+        Heap.prototype.contains = function (o, fn) {
+            if (fn === void 0) { fn = Heap.defaultIsEqual; }
+            return this.heapArray.findIndex(function (el) { return fn(el, o); }) >= 0;
+        };
+        /**
+         * Initialise a heap, sorting nodes
+         * @param  {Array} array Optional initial state array
+         */
+        Heap.prototype.init = function (array) {
+            if (array) {
+                this.heapArray = __spreadArray([], __read(array), false);
+            }
+            for (var i = Math.floor(this.heapArray.length); i >= 0; --i) {
+                this._sortNodeDown(i);
+            }
+            this._applyLimit();
+        };
+        /**
+         * Test if the heap has no elements.
+         * @return {Boolean} True if no elements on the heap
+         */
+        Heap.prototype.isEmpty = function () {
+            return this.length === 0;
+        };
+        /**
+         * Get the leafs of the tree (no children nodes)
+         */
+        Heap.prototype.leafs = function () {
+            if (this.heapArray.length === 0) {
+                return [];
+            }
+            var pi = Heap.getParentIndexOf(this.heapArray.length - 1);
+            return this.heapArray.slice(pi + 1);
+        };
+        Object.defineProperty(Heap.prototype, "length", {
+            /**
+             * Length of the heap.
+             * @return {Number}
+             */
+            get: function () {
+                return this.heapArray.length;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Heap.prototype, "limit", {
+            /**
+             * Get length limit of the heap.
+             * @return {Number}
+             */
+            get: function () {
+                return this._limit;
+            },
+            /**
+             * Set length limit of the heap.
+             * @return {Number}
+             */
+            set: function (_l) {
+                this._limit = ~~_l;
+                this._applyLimit();
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * Top node. Aliases: `element`.
+         * Same as: `top(1)[0]`
+         * @return {any} Top node
+         */
+        Heap.prototype.peek = function () {
+            return this.heapArray[0];
+        };
+        /**
+         * Extract the top node (root). Aliases: `poll`.
+         * @return {any} Extracted top node, undefined if empty
+         */
+        Heap.prototype.pop = function () {
+            var last = this.heapArray.pop();
+            if (this.length > 0 && last !== undefined) {
+                return this.replace(last);
+            }
+            return last;
+        };
+        /**
+         * Pushes element(s) to the heap.
+         * @param  {...any} elements Elements to insert
+         * @return {Boolean} True if elements are present
+         */
+        Heap.prototype.push = function () {
+            var elements = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                elements[_i] = arguments[_i];
+            }
+            if (elements.length < 1) {
+                return false;
+            }
+            else if (elements.length === 1) {
+                return this.add(elements[0]);
+            }
+            else {
+                return this.addAll(elements);
+            }
+        };
+        /**
+         * Same as push & pop in sequence, but faster
+         * @param  {any} element Element to insert
+         * @return {any}  Extracted top node
+         */
+        Heap.prototype.pushpop = function (element) {
+            var _a;
+            if (this.compare(this.heapArray[0], element) < 0) {
+                _a = __read([this.heapArray[0], element], 2), element = _a[0], this.heapArray[0] = _a[1];
+                this._sortNodeDown(0);
+            }
+            return element;
+        };
+        /**
+         * Remove an element from the heap.
+         * @param  {any}   o      Element to be found
+         * @param  {Function} fn  Optional function to compare
+         * @return {Boolean}      True if the heap was modified
+         */
+        Heap.prototype.remove = function (o, fn) {
+            if (fn === void 0) { fn = Heap.defaultIsEqual; }
+            if (this.length > 0) {
+                if (o === undefined) {
+                    this.pop();
+                    return true;
+                }
+                else {
+                    var idx = this.heapArray.findIndex(function (el) { return fn(el, o); });
+                    if (idx >= 0) {
+                        if (idx === 0) {
+                            this.pop();
+                        }
+                        else if (idx === this.length - 1) {
+                            this.heapArray.pop();
+                        }
+                        else {
+                            this.heapArray.splice(idx, 1, this.heapArray.pop());
+                            this._sortNodeUp(idx);
+                            this._sortNodeDown(idx);
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+        /**
+         * Pop the current peek value, and add the new item.
+         * @param  {any} element  Element to replace peek
+         * @return {any}         Old peek
+         */
+        Heap.prototype.replace = function (element) {
+            var peek = this.heapArray[0];
+            this.heapArray[0] = element;
+            this._sortNodeDown(0);
+            return peek;
+        };
+        /**
+         * Size of the heap
+         * @return {Number}
+         */
+        Heap.prototype.size = function () {
+            return this.length;
+        };
+        /**
+         * Return the top (highest value) N elements of the heap.
+         *
+         * @param  {Number} n  Number of elements.
+         * @return {Array}    Array of length <= N.
+         */
+        Heap.prototype.top = function (n) {
+            if (n === void 0) { n = 1; }
+            if (this.heapArray.length === 0 || n <= 0) {
+                // Nothing to do
+                return [];
+            }
+            else if (this.heapArray.length === 1 || n === 1) {
+                // Just the peek
+                return [this.heapArray[0]];
+            }
+            else if (n >= this.heapArray.length) {
+                // The whole peek
+                return __spreadArray([], __read(this.heapArray), false);
+            }
+            else {
+                // Some elements
+                var result = this._topN_push(~~n);
+                return result;
+            }
+        };
+        /**
+         * Clone the heap's internal array
+         * @return {Array}
+         */
+        Heap.prototype.toArray = function () {
+            return __spreadArray([], __read(this.heapArray), false);
+        };
+        /**
+         * String output, call to Array.prototype.toString()
+         * @return {String}
+         */
+        Heap.prototype.toString = function () {
+            return this.heapArray.toString();
+        };
+        /**
+         * Get the element at the given index.
+         * @param  {Number} i Index to get
+         * @return {any}       Element at that index
+         */
+        Heap.prototype.get = function (i) {
+            return this.heapArray[i];
+        };
+        /**
+         * Get the elements of these node's children
+         * @param  {Number} idx Node index
+         * @return {Array(any)}  Children elements
+         */
+        Heap.prototype.getChildrenOf = function (idx) {
+            var _this = this;
+            return Heap.getChildrenIndexOf(idx)
+                .map(function (i) { return _this.heapArray[i]; })
+                .filter(function (e) { return e !== undefined; });
+        };
+        /**
+         * Get the element of this node's parent
+         * @param  {Number} idx Node index
+         * @return {any}     Parent element
+         */
+        Heap.prototype.getParentOf = function (idx) {
+            var pi = Heap.getParentIndexOf(idx);
+            return this.heapArray[pi];
+        };
+        /**
+         * Iterator interface
+         */
+        Heap.prototype[Symbol.iterator] = function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.length) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.pop()];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 0];
+                    case 2: return [2 /*return*/];
+                }
+            });
+        };
+        /**
+         * Returns an iterator. To comply with Java interface.
+         */
+        Heap.prototype.iterator = function () {
+            return this.toArray();
+        };
+        /**
+         * Limit heap size if needed
+         */
+        Heap.prototype._applyLimit = function () {
+            if (this._limit && this._limit < this.heapArray.length) {
+                var rm = this.heapArray.length - this._limit;
+                // It's much faster than splice
+                while (rm) {
+                    this.heapArray.pop();
+                    --rm;
+                }
+            }
+        };
+        /**
+         * Return the bottom (lowest value) N elements of the heap, without corner cases, unsorted
+         *
+         * @param  {Number} n  Number of elements.
+         * @return {Array}     Array of length <= N.
+         */
+        Heap.prototype._bottomN_push = function (n) {
+            // Use an inverted heap
+            var bottomHeap = new Heap(this.compare);
+            bottomHeap.limit = n;
+            bottomHeap.heapArray = this.heapArray.slice(-n);
+            bottomHeap.init();
+            var startAt = this.heapArray.length - 1 - n;
+            var parentStartAt = Heap.getParentIndexOf(startAt);
+            var indices = [];
+            for (var i = startAt; i > parentStartAt; --i) {
+                indices.push(i);
+            }
+            var arr = this.heapArray;
+            while (indices.length) {
+                var i = indices.shift();
+                if (this.compare(arr[i], bottomHeap.peek()) > 0) {
+                    bottomHeap.replace(arr[i]);
+                    if (i % 2) {
+                        indices.push(Heap.getParentIndexOf(i));
+                    }
+                }
+            }
+            return bottomHeap.toArray();
+        };
+        /**
+         * Move a node to a new index, switching places
+         * @param  {Number} j First node index
+         * @param  {Number} k Another node index
+         */
+        Heap.prototype._moveNode = function (j, k) {
+            var _a;
+            _a = __read([this.heapArray[k], this.heapArray[j]], 2), this.heapArray[j] = _a[0], this.heapArray[k] = _a[1];
+        };
+        /**
+         * Move a node down the tree (to the leaves) to find a place where the heap is sorted.
+         * @param  {Number} i Index of the node
+         */
+        Heap.prototype._sortNodeDown = function (i) {
+            var _this = this;
+            var moveIt = i < this.heapArray.length - 1;
+            var self = this.heapArray[i];
+            var getPotentialParent = function (best, j) {
+                if (_this.heapArray.length > j && _this.compare(_this.heapArray[j], _this.heapArray[best]) < 0) {
+                    best = j;
+                }
+                return best;
+            };
+            while (moveIt) {
+                var childrenIdx = Heap.getChildrenIndexOf(i);
+                var bestChildIndex = childrenIdx.reduce(getPotentialParent, childrenIdx[0]);
+                var bestChild = this.heapArray[bestChildIndex];
+                if (typeof bestChild !== 'undefined' && this.compare(self, bestChild) > 0) {
+                    this._moveNode(i, bestChildIndex);
+                    i = bestChildIndex;
+                }
+                else {
+                    moveIt = false;
+                }
+            }
+        };
+        /**
+         * Move a node up the tree (to the root) to find a place where the heap is sorted.
+         * @param  {Number} i Index of the node
+         */
+        Heap.prototype._sortNodeUp = function (i) {
+            var moveIt = i > 0;
+            while (moveIt) {
+                var pi = Heap.getParentIndexOf(i);
+                if (pi >= 0 && this.compare(this.heapArray[pi], this.heapArray[i]) > 0) {
+                    this._moveNode(i, pi);
+                    i = pi;
+                }
+                else {
+                    moveIt = false;
+                }
+            }
+        };
+        /**
+         * Return the top (highest value) N elements of the heap, without corner cases, unsorted
+         * Implementation: push.
+         *
+         * @param  {Number} n  Number of elements.
+         * @return {Array}     Array of length <= N.
+         */
+        Heap.prototype._topN_push = function (n) {
+            // Use an inverted heap
+            var topHeap = new Heap(this._invertedCompare);
+            topHeap.limit = n;
+            var indices = [0];
+            var arr = this.heapArray;
+            while (indices.length) {
+                var i = indices.shift();
+                if (i < arr.length) {
+                    if (topHeap.length < n) {
+                        topHeap.push(arr[i]);
+                        indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i)), false));
+                    }
+                    else if (this.compare(arr[i], topHeap.peek()) < 0) {
+                        topHeap.replace(arr[i]);
+                        indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i)), false));
+                    }
+                }
+            }
+            return topHeap.toArray();
+        };
+        /**
+         * Return the top (highest value) N elements of the heap, without corner cases, unsorted
+         * Implementation: init + push.
+         *
+         * @param  {Number} n  Number of elements.
+         * @return {Array}     Array of length <= N.
+         */
+        Heap.prototype._topN_fill = function (n) {
+            // Use an inverted heap
+            var heapArray = this.heapArray;
+            var topHeap = new Heap(this._invertedCompare);
+            topHeap.limit = n;
+            topHeap.heapArray = heapArray.slice(0, n);
+            topHeap.init();
+            var branch = Heap.getParentIndexOf(n - 1) + 1;
+            var indices = [];
+            for (var i = branch; i < n; ++i) {
+                indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i).filter(function (l) { return l < heapArray.length; })), false));
+            }
+            if ((n - 1) % 2) {
+                indices.push(n);
+            }
+            while (indices.length) {
+                var i = indices.shift();
+                if (i < heapArray.length) {
+                    if (this.compare(heapArray[i], topHeap.peek()) < 0) {
+                        topHeap.replace(heapArray[i]);
+                        indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i)), false));
+                    }
+                }
+            }
+            return topHeap.toArray();
+        };
+        /**
+         * Return the top (highest value) N elements of the heap, without corner cases, unsorted
+         * Implementation: heap.
+         *
+         * @param  {Number} n  Number of elements.
+         * @return {Array}     Array of length <= N.
+         */
+        Heap.prototype._topN_heap = function (n) {
+            var topHeap = this.clone();
+            var result = [];
+            for (var i = 0; i < n; ++i) {
+                result.push(topHeap.pop());
+            }
+            return result;
+        };
+        /**
+         * Return index of the top element
+         * @param list
+         */
+        Heap.prototype._topIdxOf = function (list) {
+            if (!list.length) {
+                return -1;
+            }
+            var idx = 0;
+            var top = list[idx];
+            for (var i = 1; i < list.length; ++i) {
+                var comp = this.compare(list[i], top);
+                if (comp < 0) {
+                    idx = i;
+                    top = list[i];
+                }
+            }
+            return idx;
+        };
+        /**
+         * Return the top element
+         * @param list
+         */
+        Heap.prototype._topOf = function () {
+            var list = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                list[_i] = arguments[_i];
+            }
+            var heap = new Heap(this.compare);
+            heap.init(list);
+            return heap.peek();
+        };
+        return Heap;
+    }());
+
+    exports.Heap = Heap;
+    exports["default"] = Heap;
+    exports.toInt = toInt;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
 
 
 /***/ }),
