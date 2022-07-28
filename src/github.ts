@@ -98,7 +98,7 @@ export class GithubApi {
     }
   }
 
-  public numFixOrFeat() {
+  public getFixesAndFeats() {
     //const pulls = await this.getPulls().catch(error => {
     const merges = await this.getMerges().catch(error => {
       core.setFailed(error.message);
@@ -106,8 +106,7 @@ export class GithubApi {
 
     //const titles = pulls.filter(isMerged => isMerged.pull_request.merged_at).map(title => title.title).filter();
     const titles = merges.map(title => title.title).filter();
-    const fixesAndFeats = titles.filter(key => key.slice(0, this.getIndex(key)) === 'fix' || key.slice(0, this.getIndex(key)) === 'feat');
-    
+    return titles.filter(key => key.slice(0, this.getIndex(key)) === 'fix' || key.slice(0, this.getIndex(key)) === 'feat');
   }
 
   private getIndex(key: string) {
