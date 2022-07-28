@@ -85,12 +85,29 @@ export class GithubApi {
     //return numPRs;
   }
 
-  /*
-  public async getTimedPRs(issue: object, days: number) {
+  public async getMergedTime(numOfDays: number) {
 
-    return true;
+    let result = 0;
+    const pulls = await this.getPulls().catch(error => {core.setFailed(error.message);});
+    if (pulls !== undefined) {
+      const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+      // return mergedPRs.length; (for testing purpose)
+      // get target start date as "startDate" with the given days
+      const date = new Date();
+      const daysAgo = new Date(date.getTime());
+      daysAgo.setDate(date.getDate() - numOfDays);
+      const startDate = daysAgo;
+
+      for (const k in mergedPRs.filter(isMerged => isMerged.pull_request?.merged_at)) {
+        if ( (new Date(k).getTime() - startDate.getTime()) >= 0 ) {
+          result = result + 1;
+        }
+      }
+    }
+    return result;
+    //console.log(`${issueCreator} has made ${numPRs} PRs`);
+    //return numPRs;
   }
-  */
 
   public async getIssueCreator() {
     if (this.issueNumber !== undefined) {

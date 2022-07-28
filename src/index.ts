@@ -96,6 +96,8 @@ async function run() {
     // call different functions from github
     // alternatively, can determine labels + comment and do setting in 1 step
     // also consider editing comment as a strech goal
+    const numMergedTime = await github.getMergedTime(10).catch(error => {core.setFailed(error.message);});
+    console.log(numMergedTime);
   } else {
     // do nothing
   }
