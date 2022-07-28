@@ -234,6 +234,7 @@ export class GithubApi {
     for (let i = 0; i < responese.length; i++) {
       if (responese[i] !== undefined) {
         if (responese[i].body?.search(searchWords)) {
+          console.log(responese[i].id);
           return responese[i].id;
         };
       }
