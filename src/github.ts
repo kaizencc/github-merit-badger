@@ -130,9 +130,9 @@ export class GithubApi {
         }
       }
       */
-      const daysAgo = new Date();
+      //const daysAgo = new Date();
       //const daysAgo = new Date(date.getTime());
-      daysAgo.setDate(daysAgo.getDate() - numDays);
+      //daysAgo.setDate(daysAgo.getDate() - numDays);
       //const startDate = daysAgo;
 
       /*
@@ -160,7 +160,10 @@ export class GithubApi {
   private compareDate(date: Date, numDays: number) {
     const daysAgo = new Date();
     daysAgo.setDate(daysAgo.getDate() - numDays);
-    return (new Date(date).getDay() - daysAgo.getDay()) >= 0;
+    console.log('daysAgo: ' + daysAgo);
+    const diff = new Date(date).getDay() - daysAgo.getDay();
+    console.log('diff: ' + diff);
+    return diff >= 0;
   }
 
   public async getIssueCreator() {
