@@ -81,14 +81,18 @@ export class GithubApi {
         result = issues.filter(isPull => isPull.pull_request);
       }
     }
-
+    console.log('Pulls (in pulls): \n\n' + result);
     return result;
   }
 
   public async getMerges(creatorSpecific: boolean=true) {
     const pulls = await this.getPulls(creatorSpecific).catch(error => {core.setFailed(error.message);});
+    console.log('Pulls (in Merges): \n\n' + pulls);
     if (pulls !== undefined) {
-      return pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+      const merges = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+      console.log('Merges (in Merges): \n\n' + merges);
+      return merges;
+      //return pulls.filter(isMerged => isMerged.pull_request?.merged_at);
       //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
       //return mergedPRs.length;
     }
@@ -143,6 +147,7 @@ export class GithubApi {
         && (recent.pull_request?.merged_at !== undefined)
         && (this.compareDate(new Date(recent.pull_request?.merged_at), numDays)));
     }
+    console.log('Recent Merges (in Recent): \n\n' + result);
     return result;
     //console.log(`${issueCreator} has made ${numPRs} PRs`);
     //return numPRs;
