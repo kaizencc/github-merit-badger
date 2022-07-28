@@ -251,6 +251,21 @@ export class GithubApi {
     });
   }
 
+
+  public async test_comment_list() {
+    if (this.issueNumber !== undefined) {
+      const commentList = await this.octokit.rest.issues.listComments({
+        owner: this.repo.owner,
+        repo: this.repo.repo,
+        issue_number: this.issueNumber,
+        per_page: 100,
+        page: 1,
+      });
+      const responese = commentList.data;
+      console.log(responese);
+    }
+  }
+
   public async getFixesAndFeats() {
     //const pulls = await this.getPulls().catch(error => {
     const merges = await this.getMerges().catch(error => {
