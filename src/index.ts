@@ -29,7 +29,7 @@ async function run() {
     const numMerged = merges?.length;
     console.log(numMerged);
     if (numMerged !== undefined) {
-      console.log(numMerged);
+      //console.log(numMerged);
 
       const index = determineIndex(buckets, numMerged);
       const setLabels = determineLabel(labels, index);
@@ -83,7 +83,7 @@ async function run() {
     // alternatively, can determine labels + comment and do setting in 1 step
     // also consider editing comment as a strech goal
     const recentMerges = await github.getRecentMerges(days, false).catch(error => {core.setFailed(error.message);});
-    console.log(recentMerges);
+    //console.log(recentMerges);
 
     if (recentMerges !== undefined) {
       const usernames = recentMerges.filter(hasLogin => hasLogin.user?.login).map(login => login.user?.login);
