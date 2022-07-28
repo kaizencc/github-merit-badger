@@ -24,8 +24,8 @@ jobs:
         id: contributor-badge-hotlist
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: '#1 :trophy:,top 3 :fire:,top 5 :sunglasses:'
+          labels: '\#1 :trophy:,top 3 :fire:,top 5 :sunglasses:'
           buckets: '1,2,2'
-          label-meanings: 'You are in the top 2 and you're not \#2!|On the podium!|You have broken into the top 5!'
+          label-meanings: 'You are in the top 2 and you''re not \#2!|On the podium!|You have broken into the top 5!'
           days: 1
           category: 'hotlist'
