@@ -112,7 +112,7 @@ async function run() {
                 console.log(setLabels);
                 await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
 
-                let hotlistComment = 'You got the \'' + setLabels[0] + '\' label. You are on the hotlist and ' + meanings[index];
+                let hotlistComment = 'You got the \'' + setLabels[0] + '\' label. This label means you are on the hotlist! ' + meanings[index];
 
                 await github.writePRComments(hotlistComment).catch(error => {core.setFailed(error.message);});
               }
