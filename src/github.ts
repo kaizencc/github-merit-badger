@@ -138,4 +138,32 @@ export class GithubApi {
     }
   }
 
+  public async getFixesAndFeats() {
+    //const pulls = await this.getPulls().catch(error => {
+    const merges = await this.getMerges().catch(error => {
+      core.setFailed(error.message);
+    });
+
+    if (merges !== undefined) {
+      //const titles = pulls.filter(isMerged => isMerged.pull_request.merged_at).map(title => title.title).filter();
+      const titles = merges.map(title => title.title);
+      return titles.filter(key => key.slice(0, this.getIndex(key)) === 'fix' || key.slice(0, this.getIndex(key)) === 'feat');
+    }
+    return undefined;
+  }
+
+  // helper function for getFixesAndFeats
+  private getIndex(key: string) {
+    const indexColon = key.indexOf(':');
+    const indexParens = key.indexOf('(');
+
+    if (indexColon === -1) {
+      return 0;
+    }
+    if (indexParens === -1) {
+      return indexColon;
+    }
+
+    return indexColon < indexParens ? indexColon : indexParens;
+  }
 }
