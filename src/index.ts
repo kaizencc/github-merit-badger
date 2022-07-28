@@ -88,13 +88,27 @@ async function run() {
     if (recentMerges !== undefined) {
       const usernames = recentMerges.filter(hasLogin => hasLogin.user?.login).map(login => login.user?.login);
       console.log(usernames);
+
       if (usernames !== undefined) {
         const hotlist = getHotlist(usernames);
+
         if (hotlist !== undefined) {
           const minHeap = new Heap(compareFunction);
           minHeap.init(hotlist);
-          for (const value of minHeap) {
-            console.log('Next top value is', value);
+
+          const creator = await github.getIssueCreator().catch(error => {core.setFailed(error.message);});
+
+          if (creator !== undefined) {
+            const index = determineHotIndex(buckets, creator, minHeap);
+
+            if (index !== -1) {
+              const setLabels = determineLabel(labels, index);
+
+              if (setLabels != []) {
+                console.log(setLabels);
+                await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
+              }
+            }
           }
         }
       }
@@ -144,6 +158,28 @@ function determineIndex(buckets: number[], value: number): number {
   }
   return index;
 }
+
+
+export function determineHotIndex(buckets: number[], key: string, heap: Heap<(string | number)[]>) {
+  //console.log(buckets, key, heap);
+  let index = 0;
+  for (let i = 0; i < buckets.length; i += 1) {
+    for (let j = 0; j < buckets[i]; j += 1) {
+      let pop = heap.pop();
+      console.log(pop);
+      if (pop !== undefined) {
+        if (key === pop[0]) {
+          return index;
+        }
+      } else {
+        return -1;
+      }
+    }
+    index += 1;
+  }
+  return -1;
+}
+
 
 export function getHotlist(usernames: (string | undefined)[]) {
   let hotlist: Map<string, number> = new Map<string, number>;
