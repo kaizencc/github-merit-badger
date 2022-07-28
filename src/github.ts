@@ -158,8 +158,12 @@ export class GithubApi {
   }
 
   private compareDate(date: Date, numDays: number) {
+    //const minute = 1000 * 60;
+    //const hour = minute * 60;
+    const DAY = 1000 * 60 * 60 * 24; // milliseconds -> seconds -> minutes -> hours -> days
+    /*
     const daysAgo = new Date();
-    daysAgo.setDate(daysAgo.getDate() - numDays);
+    daysAgo.setDate(daysAgo.getTime() - numDays);
     console.log('daysAgo: ' + daysAgo);
     console.log(new Date(date).getDay());
     console.log(date.getDay());
@@ -169,7 +173,9 @@ export class GithubApi {
 
     console.log('diff: ' + diff);
     console.log('diff2: ' + diff2);
-    return diff >= 0;
+    return ()
+    return diff >= 0;*/
+    return ( date.getTime() >= new Date().getTime() - (numDays * DAY) );
   }
 
   public async getIssueCreator() {
