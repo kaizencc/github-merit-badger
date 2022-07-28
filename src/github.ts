@@ -189,15 +189,57 @@ export class GithubApi {
     } else {return undefined;}
   }
 
-  public async writePRComments(comment: string) {
+  public async writePRComments(comment: string, searchWords: RegExp) {
     if (this.issueNumber !== undefined) {
-      await this.octokit.rest.issues.createComment({
-        owner: this.repo.owner,
-        repo: this.repo.repo,
-        issue_number: this.issueNumber,
-        body: comment,
-      });
+      if (await this.getCommentId(this.issueNumber, searchWords)) {
+        // need to fetch the least recent comment, need a function
+        const id = await this.getCommentId(this.issueNumber, searchWords);
+        if (id) {
+          this.updateComment(id, comment).catch(error => {
+            core.setFailed(error.message);
+          });
+        }
+      } else {
+        await this.octokit.rest.issues.createComment({
+          owner: this.repo.owner,
+          repo: this.repo.repo,
+          issue_number: this.issueNumber,
+          body: comment,
+        });
+      }
     }
+  }
+
+  public async getCommentId(issueNum: number, searchWords: RegExp) {
+    // get all comments in pr
+    const commentList = await this.octokit.rest.issues.listComments({
+      owner: this.repo.owner,
+      repo: this.repo.repo,
+      issue_number: issueNum,
+      per_page: 100,
+      page: 1,
+    });
+    const responese = commentList.data;
+    // filter based markdown '<!--contribute badge-->'
+    // const comment = responese.map(commentword => commentword.body);
+    for (let i = 0; i < responese.length; i++) {
+      if (responese[i] !== undefined) {
+        if (responese[i].body?.search(searchWords)) {
+          return responese[i].id;
+        };
+      }
+    }
+    return;
+    // find the target comment_id from the comment, e.g:response[0]
+  }
+
+  public async updateComment(commentId: number, comment: string) {
+    await this.octokit.rest.issues.updateComment({
+      owner: this.repo.owner,
+      repo: this.repo.repo,
+      comment_id: commentId,
+      body: comment,
+    });
   }
 
   public async getFixesAndFeats() {
