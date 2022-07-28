@@ -21,6 +21,10 @@ const project = new GitHubActionTypeScriptProject({
         description: 'used in automated comment to explain the label',
         required: true,
       },
+      'days': {
+        description: 'filter for pull requests in the last days number of days',
+        required: false,
+      },
       'category': {
         description: 'category that buckets pertains to',
         required: true,
