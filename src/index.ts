@@ -42,10 +42,10 @@ async function run() {
       // place to generste dynamic comments
       // it has user_name, labels and label meanings
       if (index !== -1) {
-        const dynamicComments = '<!--contribute badge-->' + 'welcome ' + await github.getIssueCreator().catch(error => {core.setFailed(error.message);}) + ', the CDK Team thanks you for being a ' + setLabels + ' to the CDK. This means that you have made ' + determineMeaning(meanings, index);
+        const dynamicComments = '<!--contribute badge-->' + 'Welcome ' + await github.getIssueCreator().catch(error => {core.setFailed(error.message);}) + ', the CDK Team thanks you for opening a pull request. You got the \'' + setLabels[0] + '\' label. ' + determineMeaning(meanings, index);
         const searchWords = /<!--contribute badge-->/;
         //console.log(dynamicComments);
-        console.log(github.writePRComments(dynamicComments, searchWords));
+        //console.log(github.writePRComments(dynamicComments, searchWords));
         if (dynamicComments !== undefined) {
           await github.writePRComments(dynamicComments, searchWords).catch(error => {core.setFailed(error.message);});
         }

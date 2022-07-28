@@ -18,7 +18,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels: 'getting-started,all-star'
           buckets: '0,2'
-          label-meanings: 'Nice job, you''ve opened a PR! Open 3 to get a special label!|WOW! You''ve committed a lot, well done!'
+          label-meanings: 'Have 3 PRs merged to get a special label!|You are an all star!'
           category: 'total'
       - uses: kaizencc/contributor-badge@main
         id: contributor-badge-hotlist
