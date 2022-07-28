@@ -31,7 +31,7 @@ async function run() {
       console.log(numMerged);
 
       const index = determineIndex(buckets, numMerged);
-      const setLabels = determinLabel(labels, index);
+      const setLabels = determineLabel(labels, index);
 
       if (setLabels != []) {
         console.log(setLabels);
@@ -84,6 +84,12 @@ async function run() {
     const recentMerges = await github.getRecentMerges(days, false).catch(error => {core.setFailed(error.message);});
     console.log(recentMerges);
 
+    if (recentMerges !== undefined) {
+      const usernames = recentMerges.filter(hasLogin => hasLogin.user?.login).map(login => login.user?.login);
+      console.log(usernames);
+      //const hotlist = getHotlist(usernames);
+    }
+
 
   } else {
     // do nothing
@@ -94,7 +100,7 @@ run().catch(error => {
   core.setFailed(error.message);
 });
 
-function determinLabel(labels: string[], index: number) {
+function determineLabel(labels: string[], index: number) {
   if (index === -1) {
     return [];
   }
@@ -128,3 +134,5 @@ function determineIndex(buckets: number[], value: number): number {
   }
   return index;
 }
+
+
