@@ -41,7 +41,8 @@ async function run() {
   if (category === 'total') {
     //const issues = await github.getPulls().catch(error => {core.setFailed(error.message);});
     //if (issues !== undefined) {
-    const numMerged = await github.getMerged().catch(error => {core.setFailed(error.message);});
+    const merges = await github.getMerges().catch(error => {core.setFailed(error.message);});
+    const numMerged = merges?.length;
     console.log(numMerged);
     if (numMerged !== undefined) {
       console.log(numMerged);
@@ -96,7 +97,7 @@ async function run() {
     // call different functions from github
     // alternatively, can determine labels + comment and do setting in 1 step
     // also consider editing comment as a strech goal
-    const numMergedTime = await github.getMergedTime(10).catch(error => {core.setFailed(error.message);});
+    const numMergedTime = await github.getMergedTime(1).catch(error => {core.setFailed(error.message);});
     console.log(numMergedTime);
   } else {
     // do nothing

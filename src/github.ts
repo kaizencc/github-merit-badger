@@ -74,11 +74,12 @@ export class GithubApi {
     return result;
   }
 
-  public async getMerged(): Promise<number | undefined> {
+  public async getMerges() {
     const pulls = await this.getPulls().catch(error => {core.setFailed(error.message);});
     if (pulls !== undefined) {
-      const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
-      return mergedPRs.length;
+      return pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+      //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+      //return mergedPRs.length;
     }
     return undefined;
     //console.log(`${issueCreator} has made ${numPRs} PRs`);
@@ -88,19 +89,25 @@ export class GithubApi {
   public async getMergedTime(numOfDays: number) {
 
     let result = 0;
-    const pulls = await this.getPulls().catch(error => {core.setFailed(error.message);});
-    if (pulls !== undefined) {
-      const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
-      // return mergedPRs.length; (for testing purpose)
-      // get target start date as "startDate" with the given days
-      const date = new Date();
-      const daysAgo = new Date(date.getTime());
-      daysAgo.setDate(date.getDate() - numOfDays);
-      const startDate = daysAgo;
+    const merges = await this.getMerges().catch(error => {core.setFailed(error.message);});
+    if (merges !== undefined) {
+      const mergeDates = merges.map(mergeDate => mergeDate.pull_request?.merged_at);
+      if (mergeDates !== undefined) {
+        //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
+        // return mergedPRs.length; (for testing purpose)
+        // get target start date as "startDate" with the given days
+        const daysAgo = new Date();
+        //const daysAgo = new Date(date.getTime());
+        daysAgo.setDate(daysAgo.getDate() - numOfDays);
+        //const startDate = daysAgo;
 
-      for (const k in mergedPRs.filter(isMerged => isMerged.pull_request?.merged_at)) {
-        if ( (new Date(k).getTime() - startDate.getTime()) >= 0 ) {
-          result = result + 1;
+        for (let i = 0; i < mergeDates.length; i += 1) {
+          let date = mergeDates[i];
+          if (date !== undefined && date !== null) {
+            if ( (new Date(date).getDay() - daysAgo.getDay()) >= 0 ) {
+              result = result + 1;
+            }
+          }
         }
       }
     }
