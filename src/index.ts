@@ -81,7 +81,7 @@ async function run() {
     // call different functions from github
     // alternatively, can determine labels + comment and do setting in 1 step
     // also consider editing comment as a strech goal
-    const recentMerges = await github.getRecentMerges(days).catch(error => {core.setFailed(error.message);});
+    const recentMerges = await github.getRecentMerges(days, false).catch(error => {core.setFailed(error.message);});
     console.log(recentMerges);
 
 
