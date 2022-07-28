@@ -45,6 +45,7 @@ async function run() {
         const dynamicComments = '<!--contribute badge-->' + 'welcome ' + await github.getIssueCreator().catch(error => {core.setFailed(error.message);}) + ', the CDK Team thanks you for being a ' + setLabels + ' to the CDK. This means that you have made ' + determineMeaning(meanings, index);
         const searchWords = /<!--contribute badge-->/;
         //console.log(dynamicComments);
+        console.log(github.test_comment_list());
         if (dynamicComments !== undefined) {
           await github.writePRComments(dynamicComments, searchWords).catch(error => {core.setFailed(error.message);});
         }
