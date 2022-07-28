@@ -24,7 +24,8 @@ jobs:
         id: contributor-badge-hotlist
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'good-start,heating-up,on :fire:'
-          buckets: '0,2,5'
-          label-meanings: 'You are getting the ball rolling!|Keep that momentum going|YOU ARE HOTTTT'
+          labels: '#1 :trophy:,top 3 :fire:,top 5 :sunglasses:'
+          buckets: '1,2,2'
+          label-meanings: 'You are in the top 2 and you're not \#2!|On the podium!|You have broken into the top 5!'
+          days: 1
           category: 'hotlist'

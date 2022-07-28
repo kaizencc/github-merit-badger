@@ -3,40 +3,23 @@ import * as core from '@actions/core';
 import { GithubApi } from './github';
 
 async function run() {
-  //console.log('hi');
+
   const token: string = core.getInput('github-token');
-  //console.log(token);
   const labelsRaw: string = core.getInput('labels');
   const bucketsRaw: string = core.getInput('buckets');
   const meaningsRaw: string = core.getInput('label-meanings');
   const category: string = core.getInput('category');
 
-  //console.log(labelsRaw);
-  //console.log(bucketsRaw);
-  //console.log(category);
-
-
-  // TODO: parse labels
+  // parse labels
   const labels: string[] = labelsRaw.split(',');
 
-  // TODO: parse buckets
+  // parse buckets
   const buckets: number[] = bucketsRaw.split(',').map(Number);
 
   // parse label meanings
   const meanings: string[] = meaningsRaw.split('|');
 
-  // TODO: print all inputs
-  //console.log(labels);
-  //console.log(buckets);
-  //console.log(category);
-  //console.log(meanings);
-
-  //const dummyVal = 0;
-  //const setLabels = determinLabels(labels, buckets, dummyVal);
-
   const github: GithubApi = new GithubApi(token);
-  //console.log(github.getIssueNumber());
-
 
   if (category === 'total') {
     //const issues = await github.getPulls().catch(error => {core.setFailed(error.message);});
@@ -94,11 +77,14 @@ async function run() {
     //console.log(github.context.issue.owner);
     //const content = github.
   } else if (category === 'hotlist') {
+    const days: number = Number(core.getInput('days'));
     // call different functions from github
     // alternatively, can determine labels + comment and do setting in 1 step
     // also consider editing comment as a strech goal
-    const numMergedTime = await github.getMergedTime(1).catch(error => {core.setFailed(error.message);});
-    console.log(numMergedTime);
+    const recentMerges = await github.getRecentMerges(days).catch(error => {core.setFailed(error.message);});
+    console.log(recentMerges);
+
+
   } else {
     // do nothing
   }

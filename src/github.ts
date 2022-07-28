@@ -54,28 +54,39 @@ export class GithubApi {
     return response.data;
   }
 
-  public async getPulls() { // issueCreator: string) {
+  public async getPulls(creatorSpecific: boolean=true) { // issueCreator: string) {
     let result = undefined;
-    const issueCreator = await this.getIssueCreator().catch(error => {
-      core.setFailed(error.message);
-    });
-    if (issueCreator !== undefined) {
+    if (creatorSpecific) {
+      const issueCreator = await this.getIssueCreator().catch(error => {
+        core.setFailed(error.message);
+      });
+      if (issueCreator !== undefined) {
+        const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
+          owner: this.repo.owner,
+          repo: this.repo.repo,
+          state: 'all',
+          creator: issueCreator,
+        }).catch(error => {core.setFailed(error.message);});
+        if (issues !== undefined) {
+          result = issues.filter(isPull => isPull.pull_request);
+        }
+      }
+    } else {
       const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
         owner: this.repo.owner,
         repo: this.repo.repo,
         state: 'all',
-        //q: `is:pr author:${issueCreator}`,
-        creator: issueCreator,
       }).catch(error => {core.setFailed(error.message);});
       if (issues !== undefined) {
         result = issues.filter(isPull => isPull.pull_request);
       }
     }
+
     return result;
   }
 
-  public async getMerges() {
-    const pulls = await this.getPulls().catch(error => {core.setFailed(error.message);});
+  public async getMerges(creatorSpecific: boolean=true) {
+    const pulls = await this.getPulls(creatorSpecific).catch(error => {core.setFailed(error.message);});
     if (pulls !== undefined) {
       return pulls.filter(isMerged => isMerged.pull_request?.merged_at);
       //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
@@ -86,12 +97,13 @@ export class GithubApi {
     //return numPRs;
   }
 
-  public async getMergedTime(numOfDays: number) {
-
-    let result = 0;
-    const merges = await this.getMerges().catch(error => {core.setFailed(error.message);});
+  public async getRecentMerges(numDays: number, creatorSpecific: boolean=true) {
+    let result = undefined;
+    const merges = await this.getMerges(creatorSpecific).catch(error => {core.setFailed(error.message);});
     if (merges !== undefined) {
+      /*
       const mergeDates = merges.map(mergeDate => mergeDate.pull_request?.merged_at);
+
       if (mergeDates !== undefined) {
         //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
         // return mergedPRs.length; (for testing purpose)
@@ -110,10 +122,36 @@ export class GithubApi {
           }
         }
       }
+      */
+      const daysAgo = new Date();
+      //const daysAgo = new Date(date.getTime());
+      daysAgo.setDate(daysAgo.getDate() - numDays);
+      //const startDate = daysAgo;
+
+      /*
+      for (let i = 0; i < merges.length; i += 1) {
+        let date = merges[i].pull_request?.merged_at;
+        if (date !== undefined && date !== null) {
+          if ( (new Date(date).getDay() - daysAgo.getDay()) >= 0 ) {
+            //result = result + 1;
+          }
+        }
+      }
+      */
+
+      result = merges.filter(recent => (recent.pull_request?.merged_at !== null)
+        && (recent.pull_request?.merged_at !== undefined)
+        && (this.compareDate(new Date(recent.pull_request?.merged_at), numDays)));
     }
     return result;
     //console.log(`${issueCreator} has made ${numPRs} PRs`);
     //return numPRs;
+  }
+
+  private compareDate(date: Date, numDays: number) {
+    const daysAgo = new Date();
+    daysAgo.setDate(daysAgo.getDate() - numDays);
+    return (new Date(date).getDay() - daysAgo.getDay()) >= 0;
   }
 
   public async getIssueCreator() {
