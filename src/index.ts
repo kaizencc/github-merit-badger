@@ -4,7 +4,6 @@ import { Heap } from 'heap-js';
 import { GithubApi } from './github';
 
 async function run() {
-
   const token: string = core.getInput('github-token');
   const labelsRaw: string = core.getInput('labels');
   const bucketsRaw: string = core.getInput('buckets');

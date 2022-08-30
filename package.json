@@ -1,5 +1,5 @@
 {
-  "name": "intern-hackathon",
+  "name": "github-merit-badges",
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",

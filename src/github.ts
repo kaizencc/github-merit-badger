@@ -22,7 +22,6 @@ export class GithubApi {
     } else {
       core.setFailed('Error retrieving issue number');
     }
-
   }
 
   public async setPullRequestLabels(labels: string[]) {
@@ -36,7 +35,6 @@ export class GithubApi {
       });
     }
   }
-
 
   public async getIssueNumber() {
     return this.issueNumber;
@@ -251,7 +249,6 @@ export class GithubApi {
       body: comment,
     });
   }
-
 
   public async test_comment_list() {
     if (this.issueNumber !== undefined) {

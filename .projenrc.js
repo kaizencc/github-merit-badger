@@ -2,37 +2,40 @@ const { GitHubActionTypeScriptProject } = require('projen-github-action-typescri
 const project = new GitHubActionTypeScriptProject({
   defaultReleaseBranch: 'main',
   devDeps: ['projen-github-action-typescript'],
-  name: 'intern-hackathon',
+  deps: ['heap-js'],
+  name: 'github-merit-badges',
   actionMetadata: {
     inputs: {
       'github-token': {
         description: 'github token',
         required: true,
       },
-      'labels': {
-        description: 'posible labels',
+      'badges': {
+        description: 'badge names corresponding 1-1 with thresholds',
         required: true,
       },
-      'buckets': {
-        description: 'bands corresponding 1-1 with labels',
+      'badge-descriptions': {
+        description: 'badge descriptions corresponding 1-1 with badges',
         required: true,
       },
-      'label-meanings': {
-        description: 'used in automated comment to explain the label',
+      'thresholds': {
+        description: 'thresholds corresponding 1-1 with badges',
         required: true,
       },
       'days': {
-        description: 'filter for pull requests in the last days number of days',
+        description: 'filter for pull requests merged in the last X number of days',
         required: false,
       },
-      'category': {
-        description: 'category that buckets pertains to',
-        required: true,
+      'ignore': {
+        description: 'ignore pull requests from these authors',
+        required: false,
+      },
+      'badge-type': {
+        description: 'a flag for different ways of measuring contributions',
+        default: 'total',
+        required: false,
       },
     },
   },
-  deps: ['heap-js'], /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // packageName: undefined,  /* The "name" in package.json. */
 });
 project.synth();
