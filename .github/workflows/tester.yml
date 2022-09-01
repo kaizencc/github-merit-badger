@@ -27,5 +27,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           badges: '[1 :trophy:,top 3 :fire:,top 5 :sunglasses:]'
           thresholds: '[1,2,3]'
-          badge-descriptions: '[You''re top 2 and you''re not number 2!|You are on the podium!|You have broken into the top 5!]'
+          badge-descriptions: '[You''re top 2 and you''re not number 2!,You are on the podium!,You have broken into the top 5!]'
           badge-type: 'leaderboard'
