@@ -89,6 +89,8 @@ export abstract class Badger {
       return [];
     }
 
+    console.log(JSON.stringify(issues));
+
     return issues.filter(isMerged => isMerged.pull_request?.merged_at);
   }
 
