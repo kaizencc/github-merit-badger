@@ -105,12 +105,12 @@ export abstract class Badger {
     const badge = this.badges[badgeIndex];
     const comment = [
       `${BADGER_METADATA}\n`,
-      `Welcome ${username}`,
+      `Welcome @${username}`,
       `You are ${beginsWithVowel(badge.name) ? 'an' : 'a'}`,
       `${badge.name},`,
       `which means that ${this.badges[badgeIndex].description}`,
-      'Keep up the good work!\n',
-      '----',
+      'Keep up the good work!\n\n',
+      '----\n\n',
       'This comment brought to you by the Community Badger ([source code](https://github.com/kaizencc/github-merit-badger))',
     ].join(' ');
 
@@ -128,9 +128,12 @@ interface RepositoryInfo {
   repo: string;
 }
 
-function daysToTimestamp(_days: Number) {
-  // TODO implement
-  return '';
+function daysToTimestamp(days: number) {
+  const today = new Date();
+  const earliestDate = new Date(new Date().setDate(today.getDate() - days));
+
+  console.log(`Filtering search for pull requests with an earliest date of ${earliestDate.toISOString()}`);
+  return earliestDate.toISOString();
 }
 
 function beginsWithVowel(word: string) {
