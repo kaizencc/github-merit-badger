@@ -18,7 +18,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           badges: '[getting-started,all-star]'
           thresholds: '[0,2]'
-          badge-descriptions: '[Have 2 PRs merged to get a special label!|You are an all star!]'
+          badge-descriptions: '[Have 2 PRs merged to get a special label!,You are an all star!]'
           badge-type: 'achievement'
       # - uses: kaizencc/github-merit-badger@main
       #   id: contributor-badge-hotlist
