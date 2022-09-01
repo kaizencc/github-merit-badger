@@ -79,6 +79,7 @@ export abstract class Badger {
       owner: this.repo.owner,
       repo: this.repo.repo,
       since: this.timestamp,
+      state: 'closed',
       creator: username,
     }).catch(error => {
       core.setFailed(error.message);
