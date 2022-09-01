@@ -101,7 +101,7 @@ export abstract class Badger {
     });
   }
 
-  protected async writeComment(badgeIndex: number, username: string) {
+  protected async writeComment(badgeIndex: number, username: string, additionalInfo?: string) {
     const badge = this.badges[badgeIndex];
     const comment = [
       `${BADGER_METADATA}\n`,
@@ -110,6 +110,7 @@ export abstract class Badger {
       `${badge.name},`,
       `which means that ${this.badges[badgeIndex].description}`,
       'Keep up the good work!\n\n',
+      additionalInfo ? `${additionalInfo}\n\n` : '',
       '----\n\n',
       'This comment brought to you by the Community Badger ([source code](https://github.com/kaizencc/github-merit-badger))',
     ].join(' ');

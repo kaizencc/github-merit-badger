@@ -9,9 +9,9 @@ export class LeaderboardBadger extends Badger {
     }
 
     const pullRequests = await this.getRelevantPullRequests();
-    const badge = this.determineBadge(pullRequests);
-    await this.addLabel(badge);
-    await this.writeComment(badge, username);
+    const badgeIndex = this.determineBadge(pullRequests);
+    await this.addLabel(badgeIndex);
+    await this.writeComment(badgeIndex, username);
   }
 
   public determineBadge(_pullRequests: any[]): number {

@@ -10,13 +10,15 @@ export class AchievementBadger extends Badger {
     }
 
     const pullRequests = await this.getRelevantPullRequests(username);
-    const badge = this.determineBadge(pullRequests);
-    await this.addLabel(badge);
-    await this.writeComment(badge, username);
+    const badgeIndex = this.determineBadge(pullRequests);
+    await this.addLabel(badgeIndex);
+    await this.writeComment(badgeIndex, username);
   }
 
   public determineBadge(pullRequests: any[]): number {
     const mergedPulls = pullRequests.length;
+
+    console.log(`We found ${mergedPulls} pull requests`);
 
     for (let i = 0; i < this.badges.length; i++) {
       if (this.badges[i].threshold < mergedPulls) {
