@@ -51,10 +51,21 @@ export abstract class Badger {
 
   public abstract runBadgerWorkflow(): Promise<void>;
 
-  public abstract determineBadge(pullRequests: any[]): number;
+  public abstract determineThreshold(pullRequests: any[], username?: string): number;
 
   protected ignoreThisUsername(username: string) {
     return this.ignoreUsernames?.includes(username);
+  }
+
+  protected determineBadge(thresholdNumber: number) {
+    for (let i = 0; i < this.badges.length; i++) {
+      if (this.badges[i].threshold < thresholdNumber) {
+        continue;
+      }
+      return i;
+    }
+
+    return this.badges.length-1;
   }
 
   protected async getGitHubUsername() {

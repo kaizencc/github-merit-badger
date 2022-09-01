@@ -12,21 +12,20 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: kaizencc/github-merit-badger@main
-        id: badger
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          badges: '[first,second,third]'
-          thresholds: '[0,1,2]'
-          badge-descriptions: '[you are first!,you are second!,you are third!]'
-          badge-type: 'achievement'
-          ignore-usernames: '[Tianyi-W]'
       # - uses: kaizencc/github-merit-badger@main
-      #   id: contributor-badge-hotlist
+      #   id: badger
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     labels: '1 :trophy:,top 3 :fire:,top 5 :sunglasses:'
-      #     buckets: '1,2,2'
-      #     label-meanings: 'You''re top 2 and you''re not number 2!|You are on the podium!|You have broken into the top 5!'
-      #     days: 30
-      #     category: 'hotlist'
+      #     badges: '[first,second,third]'
+      #     thresholds: '[0,1,2]'
+      #     badge-descriptions: '[you are first!,you are second!,you are third!]'
+      #     badge-type: 'achievement'
+      #     ignore-usernames: '[Tianyi-W]'
+      - uses: kaizencc/github-merit-badger@main
+        id: contributor-badge-hotlist
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          badges: '[1 :trophy:,top 3 :fire:,top 5 :sunglasses:]'
+          thresholds: '[1,2,3]'
+          badge-descriptions: '[You''re top 2 and you''re not number 2!|You are on the podium!|You have broken into the top 5!]'
+          badge-type: 'leaderboard'

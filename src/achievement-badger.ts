@@ -12,23 +12,14 @@ export class AchievementBadger extends Badger {
     const pullRequests = await this.getRelevantPullRequests(username);
 
     console.log(JSON.stringify(pullRequests));
-    const badgeIndex = this.determineBadge(pullRequests);
+    const badgeIndex = this.determineBadge(this.determineThreshold(pullRequests));
     await this.addLabel(badgeIndex);
     await this.writeComment(badgeIndex, username);
   }
 
-  public determineBadge(pullRequests: any[]): number {
+  public determineThreshold(pullRequests: any[]): number {
     const mergedPulls = pullRequests.length;
-
     console.log(`We found ${mergedPulls} pull requests`);
-
-    for (let i = 0; i < this.badges.length; i++) {
-      if (this.badges[i].threshold < mergedPulls) {
-        continue;
-      }
-      return i;
-    }
-
-    return this.badges.length-1;
+    return mergedPulls;
   }
 }
