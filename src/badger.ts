@@ -22,7 +22,7 @@ export abstract class Badger {
   private octokit;
   private repo: RepositoryInfo;
   private pullRequestNumber: number;
-  private timestamp?: string;
+  private timestampDate?: Date;
   private ignoreUsernames?: string[];
   public badges: BadgeInfo[] = [];
 
@@ -37,7 +37,7 @@ export abstract class Badger {
       throw new Error('This Action can only be run on pull requests');
     }
 
-    this.timestamp = props.days ? daysToTimestamp(props.days) : undefined;
+    this.timestampDate = props.days ? daysToDate(props.days) : undefined;
     this.ignoreUsernames = props.ignoreUsernames;
 
     for (let i = 0; i < props.badges.length; i++) {
@@ -78,7 +78,6 @@ export abstract class Badger {
     const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
       owner: this.repo.owner,
       repo: this.repo.repo,
-      since: this.timestamp,
       state: 'closed',
       creator: username,
     }).catch(error => {
@@ -92,7 +91,12 @@ export abstract class Badger {
 
     console.log(JSON.stringify(issues));
 
-    return issues.filter(isMerged => isMerged.pull_request?.merged_at);
+    return issues.filter((isMerged) => {
+      const mergedAt = isMerged.pull_request?.merged_at;
+      if (!mergedAt) { return false; }
+      if (!this.timestampDate) { return true; }
+      return this.timestampDate < new Date(mergedAt);
+    });
   }
 
   protected async addLabel(badgeIndex: number) {
@@ -132,12 +136,12 @@ interface RepositoryInfo {
   repo: string;
 }
 
-function daysToTimestamp(days: number) {
+function daysToDate(days: number): Date {
   const today = new Date();
   const earliestDate = new Date(new Date().setDate(today.getDate() - days));
 
   console.log(`Filtering search for pull requests with an earliest date of ${earliestDate.toISOString()}`);
-  return earliestDate.toISOString();
+  return earliestDate;
 }
 
 function beginsWithVowel(word: string) {
