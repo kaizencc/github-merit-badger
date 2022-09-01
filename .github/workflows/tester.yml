@@ -20,7 +20,7 @@ jobs:
           thresholds: '[0,1,2]'
           badge-descriptions: '[you are first!,you are second!,you are third!]'
           badge-type: 'achievement'
-          days: 35
+          days: 36
       # - uses: kaizencc/github-merit-badger@main
       #   id: contributor-badge-hotlist
       #   with:
