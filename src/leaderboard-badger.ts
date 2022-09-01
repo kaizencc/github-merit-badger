@@ -32,7 +32,7 @@ export class LeaderboardBadger extends Badger {
     console.log('index', index);
 
     // contributor has no prior merged PRs
-    if (!index) { return sortedUsernames.length; }
+    if (index < 0) { return sortedUsernames.length; }
 
     console.log(sortedUsernames);
     return index - 1;
