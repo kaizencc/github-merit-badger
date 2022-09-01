@@ -109,7 +109,8 @@ steps:
 ### Badge Type
 
 This is an ad-hoc property that allows you to toggle between different types of badge
-allocation mechanisms, now and in the future. The currently accepted values are `total` (the default) and `leaderboard`.
+allocation mechanisms, now and in the future. The currently accepted values are `achievement`
+(the default) and `leaderboard`.
 
 If you specify `leaderboard`, then the Action returns badges related to _how a user compares to other contributors in the repository_. Consider the following example usage:
 
@@ -119,8 +120,8 @@ steps:
     id: github-merit-badger
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-      badges: '1st! :trophy:,top 3 :fire:,top 5 :sunglasses:'
-      thresholds: '1,3,5'
+      badges: '[1st! :trophy:,top 3 :fire:,top 5 :sunglasses:]'
+      thresholds: '[1,3,5]'
       badge-type: 'leaderboard'
 ```
 
