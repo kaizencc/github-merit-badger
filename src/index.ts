@@ -13,7 +13,7 @@ async function run() {
   const ignoreUsernames: string[] = renderListInput(core.getInput('ignore-usernames'));
   const days = Number(core.getInput('days'));
 
-  console.log(badges, badgeDescriptions, thresholds);
+  console.log(badges, badgeDescriptions, thresholds, badgeType, ignoreUsernames, days);
 
   if (badges.length === 0) {
     core.setFailed('must have at least one badge in the input');

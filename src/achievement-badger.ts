@@ -10,6 +10,8 @@ export class AchievementBadger extends Badger {
     }
 
     const pullRequests = await this.getRelevantPullRequests(username);
+
+    console.log(JSON.stringify(pullRequests));
     const badgeIndex = this.determineBadge(pullRequests);
     await this.addLabel(badgeIndex);
     await this.writeComment(badgeIndex, username);

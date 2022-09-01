@@ -51,6 +51,8 @@ export abstract class Badger {
 
   public abstract runBadgerWorkflow(): Promise<void>;
 
+  public abstract determineBadge(pullRequests: any[]): number;
+
   protected ignoreThisUsername(username: string) {
     return this.ignoreUsernames?.includes(username);
   }
@@ -87,10 +89,8 @@ export abstract class Badger {
       return [];
     }
 
-    return issues.filter(isPull => isPull.pull_request);
+    return issues.filter(isMerged => isMerged.pull_request?.merged_at);
   }
-
-  abstract determineBadge(pullRequests: any[]): number;
 
   protected async addLabel(badgeIndex: number) {
     await this.octokit.rest.issues.addLabels({
