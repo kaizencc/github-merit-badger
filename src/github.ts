@@ -36,7 +36,7 @@ export class GithubApi {
     }
   }
 
-  public async getIssueNumber() {
+  public getIssueNumber() {
     return this.issueNumber;
   }
 

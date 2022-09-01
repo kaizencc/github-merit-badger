@@ -1,5 +1,5 @@
 {
-  "name": "github-merit-badges",
+  "name": "github-merit-badger",
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",

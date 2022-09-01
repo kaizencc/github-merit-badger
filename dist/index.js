@@ -1,7 +1,43 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 5928:
+/***/ 4116:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AchievementBadger = void 0;
+const badger_1 = __nccwpck_require__(159);
+class AchievementBadger extends badger_1.Badger {
+    async runBadgerWorkflow() {
+        const username = await this.getGitHubUsername();
+        if (this.ignoreThisUsername(username)) {
+            console.log(`Detected ${username} in the list of ignored users. Exiting`);
+            return;
+        }
+        const pullRequests = await this.getRelevantPullRequests(username);
+        const badge = this.determineBadge(pullRequests);
+        await this.addLabel(badge);
+        await this.writeComment(badge, username);
+    }
+    determineBadge(pullRequests) {
+        const mergedPulls = pullRequests.length;
+        for (let i = 0; i < this.badges.length; i++) {
+            if (this.badges[i].threshold < mergedPulls) {
+                continue;
+            }
+            return i;
+        }
+        return this.badges.length - 1;
+    }
+}
+exports.AchievementBadger = AchievementBadger;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWNoaWV2ZW1lbnQtYmFkZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2FjaGlldmVtZW50LWJhZGdlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxxQ0FBa0M7QUFFbEMsTUFBYSxpQkFBa0IsU0FBUSxlQUFNO0lBQ3BDLEtBQUssQ0FBQyxpQkFBaUI7UUFDNUIsTUFBTSxRQUFRLEdBQUcsTUFBTSxJQUFJLENBQUMsaUJBQWlCLEVBQUUsQ0FBQztRQUVoRCxJQUFJLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxRQUFRLENBQUMsRUFBRTtZQUNyQyxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksUUFBUSx3Q0FBd0MsQ0FBQyxDQUFDO1lBQzFFLE9BQU87U0FDUjtRQUVELE1BQU0sWUFBWSxHQUFHLE1BQU0sSUFBSSxDQUFDLHVCQUF1QixDQUFDLFFBQVEsQ0FBQyxDQUFDO1FBQ2xFLE1BQU0sS0FBSyxHQUFHLElBQUksQ0FBQyxjQUFjLENBQUMsWUFBWSxDQUFDLENBQUM7UUFDaEQsTUFBTSxJQUFJLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQzNCLE1BQU0sSUFBSSxDQUFDLFlBQVksQ0FBQyxLQUFLLEVBQUUsUUFBUSxDQUFDLENBQUM7SUFDM0MsQ0FBQztJQUVNLGNBQWMsQ0FBQyxZQUFtQjtRQUN2QyxNQUFNLFdBQVcsR0FBRyxZQUFZLENBQUMsTUFBTSxDQUFDO1FBRXhDLEtBQUssSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxJQUFJLENBQUMsTUFBTSxDQUFDLE1BQU0sRUFBRSxDQUFDLEVBQUUsRUFBRTtZQUMzQyxJQUFJLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUMsU0FBUyxHQUFHLFdBQVcsRUFBRTtnQkFDMUMsU0FBUzthQUNWO1lBQ0QsT0FBTyxDQUFDLENBQUM7U0FDVjtRQUVELE9BQU8sSUFBSSxDQUFDLE1BQU0sQ0FBQyxNQUFNLEdBQUMsQ0FBQyxDQUFDO0lBQzlCLENBQUM7Q0FDRjtBQTNCRCw4Q0EyQkMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBCYWRnZXIgfSBmcm9tICcuL2JhZGdlcic7XG5cbmV4cG9ydCBjbGFzcyBBY2hpZXZlbWVudEJhZGdlciBleHRlbmRzIEJhZGdlciB7XG4gIHB1YmxpYyBhc3luYyBydW5CYWRnZXJXb3JrZmxvdygpIHtcbiAgICBjb25zdCB1c2VybmFtZSA9IGF3YWl0IHRoaXMuZ2V0R2l0SHViVXNlcm5hbWUoKTtcblxuICAgIGlmICh0aGlzLmlnbm9yZVRoaXNVc2VybmFtZSh1c2VybmFtZSkpIHtcbiAgICAgIGNvbnNvbGUubG9nKGBEZXRlY3RlZCAke3VzZXJuYW1lfSBpbiB0aGUgbGlzdCBvZiBpZ25vcmVkIHVzZXJzLiBFeGl0aW5nYCk7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgY29uc3QgcHVsbFJlcXVlc3RzID0gYXdhaXQgdGhpcy5nZXRSZWxldmFudFB1bGxSZXF1ZXN0cyh1c2VybmFtZSk7XG4gICAgY29uc3QgYmFkZ2UgPSB0aGlzLmRldGVybWluZUJhZGdlKHB1bGxSZXF1ZXN0cyk7XG4gICAgYXdhaXQgdGhpcy5hZGRMYWJlbChiYWRnZSk7XG4gICAgYXdhaXQgdGhpcy53cml0ZUNvbW1lbnQoYmFkZ2UsIHVzZXJuYW1lKTtcbiAgfVxuXG4gIHB1YmxpYyBkZXRlcm1pbmVCYWRnZShwdWxsUmVxdWVzdHM6IGFueVtdKTogbnVtYmVyIHtcbiAgICBjb25zdCBtZXJnZWRQdWxscyA9IHB1bGxSZXF1ZXN0cy5sZW5ndGg7XG5cbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IHRoaXMuYmFkZ2VzLmxlbmd0aDsgaSsrKSB7XG4gICAgICBpZiAodGhpcy5iYWRnZXNbaV0udGhyZXNob2xkIDwgbWVyZ2VkUHVsbHMpIHtcbiAgICAgICAgY29udGludWU7XG4gICAgICB9XG4gICAgICByZXR1cm4gaTtcbiAgICB9XG5cbiAgICByZXR1cm4gdGhpcy5iYWRnZXMubGVuZ3RoLTE7XG4gIH1cbn0iXX0=
+
+/***/ }),
+
+/***/ 159:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -30,289 +66,102 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GithubApi = void 0;
+exports.Badger = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-class GithubApi {
-    constructor(token) {
-        this.octokit = github.getOctokit(token);
+const BADGER_METADATA = '<!--merit badge comment-->';
+class Badger {
+    constructor(props) {
+        this.badges = [];
+        this.octokit = github.getOctokit(props.token);
         this.repo = github.context.repo;
-        if (github.context.payload.issue) {
-            this.issueNumber = github.context.payload.issue.number;
-        }
-        else if (github.context.payload.pull_request) {
-            this.issueNumber = github.context.payload.pull_request.number;
+        if (github.context.payload.pull_request) {
+            this.pullRequestNumber = github.context.payload.pull_request.number;
         }
         else {
-            core.setFailed('Error retrieving issue number');
+            core.setFailed('This Action can only be run on pull requests');
+            throw new Error('This Action can only be run on pull requests');
         }
-    }
-    async setPullRequestLabels(labels) {
-        if (!labels.length)
-            return;
-        if (this.issueNumber !== undefined) {
-            await this.octokit.rest.issues.addLabels({
-                owner: this.repo.owner,
-                repo: this.repo.repo,
-                issue_number: this.issueNumber,
-                labels,
+        this.timestamp = props.days ? daysToTimestamp(props.days) : undefined;
+        this.ignoreUsernames = props.ignoreUsernames;
+        for (let i = 0; i < props.badges.length; i++) {
+            this.badges.push({
+                name: props.badges[i],
+                description: props.badgeDescriptions[i],
+                threshold: props.thresholds[i],
             });
         }
     }
-    async getIssueNumber() {
-        return this.issueNumber;
-    }
-    async getPullsData(page = 1) {
-        // head props can be used below to filter PRs based on title(no big change type)
-        const response = await this.octokit.rest.pulls.list({
-            owner: this.repo.owner,
-            repo: this.repo.repo,
-            state: 'all',
-            per_page: 100,
-            page: page,
-        });
-        return response.data;
-    }
-    async getPulls(creatorSpecific = true) {
-        let result = undefined;
-        if (creatorSpecific) {
-            const issueCreator = await this.getIssueCreator().catch(error => {
-                core.setFailed(error.message);
-            });
-            if (issueCreator !== undefined) {
-                const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
-                    owner: this.repo.owner,
-                    repo: this.repo.repo,
-                    state: 'all',
-                    creator: issueCreator,
-                }).catch(error => { core.setFailed(error.message); });
-                if (issues !== undefined) {
-                    result = issues.filter(isPull => isPull.pull_request);
-                }
-            }
-        }
-        else {
-            const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
-                owner: this.repo.owner,
-                repo: this.repo.repo,
-                state: 'all',
-            }).catch(error => { core.setFailed(error.message); });
-            if (issues !== undefined) {
-                result = issues.filter(isPull => isPull.pull_request);
-            }
-        }
-        //console.log('Pulls (in pulls): \n\n');
-        //console.log(result);
-        return result;
-    }
-    async getMerges(creatorSpecific = true) {
-        const pulls = await this.getPulls(creatorSpecific).catch(error => { core.setFailed(error.message); });
-        //console.log('Pulls (in Merges): \n\n');
-        //console.log(pulls);
-        if (pulls !== undefined) {
-            const merges = pulls.filter(isMerged => { var _a; return (_a = isMerged.pull_request) === null || _a === void 0 ? void 0 : _a.merged_at; });
-            //console.log('Merges (in Merges): \n\n');
-            //console.log(merges);
-            return merges;
-            //return pulls.filter(isMerged => isMerged.pull_request?.merged_at);
-            //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
-            //return mergedPRs.length;
-        }
-        return undefined;
-        //console.log(`${issueCreator} has made ${numPRs} PRs`);
-        //return numPRs;
-    }
-    async getRecentMerges(numDays, creatorSpecific = true) {
-        let result = undefined;
-        const merges = await this.getMerges(creatorSpecific).catch(error => { core.setFailed(error.message); });
-        if (merges !== undefined) {
-            /*
-            const mergeDates = merges.map(mergeDate => mergeDate.pull_request?.merged_at);
-      
-            if (mergeDates !== undefined) {
-              //const mergedPRs = pulls.filter(isMerged => isMerged.pull_request?.merged_at);
-              // return mergedPRs.length; (for testing purpose)
-              // get target start date as "startDate" with the given days
-              const daysAgo = new Date();
-              //const daysAgo = new Date(date.getTime());
-              daysAgo.setDate(daysAgo.getDate() - numOfDays);
-              //const startDate = daysAgo;
-      
-              for (let i = 0; i < mergeDates.length; i += 1) {
-                let date = mergeDates[i];
-                if (date !== undefined && date !== null) {
-                  if ( (new Date(date).getDay() - daysAgo.getDay()) >= 0 ) {
-                    result = result + 1;
-                  }
-                }
-              }
-            }
-            */
-            //const daysAgo = new Date();
-            //const daysAgo = new Date(date.getTime());
-            //daysAgo.setDate(daysAgo.getDate() - numDays);
-            //const startDate = daysAgo;
-            /*
-            for (let i = 0; i < merges.length; i += 1) {
-              let date = merges[i].pull_request?.merged_at;
-              if (date !== undefined && date !== null) {
-                if ( (new Date(date).getDay() - daysAgo.getDay()) >= 0 ) {
-                  //result = result + 1;
-                }
-              }
-            }
-            */
-            result = merges.filter(recent => {
-                var _a, _b, _c;
-                return (((_a = recent.pull_request) === null || _a === void 0 ? void 0 : _a.merged_at) !== null)
-                    && (((_b = recent.pull_request) === null || _b === void 0 ? void 0 : _b.merged_at) !== undefined)
-                    && (this.compareDate(new Date((_c = recent.pull_request) === null || _c === void 0 ? void 0 : _c.merged_at), numDays));
-            });
-        }
-        //console.log('Recent Merges (in Recent): \n\n');
-        //console.log(result);
-        return result;
-        //console.log(`${issueCreator} has made ${numPRs} PRs`);
-        //return numPRs;
-    }
-    compareDate(date, numDays) {
-        //const minute = 1000 * 60;
-        //const hour = minute * 60;
-        const DAY = 1000 * 60 * 60 * 24; // milliseconds -> seconds -> minutes -> hours -> days
-        /*
-        const daysAgo = new Date();
-        daysAgo.setDate(daysAgo.getTime() - numDays);
-        console.log('daysAgo: ' + daysAgo);
-        console.log(new Date(date).getDay());
-        console.log(date.getDay());
-        console.log(daysAgo.getDay());
-        const diff = date.getDay() - daysAgo.getDay();
-        const diff2 = (new Date(date).getDay() - daysAgo.getDay());
-    
-        console.log('diff: ' + diff);
-        console.log('diff2: ' + diff2);
-        return ()
-        return diff >= 0;*/
-        return (date.getTime() >= new Date().getTime() - (numDays * DAY));
-    }
-    async getIssueCreator() {
+    ignoreThisUsername(username) {
         var _a;
-        if (this.issueNumber !== undefined) {
-            const { data } = await this.octokit.rest.issues.get({
-                owner: this.repo.owner,
-                repo: this.repo.repo,
-                issue_number: this.issueNumber,
-            });
-            return (_a = data.user) === null || _a === void 0 ? void 0 : _a.login;
-        }
-        else {
-            return undefined;
-        }
+        return (_a = this.ignoreUsernames) === null || _a === void 0 ? void 0 : _a.includes(username);
     }
-    async writePRComments(comment, searchWords) {
-        if (this.issueNumber !== undefined) {
-            if (searchWords !== undefined) {
-                if (await this.getCommentId(this.issueNumber, searchWords)) {
-                    // need to fetch the least recent comment, need a function
-                    const id = await this.getCommentId(this.issueNumber, searchWords);
-                    if (id) {
-                        this.updateComment(id, comment).catch(error => {
-                            core.setFailed(error.message);
-                        });
-                    }
-                }
-                else {
-                    await this.octokit.rest.issues.createComment({
-                        owner: this.repo.owner,
-                        repo: this.repo.repo,
-                        issue_number: this.issueNumber,
-                        body: comment,
-                    });
-                }
-            }
-            else {
-                await this.octokit.rest.issues.createComment({
-                    owner: this.repo.owner,
-                    repo: this.repo.repo,
-                    issue_number: this.issueNumber,
-                    body: comment,
-                });
-            }
-        }
-    }
-    async getCommentId(issueNum, searchWords) {
+    async getGitHubUsername() {
         var _a;
-        // get all comments in pr
-        const commentList = await this.octokit.rest.issues.listComments({
+        const { data } = await this.octokit.rest.issues.get({
             owner: this.repo.owner,
             repo: this.repo.repo,
-            issue_number: issueNum,
-            per_page: 100,
-            page: 1,
+            issue_number: this.pullRequestNumber,
         });
-        const responese = commentList.data;
-        // filter based markdown '<!--contribute badge-->'
-        // const comment = responese.map(commentword => commentword.body);
-        for (let i = 0; i < responese.length; i++) {
-            if (responese[i] !== undefined) {
-                if ((_a = responese[i].body) === null || _a === void 0 ? void 0 : _a.search(searchWords)) {
-                    console.log(responese[i].id);
-                    return responese[i].id;
-                }
-                ;
-            }
+        const user = (_a = data.user) === null || _a === void 0 ? void 0 : _a.login;
+        if (!user) {
+            core.setFailed(`No GitHub username found for pull request number ${this.pullRequestNumber}`);
+            throw new Error(`No GitHub username found for pull request number ${this.pullRequestNumber}`);
         }
-        return;
-        // find the target comment_id from the comment, e.g:response[0]
+        return user;
     }
-    async updateComment(commentId, comment) {
-        await this.octokit.rest.issues.updateComment({
+    async getRelevantPullRequests(username) {
+        const issues = await this.octokit.paginate(this.octokit.rest.issues.listForRepo, {
             owner: this.repo.owner,
             repo: this.repo.repo,
-            comment_id: commentId,
+            since: this.timestamp,
+            creator: username,
+        }).catch(error => {
+            core.setFailed(error.message);
+        });
+        if (!issues) {
+            console.log('no pull requests found');
+            return [];
+        }
+        return issues.filter(isPull => isPull.pull_request);
+    }
+    async addLabel(badgeIndex) {
+        await this.octokit.rest.issues.addLabels({
+            owner: this.repo.owner,
+            repo: this.repo.repo,
+            issue_number: this.pullRequestNumber,
+            labels: [this.badges[badgeIndex].name],
+        });
+    }
+    async writeComment(badgeIndex, username) {
+        const badge = this.badges[badgeIndex];
+        const comment = [
+            `${BADGER_METADATA}\n`,
+            `Welcome ${username}`,
+            `You are ${beginsWithVowel(badge.name) ? 'an' : 'a'}`,
+            `${badge.name},`,
+            `which means that ${this.badges[badgeIndex].description}`,
+            'Keep up the good work!\n',
+            '----',
+            'This comment brought to you by the Community Badger ([source code](https://github.com/kaizencc/github-merit-badger))',
+        ].join(' ');
+        await this.octokit.rest.issues.createComment({
+            owner: this.repo.owner,
+            repo: this.repo.repo,
+            issue_number: this.pullRequestNumber,
             body: comment,
         });
     }
-    async test_comment_list() {
-        if (this.issueNumber !== undefined) {
-            const commentList = await this.octokit.rest.issues.listComments({
-                owner: this.repo.owner,
-                repo: this.repo.repo,
-                issue_number: this.issueNumber,
-                per_page: 100,
-                page: 1,
-            });
-            const responese = commentList.data;
-            console.log(responese);
-        }
-    }
-    async getFixesAndFeats() {
-        //const pulls = await this.getPulls().catch(error => {
-        const merges = await this.getMerges().catch(error => {
-            core.setFailed(error.message);
-        });
-        if (merges !== undefined) {
-            //const titles = pulls.filter(isMerged => isMerged.pull_request.merged_at).map(title => title.title).filter();
-            const titles = merges.map(title => title.title);
-            return titles.filter(key => key.slice(0, this.getIndex(key)) === 'fix' || key.slice(0, this.getIndex(key)) === 'feat');
-        }
-        return undefined;
-    }
-    // helper function for getFixesAndFeats
-    getIndex(key) {
-        const indexColon = key.indexOf(':');
-        const indexParens = key.indexOf('(');
-        if (indexColon === -1) {
-            return 0;
-        }
-        if (indexParens === -1) {
-            return indexColon;
-        }
-        return indexColon < indexParens ? indexColon : indexParens;
-    }
 }
-exports.GithubApi = GithubApi;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2l0aHViLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2dpdGh1Yi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFzQztBQUN0Qyx3REFBMEM7QUFPMUMsTUFBYSxTQUFTO0lBS3BCLFlBQVksS0FBYTtRQUN2QixJQUFJLENBQUMsT0FBTyxHQUFHLE1BQU0sQ0FBQyxVQUFVLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDeEMsSUFBSSxDQUFDLElBQUksR0FBRyxNQUFNLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQztRQUVoQyxJQUFJLE1BQU0sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLEtBQUssRUFBRTtZQUNoQyxJQUFJLENBQUMsV0FBVyxHQUFHLE1BQU0sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUM7U0FDeEQ7YUFBTSxJQUFJLE1BQU0sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLFlBQVksRUFBRTtZQUM5QyxJQUFJLENBQUMsV0FBVyxHQUFHLE1BQU0sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLFlBQVksQ0FBQyxNQUFNLENBQUM7U0FDL0Q7YUFBTTtZQUNMLElBQUksQ0FBQyxTQUFTLENBQUMsK0JBQStCLENBQUMsQ0FBQztTQUNqRDtJQUVILENBQUM7SUFFTSxLQUFLLENBQUMsb0JBQW9CLENBQUMsTUFBZ0I7UUFDaEQsSUFBSSxDQUFDLE1BQU0sQ0FBQyxNQUFNO1lBQUUsT0FBTztRQUMzQixJQUFJLElBQUksQ0FBQyxXQUFXLEtBQUssU0FBUyxFQUFFO1lBQ2xDLE1BQU0sSUFBSSxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFNBQVMsQ0FBQztnQkFDdkMsS0FBSyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSztnQkFDdEIsSUFBSSxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSTtnQkFDcEIsWUFB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QUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBRSxJQUFJLENBQUMsUUFBUSxDQUFDLEdBQUcsQ0FBQyxDQUFDLEtBQUssS0FBSyxJQUFJLEdBQUcsQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsR0FBRyxDQUFDLENBQUMsS0FBSyxNQUFNLENBQUMsQ0FBQztTQUN4SDtRQUNELE9BQU8sU0FBUyxDQUFDO0lBQ25CLENBQUM7SUFFRCx1Q0FBdUM7SUFDL0IsUUFBUSxDQUFDLEdBQVc7UUFDMUIsTUFBTSxVQUFVLEdBQUcsR0FBRyxDQUFDLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQztRQUNwQyxNQUFNLFdBQVcsR0FBRyxHQUFHLENBQUMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBRXJDLElBQUksVUFBVSxLQUFLLENBQUMsQ0FBQyxFQUFFO1lBQ3JCLE9BQU8sQ0FBQyxDQUFDO1NBQ1Y7UUFDRCxJQUFJLFdBQVcsS0FBSyxDQUFDLENBQUMsRUFBRTtZQUN0QixPQUFPLFVBQVUsQ0FBQztTQUNuQjtRQUVELE9BQU8sVUFBVSxHQUFHLFdBQVcsQ0FBQyxDQUFDLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQyxXQUFXLENBQUM7SUFDN0QsQ0FBQztDQUNGO0FBalNELDhCQWlTQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAqIGFzIGNvcmUgZnJvbSAnQGFjdGlvbnMvY29yZSc7XG5pbXBvcnQgKiBhcyBnaXRodWIgZnJvbSAnQGFjdGlvbnMvZ2l0aHViJztcblxuZXhwb3J0IGludGVyZmFjZSBJUmVwbyB7XG4gIG93bmVyOiBzdHJpbmc7XG4gIHJlcG86IHN0cmluZztcbn1cblxuZXhwb3J0IGNsYXNzIEdpdGh1YkFwaSB7XG4gIHByaXZhdGUgb2N0b2tpdDtcbiAgcHJpdmF0ZSByZXBvOiBJUmVwbztcbiAgcHJpdmF0ZSBpc3N1ZU51bWJlcjogbnVtYmVyIHwgdW5kZWZpbmVkO1xuXG4gIGNvbnN0cnVjdG9yKHRva2VuOiBzdHJpbmcpIHtcbiAgICB0aGlzLm9jdG9raXQgPSBnaXRodWIuZ2V0T2N0b2tpdCh0b2tlbik7XG4gICAgdGhpcy5yZXBvID0gZ2l0aHViLmNvbnRleHQucmVwbztcblxuICAgIGlmIChnaXRodWIuY29udGV4dC5wYXlsb2FkLmlzc3VlKSB7XG4gICAgICB0aGlzLmlzc3VlTnVtYmVyID0gZ2l0aHViLmNvbnRleHQucGF5bG9hZC5pc3N1ZS5udW1iZXI7XG4gICAgfSBlbHNlIGlmIChnaXRodWIuY29udGV4dC5wYXlsb2FkLnB1bGxfcmVxdWVzdCkge1xuICAgICAgdGhpcy5pc3N1ZU51bWJlciA9IGdpdGh1Yi5jb250ZXh0LnBheWxvYWQucHVsbF9yZXF1ZXN0Lm51bWJlcjtcbiAgICB9IGVsc2Uge1xuICAgICAgY29yZS5zZXRGYWlsZWQoJ0Vycm9yIHJldHJpZXZpbmcgaXNzdWUgbnVtYmVyJyk7XG4gICAgfVxuXG4gIH1cblxuICBwdWJsaWMgYXN5bmMgc2V0UHVsbFJlcXVlc3RMYWJlbHMobGFiZWxzOiBzdHJpbmdbXSkge1xuICAgIGlmICghbGFiZWxzLmxlbmd0aCkgcmV0dXJuO1xuICAgIGlmICh0aGlzLmlzc3VlTnVtYmVyICE9PSB1bmRlZmluZWQpIHtcbiAgICAgIGF3YWl0IHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy5hZGRMYWJlbHMoe1xuICAgICAgICBvd25lcjogdGhpcy5yZXBvLm93bmVyLFxuICAgICAgICByZXBvOiB0aGlzLnJlcG8ucmVwbyxcbiAgICAgICAgaXNzdWVfbnVtYmVyOiB0aGlzLmlzc3VlTnVtYmVyLFxuICAgICAgICBsYWJlbHMsXG4gICAgICB9KTtcbiAgICB9XG4gIH1cblxuXG4gIHB1YmxpYyBhc3luYyBnZXRJc3N1ZU51bWJlcigpIHtcbiAgICByZXR1cm4gdGhpcy5pc3N1ZU51bWJlcjtcbiAgfVxuXG4gIHB1YmxpYyBhc3luYyBnZXRQdWxsc0RhdGEocGFnZTogbnVtYmVyPTEpIHtcbiAgICAvLyBoZWFkIHByb3BzIGNhbiBiZSB1c2VkIGJlbG93IHRvIGZpbHRlciBQUnMgYmFzZWQgb24gdGl0bGUobm8gYmlnIGNoYW5nZSB0eXBlKVxuICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgdGhpcy5vY3Rva2l0LnJlc3QucHVsbHMubGlzdCh7XG4gICAgICBvd25lcjogdGhpcy5yZXBvLm93bmVyLFxuICAgICAgcmVwbzogdGhpcy5yZXBvLnJlcG8sXG4gICAgICBzdGF0ZTogJ2FsbCcsXG4gICAgICBwZXJfcGFnZTogMTAwLFxuICAgICAgcGFnZTogcGFnZSxcbiAgICB9KTtcbiAgICByZXR1cm4gcmVzcG9uc2UuZGF0YTtcbiAgfVxuXG4gIHB1YmxpYyBhc3luYyBnZXRQdWxscyhjcmVhdG9yU3BlY2lmaWM6IGJvb2xlYW49dHJ1ZSkgeyAvLyBpc3N1ZUNyZWF0b3I6IHN0cmluZykge1xuICAgIGxldCByZXN1bHQgPSB1bmRlZmluZWQ7XG4gICAgaWYgKGNyZWF0b3JTcGVjaWZpYykge1xuICAgICAgY29uc3QgaXNzdWVDcmVhdG9yID0gYXdhaXQgdGhpcy5nZXRJc3N1ZUNyZWF0b3IoKS5jYXRjaChlcnJvciA9PiB7XG4gICAgICAgIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuICAgICAgfSk7XG4gICAgICBpZiAoaXNzdWVDcmVhdG9yICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgY29uc3QgaXNzdWVzID0gYXdhaXQgdGhpcy5vY3Rva2l0LnBhZ2luYXRlKHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy5saXN0Rm9yUmVwbywge1xuICAgICAgICAgIG93bmVyOiB0aGlzLnJlcG8ub3duZXIsXG4gICAgICAgICAgcmVwbzogdGhpcy5yZXBvLnJlcG8sXG4gICAgICAgICAgc3RhdGU6ICdhbGwnLFxuICAgICAgICAgIGNyZWF0b3I6IGlzc3VlQ3JlYXRvcixcbiAgICAgICAgfSkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuICAgICAgICBpZiAoaXNzdWVzICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICByZXN1bHQgPSBpc3N1ZXMuZmlsdGVyKGlzUHVsbCA9PiBpc1B1bGwucHVsbF9yZXF1ZXN0KTtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH0gZWxzZSB7XG4gICAgICBjb25zdCBpc3N1ZXMgPSBhd2FpdCB0aGlzLm9jdG9raXQucGFnaW5hdGUodGhpcy5vY3Rva2l0LnJlc3QuaXNzdWVzLmxpc3RGb3JSZXBvLCB7XG4gICAgICAgIG93bmVyOiB0aGlzLnJlcG8ub3duZXIsXG4gICAgICAgIHJlcG86IHRoaXMucmVwby5yZXBvLFxuICAgICAgICBzdGF0ZTogJ2FsbCcsXG4gICAgICB9KS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4gICAgICBpZiAoaXNzdWVzICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgcmVzdWx0ID0gaXNzdWVzLmZpbHRlcihpc1B1bGwgPT4gaXNQdWxsLnB1bGxfcmVxdWVzdCk7XG4gICAgICB9XG4gICAgfVxuICAgIC8vY29uc29sZS5sb2coJ1B1bGxzIChpbiBwdWxscyk6IFxcblxcbicpO1xuICAgIC8vY29uc29sZS5sb2cocmVzdWx0KTtcbiAgICByZXR1cm4gcmVzdWx0O1xuICB9XG5cbiAgcHVibGljIGFzeW5jIGdldE1lcmdlcyhjcmVhdG9yU3BlY2lmaWM6IGJvb2xlYW49dHJ1ZSkge1xuICAgIGNvbnN0IHB1bGxzID0gYXdhaXQgdGhpcy5nZXRQdWxscyhjcmVhdG9yU3BlY2lmaWMpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICAvL2NvbnNvbGUubG9nKCdQdWxscyAoaW4gTWVyZ2VzKTogXFxuXFxuJyk7XG4gICAgLy9jb25zb2xlLmxvZyhwdWxscyk7XG4gICAgaWYgKHB1bGxzICE9PSB1bmRlZmluZWQpIHtcbiAgICAgIGNvbnN0IG1lcmdlcyA9IHB1bGxzLmZpbHRlcihpc01lcmdlZCA9PiBpc01lcmdlZC5wdWxsX3JlcXVlc3Q/Lm1lcmdlZF9hdCk7XG4gICAgICAvL2NvbnNvbGUubG9nKCdNZXJnZXMgKGluIE1lcmdlcyk6IFxcblxcbicpO1xuICAgICAgLy9jb25zb2xlLmxvZyhtZXJnZXMpO1xuICAgICAgcmV0dXJuIG1lcmdlcztcbiAgICAgIC8vcmV0dXJuIHB1bGxzLmZpbHRlcihpc01lcmdlZCA9PiBpc01lcmdlZC5wdWxsX3JlcXVlc3Q/Lm1lcmdlZF9hdCk7XG4gICAgICAvL2NvbnN0IG1lcmdlZFBScyA9IHB1bGxzLmZpbHRlcihpc01lcmdlZCA9PiBpc01lcmdlZC5wdWxsX3JlcXVlc3Q/Lm1lcmdlZF9hdCk7XG4gICAgICAvL3JldHVybiBtZXJnZWRQUnMubGVuZ3RoO1xuICAgIH1cbiAgICByZXR1cm4gdW5kZWZpbmVkO1xuICAgIC8vY29uc29sZS5sb2coYCR7aXNzdWVDcmVhdG9yfSBoYXMgbWFkZSAke251bVBSc30gUFJzYCk7XG4gICAgLy9yZXR1cm4gbnVtUFJzO1xuICB9XG5cbiAgcHVibGljIGFzeW5jIGdldFJlY2VudE1lcmdlcyhudW1EYXlzOiBudW1iZXIsIGNyZWF0b3JTcGVjaWZpYzogYm9vbGVhbj10cnVlKSB7XG4gICAgbGV0IHJlc3VsdCA9IHVuZGVmaW5lZDtcbiAgICBjb25zdCBtZXJnZXMgPSBhd2FpdCB0aGlzLmdldE1lcmdlcyhjcmVhdG9yU3BlY2lmaWMpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICBpZiAobWVyZ2VzICE9PSB1bmRlZmluZWQpIHtcbiAgICAgIC8qXG4gICAgICBjb25zdCBtZXJnZURhdGVzID0gbWVyZ2VzLm1hcChtZXJnZURhdGUgPT4gbWVyZ2VEYXRlLnB1bGxfcmVxdWVzdD8ubWVyZ2VkX2F0KTtcblxuICAgICAgaWYgKG1lcmdlRGF0ZXMgIT09IHVuZGVmaW5lZCkge1xuICAgICAgICAvL2NvbnN0IG1lcmdlZFBScyA9IHB1bGxzLmZpbHRlcihpc01lcmdlZCA9PiBpc01lcmdlZC5wdWxsX3JlcXVlc3Q/Lm1lcmdlZF9hdCk7XG4gICAgICAgIC8vIHJldHVybiBtZXJnZWRQUnMubGVuZ3RoOyAoZm9yIHRlc3RpbmcgcHVycG9zZSlcbiAgICAgICAgLy8gZ2V0IHRhcmdldCBzdGFydCBkYXRlIGFzIFwic3RhcnREYXRlXCIgd2l0aCB0aGUgZ2l2ZW4gZGF5c1xuICAgICAgICBjb25zdCBkYXlzQWdvID0gbmV3IERhdGUoKTtcbiAgICAgICAgLy9jb25zdCBkYXlzQWdvID0gbmV3IERhdGUoZGF0ZS5nZXRUaW1lKCkpO1xuICAgICAgICBkYXlzQWdvLnNldERhdGUoZGF5c0Fnby5nZXREYXRlKCkgLSBudW1PZkRheXMpO1xuICAgICAgICAvL2NvbnN0IHN0YXJ0RGF0ZSA9IGRheXNBZ287XG5cbiAgICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBtZXJnZURhdGVzLmxlbmd0aDsgaSArPSAxKSB7XG4gICAgICAgICAgbGV0IGRhdGUgPSBtZXJnZURhdGVzW2ldO1xuICAgICAgICAgIGlmIChkYXRlICE9PSB1bmRlZmluZWQgJiYgZGF0ZSAhPT0gbnVsbCkge1xuICAgICAgICAgICAgaWYgKCAobmV3IERhdGUoZGF0ZSkuZ2V0RGF5KCkgLSBkYXlzQWdvLmdldERheSgpKSA+PSAwICkge1xuICAgICAgICAgICAgICByZXN1bHQgPSByZXN1bHQgKyAxO1xuICAgICAgICAgICAgfVxuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuICAgICAgKi9cbiAgICAgIC8vY29uc3QgZGF5c0FnbyA9IG5ldyBEYXRlKCk7XG4gICAgICAvL2NvbnN0IGRheXNBZ28gPSBuZXcgRGF0ZShkYXRlLmdldFRpbWUoKSk7XG4gICAgICAvL2RheXNBZ28uc2V0RGF0ZShkYXlzQWdvLmdldERhdGUoKSAtIG51bURheXMpO1xuICAgICAgLy9jb25zdCBzdGFydERhdGUgPSBkYXlzQWdvO1xuXG4gICAgICAvKlxuICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBtZXJnZXMubGVuZ3RoOyBpICs9IDEpIHtcbiAgICAgICAgbGV0IGRhdGUgPSBtZXJnZXNbaV0ucHVsbF9yZXF1ZXN0Py5tZXJnZWRfYXQ7XG4gICAgICAgIGlmIChkYXRlICE9PSB1bmRlZmluZWQgJiYgZGF0ZSAhPT0gbnVsbCkge1xuICAgICAgICAgIGlmICggKG5ldyBEYXRlKGRhdGUpLmdldERheSgpIC0gZGF5c0Fnby5nZXREYXkoKSkgPj0gMCApIHtcbiAgICAgICAgICAgIC8vcmVzdWx0ID0gcmVzdWx0ICsgMTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICAgICovXG5cbiAgICAgIHJlc3VsdCA9IG1lcmdlcy5maWx0ZXIocmVjZW50ID0+IChyZWNlbnQucHVsbF9yZXF1ZXN0Py5tZXJnZWRfYXQgIT09IG51bGwpXG4gICAgICAgICYmIChyZWNlbnQucHVsbF9yZXF1ZXN0Py5tZXJnZWRfYXQgIT09IHVuZGVmaW5lZClcbiAgICAgICAgJiYgKHRoaXMuY29tcGFyZURhdGUobmV3IERhdGUocmVjZW50LnB1bGxfcmVxdWVzdD8ubWVyZ2VkX2F0KSwgbnVtRGF5cykpKTtcbiAgICB9XG4gICAgLy9jb25zb2xlLmxvZygnUmVjZW50IE1lcmdlcyAoaW4gUmVjZW50KTogXFxuXFxuJyk7XG4gICAgLy9jb25zb2xlLmxvZyhyZXN1bHQpO1xuICAgIHJldHVybiByZXN1bHQ7XG4gICAgLy9jb25zb2xlLmxvZyhgJHtpc3N1ZUNyZWF0b3J9IGhhcyBtYWRlICR7bnVtUFJzfSBQUnNgKTtcbiAgICAvL3JldHVybiBudW1QUnM7XG4gIH1cblxuICBwcml2YXRlIGNvbXBhcmVEYXRlKGRhdGU6IERhdGUsIG51bURheXM6IG51bWJlcikge1xuICAgIC8vY29uc3QgbWludXRlID0gMTAwMCAqIDYwO1xuICAgIC8vY29uc3QgaG91ciA9IG1pbnV0ZSAqIDYwO1xuICAgIGNvbnN0IERBWSA9IDEwMDAgKiA2MCAqIDYwICogMjQ7IC8vIG1pbGxpc2Vjb25kcyAtPiBzZWNvbmRzIC0+IG1pbnV0ZXMgLT4gaG91cnMgLT4gZGF5c1xuICAgIC8qXG4gICAgY29uc3QgZGF5c0FnbyA9IG5ldyBEYXRlKCk7XG4gICAgZGF5c0Fnby5zZXREYXRlKGRheXNBZ28uZ2V0VGltZSgpIC0gbnVtRGF5cyk7XG4gICAgY29uc29sZS5sb2coJ2RheXNBZ286ICcgKyBkYXlzQWdvKTtcbiAgICBjb25zb2xlLmxvZyhuZXcgRGF0ZShkYXRlKS5nZXREYXkoKSk7XG4gICAgY29uc29sZS5sb2coZGF0ZS5nZXREYXkoKSk7XG4gICAgY29uc29sZS5sb2coZGF5c0Fnby5nZXREYXkoKSk7XG4gICAgY29uc3QgZGlmZiA9IGRhdGUuZ2V0RGF5KCkgLSBkYXlzQWdvLmdldERheSgpO1xuICAgIGNvbnN0IGRpZmYyID0gKG5ldyBEYXRlKGRhdGUpLmdldERheSgpIC0gZGF5c0Fnby5nZXREYXkoKSk7XG5cbiAgICBjb25zb2xlLmxvZygnZGlmZjogJyArIGRpZmYpO1xuICAgIGNvbnNvbGUubG9nKCdkaWZmMjogJyArIGRpZmYyKTtcbiAgICByZXR1cm4gKClcbiAgICByZXR1cm4gZGlmZiA+PSAwOyovXG4gICAgcmV0dXJuICggZGF0ZS5nZXRUaW1lKCkgPj0gbmV3IERhdGUoKS5nZXRUaW1lKCkgLSAobnVtRGF5cyAqIERBWSkgKTtcbiAgfVxuXG4gIHB1YmxpYyBhc3luYyBnZXRJc3N1ZUNyZWF0b3IoKSB7XG4gICAgaWYgKHRoaXMuaXNzdWVOdW1iZXIgIT09IHVuZGVmaW5lZCkge1xuICAgICAgY29uc3QgeyBkYXRhIH0gPSBhd2FpdCB0aGlzLm9jdG9raXQucmVzdC5pc3N1ZXMuZ2V0KHtcbiAgICAgICAgb3duZXI6IHRoaXMucmVwby5vd25lcixcbiAgICAgICAgcmVwbzogdGhpcy5yZXBvLnJlcG8sXG4gICAgICAgIGlzc3VlX251bWJlcjogdGhpcy5pc3N1ZU51bWJlcixcbiAgICAgIH0pO1xuICAgICAgcmV0dXJuIGRhdGEudXNlcj8ubG9naW47XG4gICAgfSBlbHNlIHtyZXR1cm4gdW5kZWZpbmVkO31cbiAgfVxuXG4gIHB1YmxpYyBhc3luYyB3cml0ZVBSQ29tbWVudHMoY29tbWVudDogc3RyaW5nLCBzZWFyY2hXb3Jkcz86IFJlZ0V4cCkge1xuICAgIGlmICh0aGlzLmlzc3VlTnVtYmVyICE9PSB1bmRlZmluZWQpIHtcbiAgICAgIGlmIChzZWFyY2hXb3JkcyAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgIGlmIChhd2FpdCB0aGlzLmdldENvbW1lbnRJZCh0aGlzLmlzc3VlTnVtYmVyLCBzZWFyY2hXb3JkcykpIHtcbiAgICAgICAgICAvLyBuZWVkIHRvIGZldGNoIHRoZSBsZWFzdCByZWNlbnQgY29tbWVudCwgbmVlZCBhIGZ1bmN0aW9uXG4gICAgICAgICAgY29uc3QgaWQgPSBhd2FpdCB0aGlzLmdldENvbW1lbnRJZCh0aGlzLmlzc3VlTnVtYmVyLCBzZWFyY2hXb3Jkcyk7XG4gICAgICAgICAgaWYgKGlkKSB7XG4gICAgICAgICAgICB0aGlzLnVwZGF0ZUNvbW1lbnQoaWQsIGNvbW1lbnQpLmNhdGNoKGVycm9yID0+IHtcbiAgICAgICAgICAgICAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG4gICAgICAgICAgICB9KTtcbiAgICAgICAgICB9XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgYXdhaXQgdGhpcy5vY3Rva2l0LnJlc3QuaXNzdWVzLmNyZWF0ZUNvbW1lbnQoe1xuICAgICAgICAgICAgb3duZXI6IHRoaXMucmVwby5vd25lcixcbiAgICAgICAgICAgIHJlcG86IHRoaXMucmVwby5yZXBvLFxuICAgICAgICAgICAgaXNzdWVfbnVtYmVyOiB0aGlzLmlzc3VlTnVtYmVyLFxuICAgICAgICAgICAgYm9keTogY29tbWVudCxcbiAgICAgICAgICB9KTtcbiAgICAgICAgfVxuICAgICAgfSBlbHNlIHtcbiAgICAgICAgYXdhaXQgdGhpcy5vY3Rva2l0LnJlc3QuaXNzdWVzLmNyZWF0ZUNvbW1lbnQoe1xuICAgICAgICAgIG93bmVyOiB0aGlzLnJlcG8ub3duZXIsXG4gICAgICAgICAgcmVwbzogdGhpcy5yZXBvLnJlcG8sXG4gICAgICAgICAgaXNzdWVfbnVtYmVyOiB0aGlzLmlzc3VlTnVtYmVyLFxuICAgICAgICAgIGJvZHk6IGNvbW1lbnQsXG4gICAgICAgIH0pO1xuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIHB1YmxpYyBhc3luYyBnZXRDb21tZW50SWQoaXNzdWVOdW06IG51bWJlciwgc2VhcmNoV29yZHM6IFJlZ0V4cCkge1xuICAgIC8vIGdldCBhbGwgY29tbWVudHMgaW4gcHJcbiAgICBjb25zdCBjb21tZW50TGlzdCA9IGF3YWl0IHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy5saXN0Q29tbWVudHMoe1xuICAgICAgb3duZXI6IHRoaXMucmVwby5vd25lcixcbiAgICAgIHJlcG86IHRoaXMucmVwby5yZXBvLFxuICAgICAgaXNzdWVfbnVtYmVyOiBpc3N1ZU51bSxcbiAgICAgIHBlcl9wYWdlOiAxMDAsXG4gICAgICBwYWdlOiAxLFxuICAgIH0pO1xuICAgIGNvbnN0IHJlc3BvbmVzZSA9IGNvbW1lbnRMaXN0LmRhdGE7XG4gICAgLy8gZmlsdGVyIGJhc2VkIG1hcmtkb3duICc8IS0tY29udHJpYnV0ZSBiYWRnZS0tPidcbiAgICAvLyBjb25zdCBjb21tZW50ID0gcmVzcG9uZXNlLm1hcChjb21tZW50d29yZCA9PiBjb21tZW50d29yZC5ib2R5KTtcbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IHJlc3BvbmVzZS5sZW5ndGg7IGkrKykge1xuICAgICAgaWYgKHJlc3BvbmVzZVtpXSAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgIGlmIChyZXNwb25lc2VbaV0uYm9keT8uc2VhcmNoKHNlYXJjaFdvcmRzKSkge1xuICAgICAgICAgIGNvbnNvbGUubG9nKHJlc3BvbmVzZVtpXS5pZCk7XG4gICAgICAgICAgcmV0dXJuIHJlc3BvbmVzZVtpXS5pZDtcbiAgICAgICAgfTtcbiAgICAgIH1cbiAgICB9XG4gICAgcmV0dXJuO1xuICAgIC8vIGZpbmQgdGhlIHRhcmdldCBjb21tZW50X2lkIGZyb20gdGhlIGNvbW1lbnQsIGUuZzpyZXNwb25zZVswXVxuICB9XG5cbiAgcHVibGljIGFzeW5jIHVwZGF0ZUNvbW1lbnQoY29tbWVudElkOiBudW1iZXIsIGNvbW1lbnQ6IHN0cmluZykge1xuICAgIGF3YWl0IHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy51cGRhdGVDb21tZW50KHtcbiAgICAgIG93bmVyOiB0aGlzLnJlcG8ub3duZXIsXG4gICAgICByZXBvOiB0aGlzLnJlcG8ucmVwbyxcbiAgICAgIGNvbW1lbnRfaWQ6IGNvbW1lbnRJZCxcbiAgICAgIGJvZHk6IGNvbW1lbnQsXG4gICAgfSk7XG4gIH1cblxuXG4gIHB1YmxpYyBhc3luYyB0ZXN0X2NvbW1lbnRfbGlzdCgpIHtcbiAgICBpZiAodGhpcy5pc3N1ZU51bWJlciAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICBjb25zdCBjb21tZW50TGlzdCA9IGF3YWl0IHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy5saXN0Q29tbWVudHMoe1xuICAgICAgICBvd25lcjogdGhpcy5yZXBvLm93bmVyLFxuICAgICAgICByZXBvOiB0aGlzLnJlcG8ucmVwbyxcbiAgICAgICAgaXNzdWVfbnVtYmVyOiB0aGlzLmlzc3VlTnVtYmVyLFxuICAgICAgICBwZXJfcGFnZTogMTAwLFxuICAgICAgICBwYWdlOiAxLFxuICAgICAgfSk7XG4gICAgICBjb25zdCByZXNwb25lc2UgPSBjb21tZW50TGlzdC5kYXRhO1xuICAgICAgY29uc29sZS5sb2cocmVzcG9uZXNlKTtcbiAgICB9XG4gIH1cblxuICBwdWJsaWMgYXN5bmMgZ2V0Rml4ZXNBbmRGZWF0cygpIHtcbiAgICAvL2NvbnN0IHB1bGxzID0gYXdhaXQgdGhpcy5nZXRQdWxscygpLmNhdGNoKGVycm9yID0+IHtcbiAgICBjb25zdCBtZXJnZXMgPSBhd2FpdCB0aGlzLmdldE1lcmdlcygpLmNhdGNoKGVycm9yID0+IHtcbiAgICAgIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuICAgIH0pO1xuXG4gICAgaWYgKG1lcmdlcyAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAvL2NvbnN0IHRpdGxlcyA9IHB1bGxzLmZpbHRlcihpc01lcmdlZCA9PiBpc01lcmdlZC5wdWxsX3JlcXVlc3QubWVyZ2VkX2F0KS5tYXAodGl0bGUgPT4gdGl0bGUudGl0bGUpLmZpbHRlcigpO1xuICAgICAgY29uc3QgdGl0bGVzID0gbWVyZ2VzLm1hcCh0aXRsZSA9PiB0aXRsZS50aXRsZSk7XG4gICAgICByZXR1cm4gdGl0bGVzLmZpbHRlcihrZXkgPT4ga2V5LnNsaWNlKDAsIHRoaXMuZ2V0SW5kZXgoa2V5KSkgPT09ICdmaXgnIHx8IGtleS5zbGljZSgwLCB0aGlzLmdldEluZGV4KGtleSkpID09PSAnZmVhdCcpO1xuICAgIH1cbiAgICByZXR1cm4gdW5kZWZpbmVkO1xuICB9XG5cbiAgLy8gaGVscGVyIGZ1bmN0aW9uIGZvciBnZXRGaXhlc0FuZEZlYXRzXG4gIHByaXZhdGUgZ2V0SW5kZXgoa2V5OiBzdHJpbmcpIHtcbiAgICBjb25zdCBpbmRleENvbG9uID0ga2V5LmluZGV4T2YoJzonKTtcbiAgICBjb25zdCBpbmRleFBhcmVucyA9IGtleS5pbmRleE9mKCcoJyk7XG5cbiAgICBpZiAoaW5kZXhDb2xvbiA9PT0gLTEpIHtcbiAgICAgIHJldHVybiAwO1xuICAgIH1cbiAgICBpZiAoaW5kZXhQYXJlbnMgPT09IC0xKSB7XG4gICAgICByZXR1cm4gaW5kZXhDb2xvbjtcbiAgICB9XG5cbiAgICByZXR1cm4gaW5kZXhDb2xvbiA8IGluZGV4UGFyZW5zID8gaW5kZXhDb2xvbiA6IGluZGV4UGFyZW5zO1xuICB9XG59XG4iXX0=
+exports.Badger = Badger;
+function daysToTimestamp(_days) {
+    // TODO implement
+    return '';
+}
+function beginsWithVowel(word) {
+    return ['a', 'e', 'i', 'o', 'u'].includes(word[0]);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYmFkZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2JhZGdlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFzQztBQUN0Qyx3REFBMEM7QUFFMUMsTUFBTSxlQUFlLEdBQUcsNEJBQTRCLENBQUM7QUFpQnJELE1BQXNCLE1BQU07SUFRMUIsWUFBWSxLQUFrQjtRQUZ2QixXQUFNLEdBQWdCLEVBQUUsQ0FBQztRQUc5QixJQUFJLENBQUMsT0FBTyxHQUFHLE1BQU0sQ0FBQyxVQUFVLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQzlDLElBQUksQ0FBQyxJQUFJLEdBQUcsTUFBTSxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUM7UUFFaEMsSUFBSSxNQUFNLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FBQyxZQUFZLEVBQUU7WUFDdkMsSUFBSSxDQUFDLGlCQUFpQixHQUFHLE1BQU0sQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLFlBQVksQ0FBQyxNQUFNLENBQUM7U0FDckU7YUFBTTtZQUNMLElBQUksQ0FBQyxTQUFTLENBQUMsOENBQThDLENBQUMsQ0FBQztZQUMvRCxNQUFNLElBQUksS0FBSyxDQUFDLDhDQUE4QyxDQUFDLENBQUM7U0FDakU7UUFFRCxJQUFJLENBQUMsU0FBUyxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLGVBQWUsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLFNBQVMsQ0FBQztRQUN0RSxJQUFJLENBQUMsZUFBZSxHQUFHLEtBQUssQ0FBQyxlQUFlLENBQUM7UUFFN0MsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLEtBQUssQ0FBQyxNQUFNLENBQUMsTUFBTSxFQUFFLENBQUMsRUFBRSxFQUFFO1lBQzVDLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDO2dCQUNmLElBQUks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SUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsR0FBRyxFQUFFO1lBQ3JELEdBQUcsS0FBSyxDQUFDLElBQUksR0FBRztZQUNoQixvQkFBb0IsSUFBSSxDQUFDLE1BQU0sQ0FBQyxVQUFVLENBQUMsQ0FBQyxXQUFXLEVBQUU7WUFDekQsMEJBQTBCO1lBQzFCLE1BQU07WUFDTixzSEFBc0g7U0FDdkgsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7UUFFWixNQUFNLElBQUksQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxhQUFhLENBQUM7WUFDM0MsS0FBSyxFQUFFLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSztZQUN0QixJQUFJLEVBQUUsSUFBSSxDQUFDLElBQUksQ0FBQyxJQUFJO1lBQ3BCLFlBQVksRUFBRSxJQUFJLENBQUMsaUJBQWlCO1lBQ3BDLElBQUksRUFBRSxPQUFPO1NBQ2QsQ0FBQyxDQUFDO0lBQ0wsQ0FBQztDQUNGO0FBdkdELHdCQXVHQztBQU9ELFNBQVMsZUFBZSxDQUFDLEtBQWE7SUFDcEMsaUJBQWlCO0lBQ2pCLE9BQU8sRUFBRSxDQUFDO0FBQ1osQ0FBQztBQUVELFNBQVMsZUFBZSxDQUFDLElBQVk7SUFDbkMsT0FBTyxDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsR0FBRyxFQUFFLEdBQUcsRUFBRSxHQUFHLENBQUMsQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDckQsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAqIGFzIGNvcmUgZnJvbSAnQGFjdGlvbnMvY29yZSc7XG5pbXBvcnQgKiBhcyBnaXRodWIgZnJvbSAnQGFjdGlvbnMvZ2l0aHViJztcblxuY29uc3QgQkFER0VSX01FVEFEQVRBID0gJzwhLS1tZXJpdCBiYWRnZSBjb21tZW50LS0+JztcblxuZXhwb3J0IGludGVyZmFjZSBCYWRnZXJQcm9wcyB7XG4gIHJlYWRvbmx5IGRheXM/OiBudW1iZXI7XG4gIHJlYWRvbmx5IHRva2VuOiBzdHJpbmc7XG4gIHJlYWRvbmx5IGJhZGdlczogc3RyaW5nW107XG4gIHJlYWRvbmx5IGJhZGdlRGVzY3JpcHRpb25zOiBzdHJpbmdbXTtcbiAgcmVhZG9ubHkgdGhyZXNob2xkczogbnVtYmVyW107XG4gIHJlYWRvbmx5IGlnbm9yZVVzZXJuYW1lczogc3RyaW5nW107XG59XG5cbmludGVyZmFjZSBCYWRnZUluZm8ge1xuICByZWFkb25seSBuYW1lOiBzdHJpbmc7XG4gIHJlYWRvbmx5IGRlc2NyaXB0aW9uOiBzdHJpbmc7XG4gIHJlYWRvbmx5IHRocmVzaG9sZDogbnVtYmVyO1xufVxuXG5leHBvcnQgYWJzdHJhY3QgY2xhc3MgQmFkZ2VyIHtcbiAgcHJpdmF0ZSBvY3Rva2l0O1xuICBwcml2YXRlIHJlcG86IFJlcG9zaXRvcnlJbmZvO1xuICBwcml2YXRlIHB1bGxSZXF1ZXN0TnVtYmVyOiBudW1iZXI7XG4gIHByaXZhdGUgdGltZXN0YW1wPzogc3RyaW5nO1xuICBwcml2YXRlIGlnbm9yZVVzZXJuYW1lcz86IHN0cmluZ1tdO1xuICBwdWJsaWMgYmFkZ2VzOiBCYWRnZUluZm9bXSA9IFtdO1xuXG4gIGNvbnN0cnVjdG9yKHByb3BzOiBCYWRnZXJQcm9wcykge1xuICAgIHRoaXMub2N0b2tpdCA9IGdpdGh1Yi5nZXRPY3Rva2l0KHByb3BzLnRva2VuKTtcbiAgICB0aGlzLnJlcG8gPSBnaXRodWIuY29udGV4dC5yZXBvO1xuXG4gICAgaWYgKGdpdGh1Yi5jb250ZXh0LnBheWxvYWQucHVsbF9yZXF1ZXN0KSB7XG4gICAgICB0aGlzLnB1bGxSZXF1ZXN0TnVtYmVyID0gZ2l0aHViLmNvbnRleHQucGF5bG9hZC5wdWxsX3JlcXVlc3QubnVtYmVyO1xuICAgIH0gZWxzZSB7XG4gICAgICBjb3JlLnNldEZhaWxlZCgnVGhpcyBBY3Rpb24gY2FuIG9ubHkgYmUgcnVuIG9uIHB1bGwgcmVxdWVzdHMnKTtcbiAgICAgIHRocm93IG5ldyBFcnJvcignVGhpcyBBY3Rpb24gY2FuIG9ubHkgYmUgcnVuIG9uIHB1bGwgcmVxdWVzdHMnKTtcbiAgICB9XG5cbiAgICB0aGlzLnRpbWVzdGFtcCA9IHByb3BzLmRheXMgPyBkYXlzVG9UaW1lc3RhbXAocHJvcHMuZGF5cykgOiB1bmRlZmluZWQ7XG4gICAgdGhpcy5pZ25vcmVVc2VybmFtZXMgPSBwcm9wcy5pZ25vcmVVc2VybmFtZXM7XG5cbiAgICBmb3IgKGxldCBpID0gMDsgaSA8IHByb3BzLmJhZGdlcy5sZW5ndGg7IGkrKykge1xuICAgICAgdGhpcy5iYWRnZXMucHVzaCh7XG4gICAgICAgIG5hbWU6IHByb3BzLmJhZGdlc1tpXSxcbiAgICAgICAgZGVzY3JpcHRpb246IHByb3BzLmJhZGdlRGVzY3JpcHRpb25zW2ldLFxuICAgICAgICB0aHJlc2hvbGQ6IHByb3BzLnRocmVzaG9sZHNbaV0sXG4gICAgICB9KTtcbiAgICB9XG4gIH1cblxuICBwdWJsaWMgYWJzdHJhY3QgcnVuQmFkZ2VyV29ya2Zsb3coKTogUHJvbWlzZTx2b2lkPjtcblxuICBwcm90ZWN0ZWQgaWdub3JlVGhpc1VzZXJuYW1lKHVzZXJuYW1lOiBzdHJpbmcpIHtcbiAgICByZXR1cm4gdGhpcy5pZ25vcmVVc2VybmFtZXM/LmluY2x1ZGVzKHVzZXJuYW1lKTtcbiAgfVxuXG4gIHByb3RlY3RlZCBhc3luYyBnZXRHaXRIdWJVc2VybmFtZSgpIHtcbiAgICBjb25zdCB7IGRhdGEgfSA9IGF3YWl0IHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy5nZXQoe1xuICAgICAgb3duZXI6IHRoaXMucmVwby5vd25lcixcbiAgICAgIHJlcG86IHRoaXMucmVwby5yZXBvLFxuICAgICAgaXNzdWVfbnVtYmVyOiB0aGlzLnB1bGxSZXF1ZXN0TnVtYmVyLFxuICAgIH0pO1xuXG4gICAgY29uc3QgdXNlciA9IGRhdGEudXNlcj8ubG9naW47XG5cbiAgICBpZiAoIXVzZXIpIHtcbiAgICAgIGNvcmUuc2V0RmFpbGVkKGBObyBHaXRIdWIgdXNlcm5hbWUgZm91bmQgZm9yIHB1bGwgcmVxdWVzdCBudW1iZXIgJHt0aGlzLnB1bGxSZXF1ZXN0TnVtYmVyfWApO1xuICAgICAgdGhyb3cgbmV3IEVycm9yKGBObyBHaXRIdWIgdXNlcm5hbWUgZm91bmQgZm9yIHB1bGwgcmVxdWVzdCBudW1iZXIgJHt0aGlzLnB1bGxSZXF1ZXN0TnVtYmVyfWApO1xuICAgIH1cblxuICAgIHJldHVybiB1c2VyO1xuICB9XG5cbiAgcHJvdGVjdGVkIGFzeW5jIGdldFJlbGV2YW50UHVsbFJlcXVlc3RzKHVzZXJuYW1lPzogc3RyaW5nKSB7XG4gICAgY29uc3QgaXNzdWVzID0gYXdhaXQgdGhpcy5vY3Rva2l0LnBhZ2luYXRlKHRoaXMub2N0b2tpdC5yZXN0Lmlzc3Vlcy5saXN0Rm9yUmVwbywge1xuICAgICAgb3duZXI6IHRoaXMucmVwby5vd25lcixcbiAgICAgIHJlcG86IHRoaXMucmVwby5yZXBvLFxuICAgICAgc2luY2U6IHRoaXMudGltZXN0YW1wLFxuICAgICAgY3JlYXRvcjogdXNlcm5hbWUsXG4gICAgfSkuY2F0Y2goZXJyb3IgPT4ge1xuICAgICAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG4gICAgfSk7XG5cbiAgICBpZiAoIWlzc3Vlcykge1xuICAgICAgY29uc29sZS5sb2coJ25vIHB1bGwgcmVxdWVzdHMgZm91bmQnKTtcbiAgICAgIHJldHVybiBbXTtcbiAgICB9XG5cbiAgICByZXR1cm4gaXNzdWVzLmZpbHRlcihpc1B1bGwgPT4gaXNQdWxsLnB1bGxfcmVxdWVzdCk7XG4gIH1cblxuICBhYnN0cmFjdCBkZXRlcm1pbmVCYWRnZShwdWxsUmVxdWVzdHM6IGFueVtdKTogbnVtYmVyO1xuXG4gIHByb3RlY3RlZCBhc3luYyBhZGRMYWJlbChiYWRnZUluZGV4OiBudW1iZXIpIHtcbiAgICBhd2FpdCB0aGlzLm9jdG9raXQucmVzdC5pc3N1ZXMuYWRkTGFiZWxzKHtcbiAgICAgIG93bmVyOiB0aGlzLnJlcG8ub3duZXIsXG4gICAgICByZXBvOiB0aGlzLnJlcG8ucmVwbyxcbiAgICAgIGlzc3VlX251bWJlcjogdGhpcy5wdWxsUmVxdWVzdE51bWJlcixcbiAgICAgIGxhYmVsczogW3RoaXMuYmFkZ2VzW2JhZGdlSW5kZXhdLm5hbWVdLFxuICAgIH0pO1xuICB9XG5cbiAgcHJvdGVjdGVkIGFzeW5jIHdyaXRlQ29tbWVudChiYWRnZUluZGV4OiBudW1iZXIsIHVzZXJuYW1lOiBzdHJpbmcpIHtcbiAgICBjb25zdCBiYWRnZSA9IHRoaXMuYmFkZ2VzW2JhZGdlSW5kZXhdO1xuICAgIGNvbnN0IGNvbW1lbnQgPSBbXG4gICAgICBgJHtCQURHRVJfTUVUQURBVEF9XFxuYCxcbiAgICAgIGBXZWxjb21lICR7dXNlcm5hbWV9YCxcbiAgICAgIGBZb3UgYXJlICR7YmVnaW5zV2l0aFZvd2VsKGJhZGdlLm5hbWUpID8gJ2FuJyA6ICdhJ31gLFxuICAgICAgYCR7YmFkZ2UubmFtZX0sYCxcbiAgICAgIGB3aGljaCBtZWFucyB0aGF0ICR7dGhpcy5iYWRnZXNbYmFkZ2VJbmRleF0uZGVzY3JpcHRpb259YCxcbiAgICAgICdLZWVwIHVwIHRoZSBnb29kIHdvcmshXFxuJyxcbiAgICAgICctLS0tJyxcbiAgICAgICdUaGlzIGNvbW1lbnQgYnJvdWdodCB0byB5b3UgYnkgdGhlIENvbW11bml0eSBCYWRnZXIgKFtzb3VyY2UgY29kZV0oaHR0cHM6Ly9naXRodWIuY29tL2thaXplbmNjL2dpdGh1Yi1tZXJpdC1iYWRnZXIpKScsXG4gICAgXS5qb2luKCcgJyk7XG5cbiAgICBhd2FpdCB0aGlzLm9jdG9raXQucmVzdC5pc3N1ZXMuY3JlYXRlQ29tbWVudCh7XG4gICAgICBvd25lcjogdGhpcy5yZXBvLm93bmVyLFxuICAgICAgcmVwbzogdGhpcy5yZXBvLnJlcG8sXG4gICAgICBpc3N1ZV9udW1iZXI6IHRoaXMucHVsbFJlcXVlc3ROdW1iZXIsXG4gICAgICBib2R5OiBjb21tZW50LFxuICAgIH0pO1xuICB9XG59XG5cbmludGVyZmFjZSBSZXBvc2l0b3J5SW5mbyB7XG4gIG93bmVyOiBzdHJpbmc7XG4gIHJlcG86IHN0cmluZztcbn1cblxuZnVuY3Rpb24gZGF5c1RvVGltZXN0YW1wKF9kYXlzOiBOdW1iZXIpIHtcbiAgLy8gVE9ETyBpbXBsZW1lbnRcbiAgcmV0dXJuICcnO1xufVxuXG5mdW5jdGlvbiBiZWdpbnNXaXRoVm93ZWwod29yZDogc3RyaW5nKSB7XG4gIHJldHVybiBbJ2EnLCAnZScsICdpJywgJ28nLCAndSddLmluY2x1ZGVzKHdvcmRbMF0pO1xufSJdfQ==
 
 /***/ }),
 
@@ -345,189 +194,251 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.compareFunction = exports.getHotlist = exports.determineHotIndex = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-//import { GitHub } from '@actions/github/lib/utils';
-const heap_js_1 = __nccwpck_require__(8973);
-const github_1 = __nccwpck_require__(5928);
+// import { Heap } from 'heap-js';
+const achievement_badger_1 = __nccwpck_require__(4116);
+const leaderboard_badger_1 = __nccwpck_require__(963);
 async function run() {
     const token = core.getInput('github-token');
-    const labelsRaw = core.getInput('labels');
-    const bucketsRaw = core.getInput('buckets');
-    const meaningsRaw = core.getInput('label-meanings');
-    const category = core.getInput('category');
-    // parse labels
-    const labels = labelsRaw.split(',');
-    // parse buckets
-    const buckets = bucketsRaw.split(',').map(Number);
-    // parse label meanings
-    const meanings = meaningsRaw.split('|');
-    const github = new github_1.GithubApi(token);
-    if (category === 'total') {
-        //const issues = await github.getPulls().catch(error => {core.setFailed(error.message);});
-        //if (issues !== undefined) {
-        const merges = await github.getMerges().catch(error => { core.setFailed(error.message); });
-        const numMerged = merges === null || merges === void 0 ? void 0 : merges.length;
-        console.log(numMerged);
-        if (numMerged !== undefined) {
-            //console.log(numMerged);
-            const index = determineIndex(buckets, numMerged);
-            const setLabels = determineLabel(labels, index);
-            if (setLabels != []) {
-                console.log(setLabels);
-                await github.setPullRequestLabels(setLabels).catch(error => { core.setFailed(error.message); }); // .catch(error => {core.setFailed(error.message);}); ?
-            }
-            // place to generste dynamic comments
-            // it has user_name, labels and label meanings
-            if (index !== -1) {
-                const dynamicComments = '<!--contribute badge-->' + 'Welcome ' + await github.getIssueCreator().catch(error => { core.setFailed(error.message); }) + ', the CDK Team thanks you for opening a pull request. You got the \'' + setLabels[0] + '\' label. ' + determineMeaning(meanings, index);
-                const searchWords = /<!--contribute badge-->/;
-                //console.log(dynamicComments);
-                //console.log(github.writePRComments(dynamicComments, searchWords));
-                if (dynamicComments !== undefined) {
-                    await github.writePRComments(dynamicComments, searchWords).catch(error => { core.setFailed(error.message); });
-                }
-            }
-        }
-        //}
-        //const data = await github.getPullsData().catch(error => {
-        //  core.setFailed(error.message);
-        //});
-        //console.log(data);
-        //if (data !== undefined) { // if (result instanceof Object) {
-        //  for (let i = 0; i < data.length; i += 1) {
-        //    console.log(data[i].user?.login);
-        //  }
-        //}
-        //console.log('\nReset\n');
-        /*const creator = await github.getIssueCreator().catch(error => {
-          core.setFailed(error.message);
-        });
-        */
-        //if (creator !== undefined) {
-        //await github.paginateData().catch(error => {
-        //  core.setFailed(error.message);
-        //});
-        //}
-        //console.log(github.context.issue.owner);
-        //const content = github.
+    const badges = renderListInput(core.getInput('badges'));
+    const thresholds = toNumberList(renderListInput(core.getInput('thresholds')));
+    const badgeDescriptions = renderListInput(core.getInput('badge-descriptions'));
+    const badgeType = core.getInput('badge-type');
+    const ignoreUsernames = renderListInput(core.getInput('ignore-usernames'));
+    const days = Number(core.getInput('days'));
+    console.log(badges, badgeDescriptions, thresholds);
+    if (badges.length === 0) {
+        core.setFailed('must have at least one badge in the input');
+        return;
     }
-    else if (category === 'hotlist') {
-        const days = Number(core.getInput('days'));
-        // call different functions from github
-        // alternatively, can determine labels + comment and do setting in 1 step
-        // also consider editing comment as a strech goal
-        const recentMerges = await github.getRecentMerges(days, false).catch(error => { core.setFailed(error.message); });
-        //console.log(recentMerges);
-        if (recentMerges !== undefined) {
-            const usernames = recentMerges.filter(hasLogin => { var _a; return (_a = hasLogin.user) === null || _a === void 0 ? void 0 : _a.login; }).map(login => { var _a; return (_a = login.user) === null || _a === void 0 ? void 0 : _a.login; });
-            console.log(usernames);
-            if (usernames !== undefined) {
-                const hotlist = getHotlist(usernames);
-                if (hotlist !== undefined) {
-                    const minHeap = new heap_js_1.Heap(compareFunction);
-                    minHeap.init(hotlist);
-                    const creator = await github.getIssueCreator().catch(error => { core.setFailed(error.message); });
-                    if (creator !== undefined) {
-                        const index = determineHotIndex(buckets, creator, minHeap);
-                        if (index !== -1) {
-                            const setLabels = determineLabel(labels, index);
-                            if (setLabels != []) {
-                                console.log(setLabels);
-                                await github.setPullRequestLabels(setLabels).catch(error => { core.setFailed(error.message); }); // .catch(error => {core.setFailed(error.message);}); ?
-                                let hotlistComment = 'You got the \'' + setLabels[0] + '\' label. This label means you are on the hotlist! ' + meanings[index];
-                                await github.writePRComments(hotlistComment).catch(error => { core.setFailed(error.message); });
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    if (badgeDescriptions.length !== badges.length || badges.length !== thresholds.length) {
+        core.setFailed('badge, badgeDescriptions, and thresholds must be lists with the same number of elements');
+        return;
+    }
+    let badger;
+    if (badgeType === 'leaderboard') {
+        badger = new leaderboard_badger_1.LeaderboardBadger({
+            token,
+            badges,
+            thresholds,
+            badgeDescriptions,
+            ignoreUsernames,
+            days,
+        });
     }
     else {
-        // do nothing
+        badger = new achievement_badger_1.AchievementBadger({
+            token,
+            badges,
+            thresholds,
+            badgeDescriptions,
+            ignoreUsernames,
+            days,
+        });
     }
+    await badger.runBadgerWorkflow();
+}
+//   const github: GithubApi = new GithubApi(token);
+//   if (category === 'total') {
+//     //const issues = await github.getPulls().catch(error => {core.setFailed(error.message);});
+//     //if (issues !== undefined) {
+//     const merges = await github.getMerges().catch(error => {core.setFailed(error.message);});
+//     const numMerged = merges?.length;
+//     console.log(numMerged);
+//     if (numMerged !== undefined) {
+//       //console.log(numMerged);
+//       const index = determineIndex(buckets, numMerged);
+//       const setLabels = determineLabel(labels, index);
+//       if (setLabels != []) {
+//         console.log(setLabels);
+//         await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
+//       }
+//       // place to generste dynamic comments
+//       // it has user_name, labels and label meanings
+//       if (index !== -1) {
+//         const dynamicComments = '<!--contribute badge-->' + 'Welcome ' + await github.getIssueCreator().catch(error => {core.setFailed(error.message);}) + ', the CDK Team thanks you for opening a pull request. You got the \'' + setLabels[0] + '\' label. ' + determineMeaning(meanings, index);
+//         const searchWords = /<!--contribute badge-->/;
+//         //console.log(dynamicComments);
+//         //console.log(github.writePRComments(dynamicComments, searchWords));
+//         if (dynamicComments !== undefined) {
+//           await github.writePRComments(dynamicComments, searchWords).catch(error => {core.setFailed(error.message);});
+//         }
+//       }
+//     }
+//     //}
+//     //const data = await github.getPullsData().catch(error => {
+//     //  core.setFailed(error.message);
+//     //});
+//     //console.log(data);
+//     //if (data !== undefined) { // if (result instanceof Object) {
+//     //  for (let i = 0; i < data.length; i += 1) {
+//     //    console.log(data[i].user?.login);
+//     //  }
+//     //}
+//     //console.log('\nReset\n');
+//     /*const creator = await github.getIssueCreator().catch(error => {
+//       core.setFailed(error.message);
+//     });
+//     */
+//     //if (creator !== undefined) {
+//     //await github.paginateData().catch(error => {
+//     //  core.setFailed(error.message);
+//     //});
+//     //}
+//     //console.log(github.context.issue.owner);
+//     //const content = github.
+//   } else if (category === 'hotlist') {
+//     const days: number = Number(core.getInput('days'));
+//     // call different functions from github
+//     // alternatively, can determine labels + comment and do setting in 1 step
+//     // also consider editing comment as a strech goal
+//     const recentMerges = await github.getRecentMerges(days, false).catch(error => {core.setFailed(error.message);});
+//     if (recentMerges !== undefined) {
+//       const usernames = recentMerges.filter(hasLogin => hasLogin.user?.login).map(login => login.user?.login);
+//       console.log(usernames);
+//       if (usernames !== undefined) {
+//         const hotlist = getHotlist(usernames);
+//         if (hotlist !== undefined) {
+//           const minHeap = new Heap(compareFunction);
+//           minHeap.init(hotlist);
+//           const creator = await github.getIssueCreator().catch(error => {core.setFailed(error.message);});
+//           if (creator !== undefined) {
+//             const index = determineHotIndex(buckets, creator, minHeap);
+//             if (index !== -1) {
+//               const setLabels = determineLabel(labels, index);
+//               if (setLabels != []) {
+//                 console.log(setLabels);
+//                 await github.setPullRequestLabels(setLabels).catch(error => {core.setFailed(error.message);}); // .catch(error => {core.setFailed(error.message);}); ?
+//                 let hotlistComment = 'You got the \'' + setLabels[0] + '\' label. This label means you are on the hotlist! ' + meanings[index];
+//                 await github.writePRComments(hotlistComment).catch(error => {core.setFailed(error.message);});
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   } else {
+//     // do nothing
+//   }
+// }
+// run().catch(error => {
+//   core.setFailed(error.message);
+// });
+// function determineLabel(labels: string[], index: number) {
+//   if (index === -1) {
+//     return [];
+//   }
+//   return [labels[index]];
+// }
+// function determineMeaning(meanings: string[], index: number) {
+//   if (index === -1) {
+//     return undefined;
+//   }
+//   return meanings[index];
+// }
+// function determineIndex(buckets: number[], value: number): number {
+//   if (value <= buckets[0]) {
+//     return -1;
+//   }
+//   let index = 0;
+//   let i = 0;
+//   while (i < buckets.length) {
+//     if (value > buckets[i]) {
+//       index = i;
+//     }
+//     if (value <= buckets[i]) {
+//       break;
+//     }
+//     i += 1;
+//   }
+//   return index;
+// }
+// export function determineHotIndex(buckets: number[], key: string, heap: Heap<(string | number)[]>) {
+//   //console.log(buckets, key, heap);
+//   let index = 0;
+//   for (let i = 0; i < buckets.length; i += 1) {
+//     for (let j = 0; j < buckets[i]; j += 1) {
+//       let pop = heap.pop();
+//       console.log(pop);
+//       if (pop !== undefined) {
+//         if (key === pop[0]) {
+//           return index;
+//         }
+//       } else {
+//         return -1;
+//       }
+//     }
+//     index += 1;
+//   }
+//   return -1;
+// }
+// export function getHotlist(usernames: (string | undefined)[]) {
+//   let hotlist: Map<string, number> = new Map<string, number>;
+//   for (let i = 0; i < usernames.length; i += 1) {
+//     let username = usernames[i];
+//     if (username !== undefined) {
+//       if (hotlist.has(username)) {
+//         let value = hotlist.get(username);
+//         if (value !== undefined) {
+//           hotlist.set(username, value + 1);
+//         }
+//       } else {
+//         hotlist.set(username, 1);
+//       }
+//     } else {
+//       return undefined;
+//     }
+//   }
+//   return Array.from(hotlist);
+// }
+// export function compareFunction(a: (string | number)[], b: (string | number)[]) {
+//   return a[1] >= b[1] ? -1 : 1;
+// }
+/**
+ * Renders a TypeScript list based on what we expect the list to look like in yaml.
+ * We expect to see something like "[item1,item2]". GitHub will return '' if the
+ * input is not defined, so treating the empty string like undefined.
+ */
+function renderListInput(rawInput) {
+    return (rawInput === '' || rawInput === '[]') ? [] : rawInput.replace(/\[|\]/gi, '').split(',');
+}
+function toNumberList(list) {
+    return list.map((i) => Number(i));
 }
 run().catch(error => {
     core.setFailed(error.message);
 });
-function determineLabel(labels, index) {
-    if (index === -1) {
-        return [];
-    }
-    return [labels[index]];
-}
-function determineMeaning(meanings, index) {
-    if (index === -1) {
-        return undefined;
-    }
-    return meanings[index];
-}
-function determineIndex(buckets, value) {
-    if (value <= buckets[0]) {
-        return -1;
-    }
-    let index = 0;
-    let i = 0;
-    while (i < buckets.length) {
-        if (value > buckets[i]) {
-            index = i;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFzQztBQUN0QyxrQ0FBa0M7QUFDbEMsNkRBQXlEO0FBRXpELDZEQUF5RDtBQUV6RCxLQUFLLFVBQVUsR0FBRztJQUNoQixNQUFNLEtBQUssR0FBVyxJQUFJLENBQUMsUUFBUSxDQUFDLGNBQWMsQ0FBQyxDQUFDO0lBQ3BELE1BQU0sTUFBTSxHQUFhLGVBQWUsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUM7SUFDbEUsTUFBTSxVQUFVLEdBQWEsWUFBWSxDQUFDLGVBQWUsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLFlBQVksQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUN4RixNQUFNLGlCQUFpQixHQUFhLGVBQWUsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLG9CQUFvQixDQUFDLENBQUMsQ0FBQztJQUN6RixNQUFNLFNBQVMsR0FBVyxJQUFJLENBQUMsUUFBUSxDQUFDLFlBQVksQ0FBQyxDQUFDO0lBQ3RELE1BQU0sZUFBZSxHQUFhLGVBQWUsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLGtCQUFrQixDQUFDLENBQUMsQ0FBQztJQUNyRixNQUFNLElBQUksR0FBRyxNQUFNLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDO0lBRTNDLE9BQU8sQ0FBQyxHQUFHLENBQUMsTUFBTSxFQUFFLGlCQUFpQixFQUFFLFVBQVUsQ0FBQyxDQUFDO0lBRW5ELElBQUksTUFBTSxDQUFDLE1BQU0sS0FBSyxDQUFDLEVBQUU7UUFDdkIsSUFBSSxDQUFDLFNBQVMsQ0FBQywyQ0FBMkMsQ0FBQyxDQUFDO1FBQzVELE9BQU87S0FDUjtJQUVELElBQUksaUJBQWlCLENBQUMsTUFBTSxLQUFLLE1BQU0sQ0FBQyxNQUFNLElBQUks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QyxFQUFFO0lBQ2xCLElBQUksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFDO0FBQ2hDLENBQUMsQ0FBQyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgY29yZSBmcm9tICdAYWN0aW9ucy9jb3JlJztcbi8vIGltcG9ydCB7IEhlYXAgfSBmcm9tICdoZWFwLWpzJztcbmltcG9ydCB7IEFjaGlldmVtZW50QmFkZ2VyIH0gZnJvbSAnLi9hY2hpZXZlbWVudC1iYWRnZXInO1xuaW1wb3J0IHsgQmFkZ2VyIH0gZnJvbSAnLi9iYWRnZXInO1xuaW1wb3J0IHsgTGVhZGVyYm9hcmRCYWRnZXIgfSBmcm9tICcuL2xlYWRlcmJvYXJkLWJhZGdlcic7XG5cbmFzeW5jIGZ1bmN0aW9uIHJ1bigpIHtcbiAgY29uc3QgdG9rZW46IHN0cmluZyA9IGNvcmUuZ2V0SW5wdXQoJ2dpdGh1Yi10b2tlbicpO1xuICBjb25zdCBiYWRnZXM6IHN0cmluZ1tdID0gcmVuZGVyTGlzdElucHV0KGNvcmUuZ2V0SW5wdXQoJ2JhZGdlcycpKTtcbiAgY29uc3QgdGhyZXNob2xkczogbnVtYmVyW10gPSB0b051bWJlckxpc3QocmVuZGVyTGlzdElucHV0KGNvcmUuZ2V0SW5wdXQoJ3RocmVzaG9sZHMnKSkpO1xuICBjb25zdCBiYWRnZURlc2NyaXB0aW9uczogc3RyaW5nW10gPSByZW5kZXJMaXN0SW5wdXQoY29yZS5nZXRJbnB1dCgnYmFkZ2UtZGVzY3JpcHRpb25zJykpO1xuICBjb25zdCBiYWRnZVR5cGU6IHN0cmluZyA9IGNvcmUuZ2V0SW5wdXQoJ2JhZGdlLXR5cGUnKTtcbiAgY29uc3QgaWdub3JlVXNlcm5hbWVzOiBzdHJpbmdbXSA9IHJlbmRlckxpc3RJbnB1dChjb3JlLmdldElucHV0KCdpZ25vcmUtdXNlcm5hbWVzJykpO1xuICBjb25zdCBkYXlzID0gTnVtYmVyKGNvcmUuZ2V0SW5wdXQoJ2RheXMnKSk7XG5cbiAgY29uc29sZS5sb2coYmFkZ2VzLCBiYWRnZURlc2NyaXB0aW9ucywgdGhyZXNob2xkcyk7XG5cbiAgaWYgKGJhZGdlcy5sZW5ndGggPT09IDApIHtcbiAgICBjb3JlLnNldEZhaWxlZCgnbXVzdCBoYXZlIGF0IGxlYXN0IG9uZSBiYWRnZSBpbiB0aGUgaW5wdXQnKTtcbiAgICByZXR1cm47XG4gIH1cblxuICBpZiAoYmFkZ2VEZXNjcmlwdGlvbnMubGVuZ3RoICE9PSBiYWRnZXMubGVuZ3RoIHx8IGJhZGdlcy5sZW5ndGggIT09IHRocmVzaG9sZHMubGVuZ3RoKSB7XG4gICAgY29yZS5zZXRGYWlsZWQoJ2JhZGdlLCBiYWRnZURlc2NyaXB0aW9ucywgYW5kIHRocmVzaG9sZHMgbXVzdCBiZSBsaXN0cyB3aXRoIHRoZSBzYW1lIG51bWJlciBvZiBlbGVtZW50cycpO1xuICAgIHJldHVybjtcbiAgfVxuXG4gIGxldCBiYWRnZXI6IEJhZGdlcjtcbiAgaWYgKGJhZGdlVHlwZSA9PT0gJ2xlYWRlcmJvYXJkJykge1xuICAgIGJhZGdlciA9IG5ldyBMZWFkZXJib2FyZEJhZGdlcih7XG4gICAgICB0b2tlbixcbiAgICAgIGJhZGdlcyxcbiAgICAgIHRocmVzaG9sZHMsXG4gICAgICBiYWRnZURlc2NyaXB0aW9ucyxcbiAgICAgIGlnbm9yZVVzZXJuYW1lcyxcbiAgICAgIGRheXMsXG4gICAgfSk7XG4gIH0gZWxzZSB7XG4gICAgYmFkZ2VyID0gbmV3IEFjaGlldmVtZW50QmFkZ2VyKHtcbiAgICAgIHRva2VuLFxuICAgICAgYmFkZ2VzLFxuICAgICAgdGhyZXNob2xkcyxcbiAgICAgIGJhZGdlRGVzY3JpcHRpb25zLFxuICAgICAgaWdub3JlVXNlcm5hbWVzLFxuICAgICAgZGF5cyxcbiAgICB9KTtcbiAgfVxuXG4gIGF3YWl0IGJhZGdlci5ydW5CYWRnZXJXb3JrZmxvdygpO1xufVxuXG4vLyAgIGNvbnN0IGdpdGh1YjogR2l0aHViQXBpID0gbmV3IEdpdGh1YkFwaSh0b2tlbik7XG5cbi8vICAgaWYgKGNhdGVnb3J5ID09PSAndG90YWwnKSB7XG4vLyAgICAgLy9jb25zdCBpc3N1ZXMgPSBhd2FpdCBnaXRodWIuZ2V0UHVsbHMoKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4vLyAgICAgLy9pZiAoaXNzdWVzICE9PSB1bmRlZmluZWQpIHtcbi8vICAgICBjb25zdCBtZXJnZXMgPSBhd2FpdCBnaXRodWIuZ2V0TWVyZ2VzKCkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuLy8gICAgIGNvbnN0IG51bU1lcmdlZCA9IG1lcmdlcz8ubGVuZ3RoO1xuLy8gICAgIGNvbnNvbGUubG9nKG51bU1lcmdlZCk7XG4vLyAgICAgaWYgKG51bU1lcmdlZCAhPT0gdW5kZWZpbmVkKSB7XG4vLyAgICAgICAvL2NvbnNvbGUubG9nKG51bU1lcmdlZCk7XG5cbi8vICAgICAgIGNvbnN0IGluZGV4ID0gZGV0ZXJtaW5lSW5kZXgoYnVja2V0cywgbnVtTWVyZ2VkKTtcbi8vICAgICAgIGNvbnN0IHNldExhYmVscyA9IGRldGVybWluZUxhYmVsKGxhYmVscywgaW5kZXgpO1xuXG4vLyAgICAgICBpZiAoc2V0TGFiZWxzICE9IFtdKSB7XG4vLyAgICAgICAgIGNvbnNvbGUubG9nKHNldExhYmVscyk7XG4vLyAgICAgICAgIGF3YWl0IGdpdGh1Yi5zZXRQdWxsUmVxdWVzdExhYmVscyhzZXRMYWJlbHMpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTsgLy8gLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTsgP1xuLy8gICAgICAgfVxuXG4vLyAgICAgICAvLyBwbGFjZSB0byBnZW5lcnN0ZSBkeW5hbWljIGNvbW1lbnRzXG4vLyAgICAgICAvLyBpdCBoYXMgdXNlcl9uYW1lLCBsYWJlbHMgYW5kIGxhYmVsIG1lYW5pbmdzXG4vLyAgICAgICBpZiAoaW5kZXggIT09IC0xKSB7XG4vLyAgICAgICAgIGNvbnN0IGR5bmFtaWNDb21tZW50cyA9ICc8IS0tY29udHJpYnV0ZSBiYWRnZS0tPicgKyAnV2VsY29tZSAnICsgYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KSArICcsIHRoZSBDREsgVGVhbSB0aGFua3MgeW91IGZvciBvcGVuaW5nIGEgcHVsbCByZXF1ZXN0LiBZb3UgZ290IHRoZSBcXCcnICsgc2V0TGFiZWxzWzBdICsgJ1xcJyBsYWJlbC4gJyArIGRldGVybWluZU1lYW5pbmcobWVhbmluZ3MsIGluZGV4KTtcbi8vICAgICAgICAgY29uc3Qgc2VhcmNoV29yZHMgPSAvPCEtLWNvbnRyaWJ1dGUgYmFkZ2UtLT4vO1xuLy8gICAgICAgICAvL2NvbnNvbGUubG9nKGR5bmFtaWNDb21tZW50cyk7XG4vLyAgICAgICAgIC8vY29uc29sZS5sb2coZ2l0aHViLndyaXRlUFJDb21tZW50cyhkeW5hbWljQ29tbWVudHMsIHNlYXJjaFdvcmRzKSk7XG4vLyAgICAgICAgIGlmIChkeW5hbWljQ29tbWVudHMgIT09IHVuZGVmaW5lZCkge1xuLy8gICAgICAgICAgIGF3YWl0IGdpdGh1Yi53cml0ZVBSQ29tbWVudHMoZHluYW1pY0NvbW1lbnRzLCBzZWFyY2hXb3JkcykuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuLy8gICAgICAgICB9XG4vLyAgICAgICB9XG4vLyAgICAgfVxuLy8gICAgIC8vfVxuXG5cbi8vICAgICAvL2NvbnN0IGRhdGEgPSBhd2FpdCBnaXRodWIuZ2V0UHVsbHNEYXRhKCkuY2F0Y2goZXJyb3IgPT4ge1xuLy8gICAgIC8vICBjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTtcbi8vICAgICAvL30pO1xuXG4vLyAgICAgLy9jb25zb2xlLmxvZyhkYXRhKTtcblxuLy8gICAgIC8vaWYgKGRhdGEgIT09IHVuZGVmaW5lZCkgeyAvLyBpZiAocmVzdWx0IGluc3RhbmNlb2YgT2JqZWN0KSB7XG4vLyAgICAgLy8gIGZvciAobGV0IGkgPSAwOyBpIDwgZGF0YS5sZW5ndGg7IGkgKz0gMSkge1xuLy8gICAgIC8vICAgIGNvbnNvbGUubG9nKGRhdGFbaV0udXNlcj8ubG9naW4pO1xuLy8gICAgIC8vICB9XG4vLyAgICAgLy99XG5cbi8vICAgICAvL2NvbnNvbGUubG9nKCdcXG5SZXNldFxcbicpO1xuXG4vLyAgICAgLypjb25zdCBjcmVhdG9yID0gYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtcbi8vICAgICAgIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuLy8gICAgIH0pO1xuLy8gICAgICovXG5cbi8vICAgICAvL2lmIChjcmVhdG9yICE9PSB1bmRlZmluZWQpIHtcbi8vICAgICAvL2F3YWl0IGdpdGh1Yi5wYWdpbmF0ZURhdGEoKS5jYXRjaChlcnJvciA9PiB7XG4vLyAgICAgLy8gIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuLy8gICAgIC8vfSk7XG4vLyAgICAgLy99XG5cbi8vICAgICAvL2NvbnNvbGUubG9nKGdpdGh1Yi5jb250ZXh0Lmlzc3VlLm93bmVyKTtcbi8vICAgICAvL2NvbnN0IGNvbnRlbnQgPSBnaXRodWIuXG4vLyAgIH0gZWxzZSBpZiAoY2F0ZWdvcnkgPT09ICdob3RsaXN0Jykge1xuLy8gICAgIGNvbnN0IGRheXM6IG51bWJlciA9IE51bWJlcihjb3JlLmdldElucHV0KCdkYXlzJykpO1xuLy8gICAgIC8vIGNhbGwgZGlmZmVyZW50IGZ1bmN0aW9ucyBmcm9tIGdpdGh1YlxuLy8gICAgIC8vIGFsdGVybmF0aXZlbHksIGNhbiBkZXRlcm1pbmUgbGFiZWxzICsgY29tbWVudCBhbmQgZG8gc2V0dGluZyBpbiAxIHN0ZXBcbi8vICAgICAvLyBhbHNvIGNvbnNpZGVyIGVkaXRpbmcgY29tbWVudCBhcyBhIHN0cmVjaCBnb2FsXG4vLyAgICAgY29uc3QgcmVjZW50TWVyZ2VzID0gYXdhaXQgZ2l0aHViLmdldFJlY2VudE1lcmdlcyhkYXlzLCBmYWxzZSkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuXG4vLyAgICAgaWYgKHJlY2VudE1lcmdlcyAhPT0gdW5kZWZpbmVkKSB7XG4vLyAgICAgICBjb25zdCB1c2VybmFtZXMgPSByZWNlbnRNZXJnZXMuZmlsdGVyKGhhc0xvZ2luID0+IGhhc0xvZ2luLnVzZXI/LmxvZ2luKS5tYXAobG9naW4gPT4gbG9naW4udXNlcj8ubG9naW4pO1xuLy8gICAgICAgY29uc29sZS5sb2codXNlcm5hbWVzKTtcblxuLy8gICAgICAgaWYgKHVzZXJuYW1lcyAhPT0gdW5kZWZpbmVkKSB7XG4vLyAgICAgICAgIGNvbnN0IGhvdGxpc3QgPSBnZXRIb3RsaXN0KHVzZXJuYW1lcyk7XG5cbi8vICAgICAgICAgaWYgKGhvdGxpc3QgIT09IHVuZGVmaW5lZCkge1xuLy8gICAgICAgICAgIGNvbnN0IG1pbkhlYXAgPSBuZXcgSGVhcChjb21wYXJlRnVuY3Rpb24pO1xuLy8gICAgICAgICAgIG1pbkhlYXAuaW5pdChob3RsaXN0KTtcblxuLy8gICAgICAgICAgIGNvbnN0IGNyZWF0b3IgPSBhd2FpdCBnaXRodWIuZ2V0SXNzdWVDcmVhdG9yKCkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuXG4vLyAgICAgICAgICAgaWYgKGNyZWF0b3IgIT09IHVuZGVmaW5lZCkge1xuLy8gICAgICAgICAgICAgY29uc3QgaW5kZXggPSBkZXRlcm1pbmVIb3RJbmRleChidWNrZXRzLCBjcmVhdG9yLCBtaW5IZWFwKTtcblxuLy8gICAgICAgICAgICAgaWYgKGluZGV4ICE9PSAtMSkge1xuLy8gICAgICAgICAgICAgICBjb25zdCBzZXRMYWJlbHMgPSBkZXRlcm1pbmVMYWJlbChsYWJlbHMsIGluZGV4KTtcblxuLy8gICAgICAgICAgICAgICBpZiAoc2V0TGFiZWxzICE9IFtdKSB7XG4vLyAgICAgICAgICAgICAgICAgY29uc29sZS5sb2coc2V0TGFiZWxzKTtcbi8vICAgICAgICAgICAgICAgICBhd2FpdCBnaXRodWIuc2V0UHVsbFJlcXVlc3RMYWJlbHMoc2V0TGFiZWxzKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7IC8vIC5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7ID9cblxuLy8gICAgICAgICAgICAgICAgIGxldCBob3RsaXN0Q29tbWVudCA9ICdZb3UgZ290IHRoZSBcXCcnICsgc2V0TGFiZWxzWzBdICsgJ1xcJyBsYWJlbC4gVGhpcyBsYWJlbCBtZWFucyB5b3UgYXJlIG9uIHRoZSBob3RsaXN0ISAnICsgbWVhbmluZ3NbaW5kZXhdO1xuXG4vLyAgICAgICAgICAgICAgICAgYXdhaXQgZ2l0aHViLndyaXRlUFJDb21tZW50cyhob3RsaXN0Q29tbWVudCkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuLy8gICAgICAgICAgICAgICB9XG4vLyAgICAgICAgICAgICB9XG4vLyAgICAgICAgICAgfVxuLy8gICAgICAgICB9XG4vLyAgICAgICB9XG4vLyAgICAgfVxuXG5cbi8vICAgfSBlbHNlIHtcbi8vICAgICAvLyBkbyBub3RoaW5nXG4vLyAgIH1cbi8vIH1cblxuLy8gcnVuKCkuY2F0Y2goZXJyb3IgPT4ge1xuLy8gICBjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTtcbi8vIH0pO1xuXG4vLyBmdW5jdGlvbiBkZXRlcm1pbmVMYWJlbChsYWJlbHM6IHN0cmluZ1tdLCBpbmRleDogbnVtYmVyKSB7XG4vLyAgIGlmIChpbmRleCA9PT0gLTEpIHtcbi8vICAgICByZXR1cm4gW107XG4vLyAgIH1cbi8vICAgcmV0dXJuIFtsYWJlbHNbaW5kZXhdXTtcbi8vIH1cblxuXG4vLyBmdW5jdGlvbiBkZXRlcm1pbmVNZWFuaW5nKG1lYW5pbmdzOiBzdHJpbmdbXSwgaW5kZXg6IG51bWJlcikge1xuLy8gICBpZiAoaW5kZXggPT09IC0xKSB7XG4vLyAgICAgcmV0dXJuIHVuZGVmaW5lZDtcbi8vICAgfVxuLy8gICByZXR1cm4gbWVhbmluZ3NbaW5kZXhdO1xuLy8gfVxuXG5cbi8vIGZ1bmN0aW9uIGRldGVybWluZUluZGV4KGJ1Y2tldHM6IG51bWJlcltdLCB2YWx1ZTogbnVtYmVyKTogbnVtYmVyIHtcbi8vICAgaWYgKHZhbHVlIDw9IGJ1Y2tldHNbMF0pIHtcbi8vICAgICByZXR1cm4gLTE7XG4vLyAgIH1cbi8vICAgbGV0IGluZGV4ID0gMDtcblxuLy8gICBsZXQgaSA9IDA7XG4vLyAgIHdoaWxlIChpIDwgYnVja2V0cy5sZW5ndGgpIHtcbi8vICAgICBpZiAodmFsdWUgPiBidWNrZXRzW2ldKSB7XG4vLyAgICAgICBpbmRleCA9IGk7XG4vLyAgICAgfVxuLy8gICAgIGlmICh2YWx1ZSA8PSBidWNrZXRzW2ldKSB7XG4vLyAgICAgICBicmVhaztcbi8vICAgICB9XG4vLyAgICAgaSArPSAxO1xuLy8gICB9XG4vLyAgIHJldHVybiBpbmRleDtcbi8vIH1cblxuXG4vLyBleHBvcnQgZnVuY3Rpb24gZGV0ZXJtaW5lSG90SW5kZXgoYnVja2V0czogbnVtYmVyW10sIGtleTogc3RyaW5nLCBoZWFwOiBIZWFwPChzdHJpbmcgfCBudW1iZXIpW10+KSB7XG4vLyAgIC8vY29uc29sZS5sb2coYnVja2V0cywga2V5LCBoZWFwKTtcbi8vICAgbGV0IGluZGV4ID0gMDtcbi8vICAgZm9yIChsZXQgaSA9IDA7IGkgPCBidWNrZXRzLmxlbmd0aDsgaSArPSAxKSB7XG4vLyAgICAgZm9yIChsZXQgaiA9IDA7IGogPCBidWNrZXRzW2ldOyBqICs9IDEpIHtcbi8vICAgICAgIGxldCBwb3AgPSBoZWFwLnBvcCgpO1xuLy8gICAgICAgY29uc29sZS5sb2cocG9wKTtcbi8vICAgICAgIGlmIChwb3AgIT09IHVuZGVmaW5lZCkge1xuLy8gICAgICAgICBpZiAoa2V5ID09PSBwb3BbMF0pIHtcbi8vICAgICAgICAgICByZXR1cm4gaW5kZXg7XG4vLyAgICAgICAgIH1cbi8vICAgICAgIH0gZWxzZSB7XG4vLyAgICAgICAgIHJldHVybiAtMTtcbi8vICAgICAgIH1cbi8vICAgICB9XG4vLyAgICAgaW5kZXggKz0gMTtcbi8vICAgfVxuLy8gICByZXR1cm4gLTE7XG4vLyB9XG5cblxuLy8gZXhwb3J0IGZ1bmN0aW9uIGdldEhvdGxpc3QodXNlcm5hbWVzOiAoc3RyaW5nIHwgdW5kZWZpbmVkKVtdKSB7XG4vLyAgIGxldCBob3RsaXN0OiBNYXA8c3RyaW5nLCBudW1iZXI+ID0gbmV3IE1hcDxzdHJpbmcsIG51bWJlcj47XG4vLyAgIGZvciAobGV0IGkgPSAwOyBpIDwgdXNlcm5hbWVzLmxlbmd0aDsgaSArPSAxKSB7XG4vLyAgICAgbGV0IHVzZXJuYW1lID0gdXNlcm5hbWVzW2ldO1xuLy8gICAgIGlmICh1c2VybmFtZSAhPT0gdW5kZWZpbmVkKSB7XG4vLyAgICAgICBpZiAoaG90bGlzdC5oYXModXNlcm5hbWUpKSB7XG4vLyAgICAgICAgIGxldCB2YWx1ZSA9IGhvdGxpc3QuZ2V0KHVzZXJuYW1lKTtcbi8vICAgICAgICAgaWYgKHZhbHVlICE9PSB1bmRlZmluZWQpIHtcbi8vICAgICAgICAgICBob3RsaXN0LnNldCh1c2VybmFtZSwgdmFsdWUgKyAxKTtcbi8vICAgICAgICAgfVxuLy8gICAgICAgfSBlbHNlIHtcbi8vICAgICAgICAgaG90bGlzdC5zZXQodXNlcm5hbWUsIDEpO1xuLy8gICAgICAgfVxuLy8gICAgIH0gZWxzZSB7XG4vLyAgICAgICByZXR1cm4gdW5kZWZpbmVkO1xuLy8gICAgIH1cbi8vICAgfVxuLy8gICByZXR1cm4gQXJyYXkuZnJvbShob3RsaXN0KTtcbi8vIH1cblxuLy8gZXhwb3J0IGZ1bmN0aW9uIGNvbXBhcmVGdW5jdGlvbihhOiAoc3RyaW5nIHwgbnVtYmVyKVtdLCBiOiAoc3RyaW5nIHwgbnVtYmVyKVtdKSB7XG4vLyAgIHJldHVybiBhWzFdID49IGJbMV0gPyAtMSA6IDE7XG4vLyB9XG5cbi8qKlxuICogUmVuZGVycyBhIFR5cGVTY3JpcHQgbGlzdCBiYXNlZCBvbiB3aGF0IHdlIGV4cGVjdCB0aGUgbGlzdCB0byBsb29rIGxpa2UgaW4geWFtbC5cbiAqIFdlIGV4cGVjdCB0byBzZWUgc29tZXRoaW5nIGxpa2UgXCJbaXRlbTEsaXRlbTJdXCIuIEdpdEh1YiB3aWxsIHJldHVybiAnJyBpZiB0aGVcbiAqIGlucHV0IGlzIG5vdCBkZWZpbmVkLCBzbyB0cmVhdGluZyB0aGUgZW1wdHkgc3RyaW5nIGxpa2UgdW5kZWZpbmVkLlxuICovXG5mdW5jdGlvbiByZW5kZXJMaXN0SW5wdXQocmF3SW5wdXQ6IHN0cmluZyk6IHN0cmluZ1tdIHtcbiAgcmV0dXJuIChyYXdJbnB1dCA9PT0gJycgfHwgcmF3SW5wdXQgPT09ICdbXScpID8gW10gOiByYXdJbnB1dC5yZXBsYWNlKC9cXFt8XFxdL2dpLCAnJykuc3BsaXQoJywnKTtcbn1cblxuZnVuY3Rpb24gdG9OdW1iZXJMaXN0KGxpc3Q6IHN0cmluZ1tdKTogbnVtYmVyW10ge1xuICByZXR1cm4gbGlzdC5tYXAoKGkpID0+IE51bWJlcihpKSk7XG59XG5cbnJ1bigpLmNhdGNoKGVycm9yID0+IHtcbiAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG59KTtcbiJdfQ==
+
+/***/ }),
+
+/***/ 963:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LeaderboardBadger = void 0;
+const badger_1 = __nccwpck_require__(159);
+class LeaderboardBadger extends badger_1.Badger {
+    async runBadgerWorkflow() {
+        const username = await this.getGitHubUsername();
+        if (this.ignoreThisUsername(username)) {
+            console.log(`Detected ${username} in the list of ignored users. Exiting`);
+            return;
         }
-        if (value <= buckets[i]) {
-            break;
-        }
-        i += 1;
+        const pullRequests = await this.getRelevantPullRequests();
+        const badge = this.determineBadge(pullRequests);
+        await this.addLabel(badge);
+        await this.writeComment(badge, username);
     }
-    return index;
-}
-function determineHotIndex(buckets, key, heap) {
-    //console.log(buckets, key, heap);
-    let index = 0;
-    for (let i = 0; i < buckets.length; i += 1) {
-        for (let j = 0; j < buckets[i]; j += 1) {
-            let pop = heap.pop();
-            console.log(pop);
-            if (pop !== undefined) {
-                if (key === pop[0]) {
-                    return index;
-                }
-            }
-            else {
-                return -1;
-            }
-        }
-        index += 1;
+    determineBadge(_pullRequests) {
+        console.log('Sorry, this feature has not been implemented yet');
+        return 0;
     }
-    return -1;
 }
-exports.determineHotIndex = determineHotIndex;
-function getHotlist(usernames) {
-    let hotlist = new Map;
-    for (let i = 0; i < usernames.length; i += 1) {
-        let username = usernames[i];
-        if (username !== undefined) {
-            if (hotlist.has(username)) {
-                let value = hotlist.get(username);
-                if (value !== undefined) {
-                    hotlist.set(username, value + 1);
-                }
-            }
-            else {
-                hotlist.set(username, 1);
-            }
-        }
-        else {
-            return undefined;
-        }
-    }
-    return Array.from(hotlist);
-}
-exports.getHotlist = getHotlist;
-function compareFunction(a, b) {
-    return a[1] >= b[1] ? -1 : 1;
-}
-exports.compareFunction = compareFunction;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxvREFBc0M7QUFDdEMscURBQXFEO0FBQ3JELHFDQUErQjtBQUMvQixxQ0FBcUM7QUFFckMsS0FBSyxVQUFVLEdBQUc7SUFFaEIsTUFBTSxLQUFLLEdBQVcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxjQUFjLENBQUMsQ0FBQztJQUNwRCxNQUFNLFNBQVMsR0FBVyxJQUFJLENBQUMsUUFBUSxDQUFDLFFBQVEsQ0FBQyxDQUFDO0lBQ2xELE1BQU0sVUFBVSxHQUFXLElBQUksQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUFDLENBQUM7SUFDcEQsTUFBTSxXQUFXLEdBQVcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxnQkFBZ0IsQ0FBQyxDQUFDO0lBQzVELE1BQU0sUUFBUSxHQUFXLElBQUksQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLENBQUM7SUFFbkQsZUFBZTtJQUNmLE1BQU0sTUFBTSxHQUFhLFNBQVMsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUM7SUFFOUMsZ0JBQWdCO0lBQ2hCLE1BQU0sT0FBTyxHQUFhLFVBQVUsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBRTVELHVCQUF1QjtJQUN2QixNQUFNLFFBQVEsR0FBYSxXQUFXLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxDQUFDO0lBRWxELE1BQU0sTUFBTSxHQUFjLElBQUksa0JBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztJQUUvQyxJQUFJLFFBQVEsS0FBSyxPQUFPLEVBQUU7UUFDeEIsMEZBQTBGO1FBQzFGLDZCQUE2QjtRQUM3QixNQUFNLE1BQU0sR0FBRyxNQUFNLE1BQU0sQ0FBQyxTQUFTLEVBQUUsQ0FBQyxLQUFLLENBQUMsS0FBSyxDQUFDLEVBQUUsR0FBRSxJ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LE9BQU8sR0FBd0IsSUFBSSxHQUFtQixDQUFDO0lBQzNELEtBQUssSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxTQUFTLENBQUMsTUFBTSxFQUFFLENBQUMsSUFBSSxDQUFDLEVBQUU7UUFDNUMsSUFBSSxRQUFRLEdBQUcsU0FBUyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQzVCLElBQUksUUFBUSxLQUFLLFNBQVMsRUFBRTtZQUMxQixJQUFJLE9BQU8sQ0FBQyxHQUFHLENBQUMsUUFBUSxDQUFDLEVBQUU7Z0JBQ3pCLElBQUksS0FBSyxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsUUFBUSxDQUFDLENBQUM7Z0JBQ2xDLElBQUksS0FBSyxLQUFLLFNBQVMsRUFBRTtvQkFDdkIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxRQUFRLEVBQUUsS0FBSyxHQUFHLENBQUMsQ0FBQyxDQUFDO2lCQUNsQzthQUNGO2lCQUFNO2dCQUNMLE9BQU8sQ0FBQyxHQUFHLENBQUMsUUFBUSxFQUFFLENBQUMsQ0FBQyxDQUFDO2FBQzFCO1NBQ0Y7YUFBTTtZQUNMLE9BQU8sU0FBUyxDQUFDO1NBQ2xCO0tBQ0Y7SUFDRCxPQUFPLEtBQUssQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUM7QUFDN0IsQ0FBQztBQWxCRCxnQ0FrQkM7QUFFRCxTQUFnQixlQUFlLENBQUMsQ0FBc0IsRUFBRSxDQUFzQjtJQUM1RSxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQUZELDBDQUVDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgY29yZSBmcm9tICdAYWN0aW9ucy9jb3JlJztcbi8vaW1wb3J0IHsgR2l0SHViIH0gZnJvbSAnQGFjdGlvbnMvZ2l0aHViL2xpYi91dGlscyc7XG5pbXBvcnQgeyBIZWFwIH0gZnJvbSAnaGVhcC1qcyc7XG5pbXBvcnQgeyBHaXRodWJBcGkgfSBmcm9tICcuL2dpdGh1Yic7XG5cbmFzeW5jIGZ1bmN0aW9uIHJ1bigpIHtcblxuICBjb25zdCB0b2tlbjogc3RyaW5nID0gY29yZS5nZXRJbnB1dCgnZ2l0aHViLXRva2VuJyk7XG4gIGNvbnN0IGxhYmVsc1Jhdzogc3RyaW5nID0gY29yZS5nZXRJbnB1dCgnbGFiZWxzJyk7XG4gIGNvbnN0IGJ1Y2tldHNSYXc6IHN0cmluZyA9IGNvcmUuZ2V0SW5wdXQoJ2J1Y2tldHMnKTtcbiAgY29uc3QgbWVhbmluZ3NSYXc6IHN0cmluZyA9IGNvcmUuZ2V0SW5wdXQoJ2xhYmVsLW1lYW5pbmdzJyk7XG4gIGNvbnN0IGNhdGVnb3J5OiBzdHJpbmcgPSBjb3JlLmdldElucHV0KCdjYXRlZ29yeScpO1xuXG4gIC8vIHBhcnNlIGxhYmVsc1xuICBjb25zdCBsYWJlbHM6IHN0cmluZ1tdID0gbGFiZWxzUmF3LnNwbGl0KCcsJyk7XG5cbiAgLy8gcGFyc2UgYnVja2V0c1xuICBjb25zdCBidWNrZXRzOiBudW1iZXJbXSA9IGJ1Y2tldHNSYXcuc3BsaXQoJywnKS5tYXAoTnVtYmVyKTtcblxuICAvLyBwYXJzZSBsYWJlbCBtZWFuaW5nc1xuICBjb25zdCBtZWFuaW5nczogc3RyaW5nW10gPSBtZWFuaW5nc1Jhdy5zcGxpdCgnfCcpO1xuXG4gIGNvbnN0IGdpdGh1YjogR2l0aHViQXBpID0gbmV3IEdpdGh1YkFwaSh0b2tlbik7XG5cbiAgaWYgKGNhdGVnb3J5ID09PSAndG90YWwnKSB7XG4gICAgLy9jb25zdCBpc3N1ZXMgPSBhd2FpdCBnaXRodWIuZ2V0UHVsbHMoKS5jYXRjaChlcnJvciA9PiB7Y29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7fSk7XG4gICAgLy9pZiAoaXNzdWVzICE9PSB1bmRlZmluZWQpIHtcbiAgICBjb25zdCBtZXJnZXMgPSBhd2FpdCBnaXRodWIuZ2V0TWVyZ2VzKCkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuICAgIGNvbnN0IG51bU1lcmdlZCA9IG1lcmdlcz8ubGVuZ3RoO1xuICAgIGNvbnNvbGUubG9nKG51bU1lcmdlZCk7XG4gICAgaWYgKG51bU1lcmdlZCAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAvL2NvbnNvbGUubG9nKG51bU1lcmdlZCk7XG5cbiAgICAgIGNvbnN0IGluZGV4ID0gZGV0ZXJtaW5lSW5kZXgoYnVja2V0cywgbnVtTWVyZ2VkKTtcbiAgICAgIGNvbnN0IHNldExhYmVscyA9IGRldGVybWluZUxhYmVsKGxhYmVscywgaW5kZXgpO1xuXG4gICAgICBpZiAoc2V0TGFiZWxzICE9IFtdKSB7XG4gICAgICAgIGNvbnNvbGUubG9nKHNldExhYmVscyk7XG4gICAgICAgIGF3YWl0IGdpdGh1Yi5zZXRQdWxsUmVxdWVzdExhYmVscyhzZXRMYWJlbHMpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTsgLy8gLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTsgP1xuICAgICAgfVxuXG4gICAgICAvLyBwbGFjZSB0byBnZW5lcnN0ZSBkeW5hbWljIGNvbW1lbnRzXG4gICAgICAvLyBpdCBoYXMgdXNlcl9uYW1lLCBsYWJlbHMgYW5kIGxhYmVsIG1lYW5pbmdzXG4gICAgICBpZiAoaW5kZXggIT09IC0xKSB7XG4gICAgICAgIGNvbnN0IGR5bmFtaWNDb21tZW50cyA9ICc8IS0tY29udHJpYnV0ZSBiYWRnZS0tPicgKyAnV2VsY29tZSAnICsgYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KSArICcsIHRoZSBDREsgVGVhbSB0aGFua3MgeW91IGZvciBvcGVuaW5nIGEgcHVsbCByZXF1ZXN0LiBZb3UgZ290IHRoZSBcXCcnICsgc2V0TGFiZWxzWzBdICsgJ1xcJyBsYWJlbC4gJyArIGRldGVybWluZU1lYW5pbmcobWVhbmluZ3MsIGluZGV4KTtcbiAgICAgICAgY29uc3Qgc2VhcmNoV29yZHMgPSAvPCEtLWNvbnRyaWJ1dGUgYmFkZ2UtLT4vO1xuICAgICAgICAvL2NvbnNvbGUubG9nKGR5bmFtaWNDb21tZW50cyk7XG4gICAgICAgIC8vY29uc29sZS5sb2coZ2l0aHViLndyaXRlUFJDb21tZW50cyhkeW5hbWljQ29tbWVudHMsIHNlYXJjaFdvcmRzKSk7XG4gICAgICAgIGlmIChkeW5hbWljQ29tbWVudHMgIT09IHVuZGVmaW5lZCkge1xuICAgICAgICAgIGF3YWl0IGdpdGh1Yi53cml0ZVBSQ29tbWVudHMoZHluYW1pY0NvbW1lbnRzLCBzZWFyY2hXb3JkcykuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICAgIC8vfVxuXG5cbiAgICAvL2NvbnN0IGRhdGEgPSBhd2FpdCBnaXRodWIuZ2V0UHVsbHNEYXRhKCkuY2F0Y2goZXJyb3IgPT4ge1xuICAgIC8vICBjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTtcbiAgICAvL30pO1xuXG4gICAgLy9jb25zb2xlLmxvZyhkYXRhKTtcblxuICAgIC8vaWYgKGRhdGEgIT09IHVuZGVmaW5lZCkgeyAvLyBpZiAocmVzdWx0IGluc3RhbmNlb2YgT2JqZWN0KSB7XG4gICAgLy8gIGZvciAobGV0IGkgPSAwOyBpIDwgZGF0YS5sZW5ndGg7IGkgKz0gMSkge1xuICAgIC8vICAgIGNvbnNvbGUubG9nKGRhdGFbaV0udXNlcj8ubG9naW4pO1xuICAgIC8vICB9XG4gICAgLy99XG5cbiAgICAvL2NvbnNvbGUubG9nKCdcXG5SZXNldFxcbicpO1xuXG4gICAgLypjb25zdCBjcmVhdG9yID0gYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtcbiAgICAgIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuICAgIH0pO1xuICAgICovXG5cbiAgICAvL2lmIChjcmVhdG9yICE9PSB1bmRlZmluZWQpIHtcbiAgICAvL2F3YWl0IGdpdGh1Yi5wYWdpbmF0ZURhdGEoKS5jYXRjaChlcnJvciA9PiB7XG4gICAgLy8gIGNvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO1xuICAgIC8vfSk7XG4gICAgLy99XG5cbiAgICAvL2NvbnNvbGUubG9nKGdpdGh1Yi5jb250ZXh0Lmlzc3VlLm93bmVyKTtcbiAgICAvL2NvbnN0IGNvbnRlbnQgPSBnaXRodWIuXG4gIH0gZWxzZSBpZiAoY2F0ZWdvcnkgPT09ICdob3RsaXN0Jykge1xuICAgIGNvbnN0IGRheXM6IG51bWJlciA9IE51bWJlcihjb3JlLmdldElucHV0KCdkYXlzJykpO1xuICAgIC8vIGNhbGwgZGlmZmVyZW50IGZ1bmN0aW9ucyBmcm9tIGdpdGh1YlxuICAgIC8vIGFsdGVybmF0aXZlbHksIGNhbiBkZXRlcm1pbmUgbGFiZWxzICsgY29tbWVudCBhbmQgZG8gc2V0dGluZyBpbiAxIHN0ZXBcbiAgICAvLyBhbHNvIGNvbnNpZGVyIGVkaXRpbmcgY29tbWVudCBhcyBhIHN0cmVjaCBnb2FsXG4gICAgY29uc3QgcmVjZW50TWVyZ2VzID0gYXdhaXQgZ2l0aHViLmdldFJlY2VudE1lcmdlcyhkYXlzLCBmYWxzZSkuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pO1xuICAgIC8vY29uc29sZS5sb2cocmVjZW50TWVyZ2VzKTtcblxuICAgIGlmIChyZWNlbnRNZXJnZXMgIT09IHVuZGVmaW5lZCkge1xuICAgICAgY29uc3QgdXNlcm5hbWVzID0gcmVjZW50TWVyZ2VzLmZpbHRlcihoYXNMb2dpbiA9PiBoYXNMb2dpbi51c2VyPy5sb2dpbikubWFwKGxvZ2luID0+IGxvZ2luLnVzZXI/LmxvZ2luKTtcbiAgICAgIGNvbnNvbGUubG9nKHVzZXJuYW1lcyk7XG5cbiAgICAgIGlmICh1c2VybmFtZXMgIT09IHVuZGVmaW5lZCkge1xuICAgICAgICBjb25zdCBob3RsaXN0ID0gZ2V0SG90bGlzdCh1c2VybmFtZXMpO1xuXG4gICAgICAgIGlmIChob3RsaXN0ICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICBjb25zdCBtaW5IZWFwID0gbmV3IEhlYXAoY29tcGFyZUZ1bmN0aW9uKTtcbiAgICAgICAgICBtaW5IZWFwLmluaXQoaG90bGlzdCk7XG5cbiAgICAgICAgICBjb25zdCBjcmVhdG9yID0gYXdhaXQgZ2l0aHViLmdldElzc3VlQ3JlYXRvcigpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcblxuICAgICAgICAgIGlmIChjcmVhdG9yICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICAgIGNvbnN0IGluZGV4ID0gZGV0ZXJtaW5lSG90SW5kZXgoYnVja2V0cywgY3JlYXRvciwgbWluSGVhcCk7XG5cbiAgICAgICAgICAgIGlmIChpbmRleCAhPT0gLTEpIHtcbiAgICAgICAgICAgICAgY29uc3Qgc2V0TGFiZWxzID0gZGV0ZXJtaW5lTGFiZWwobGFiZWxzLCBpbmRleCk7XG5cbiAgICAgICAgICAgICAgaWYgKHNldExhYmVscyAhPSBbXSkge1xuICAgICAgICAgICAgICAgIGNvbnNvbGUubG9nKHNldExhYmVscyk7XG4gICAgICAgICAgICAgICAgYXdhaXQgZ2l0aHViLnNldFB1bGxSZXF1ZXN0TGFiZWxzKHNldExhYmVscykuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pOyAvLyAuY2F0Y2goZXJyb3IgPT4ge2NvcmUuc2V0RmFpbGVkKGVycm9yLm1lc3NhZ2UpO30pOyA/XG5cbiAgICAgICAgICAgICAgICBsZXQgaG90bGlzdENvbW1lbnQgPSAnWW91IGdvdCB0aGUgXFwnJyArIHNldExhYmVsc1swXSArICdcXCcgbGFiZWwuIFRoaXMgbGFiZWwgbWVhbnMgeW91IGFyZSBvbiB0aGUgaG90bGlzdCEgJyArIG1lYW5pbmdzW2luZGV4XTtcblxuICAgICAgICAgICAgICAgIGF3YWl0IGdpdGh1Yi53cml0ZVBSQ29tbWVudHMoaG90bGlzdENvbW1lbnQpLmNhdGNoKGVycm9yID0+IHtjb3JlLnNldEZhaWxlZChlcnJvci5tZXNzYWdlKTt9KTtcbiAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgfVxuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cblxuXG4gIH0gZWxzZSB7XG4gICAgLy8gZG8gbm90aGluZ1xuICB9XG59XG5cbnJ1bigpLmNhdGNoKGVycm9yID0+IHtcbiAgY29yZS5zZXRGYWlsZWQoZXJyb3IubWVzc2FnZSk7XG59KTtcblxuZnVuY3Rpb24gZGV0ZXJtaW5lTGFiZWwobGFiZWxzOiBzdHJpbmdbXSwgaW5kZXg6IG51bWJlcikge1xuICBpZiAoaW5kZXggPT09IC0xKSB7XG4gICAgcmV0dXJuIFtdO1xuICB9XG4gIHJldHVybiBbbGFiZWxzW2luZGV4XV07XG59XG5cblxuZnVuY3Rpb24gZGV0ZXJtaW5lTWVhbmluZyhtZWFuaW5nczogc3RyaW5nW10sIGluZGV4OiBudW1iZXIpIHtcbiAgaWYgKGluZGV4ID09PSAtMSkge1xuICAgIHJldHVybiB1bmRlZmluZWQ7XG4gIH1cbiAgcmV0dXJuIG1lYW5pbmdzW2luZGV4XTtcbn1cblxuXG5mdW5jdGlvbiBkZXRlcm1pbmVJbmRleChidWNrZXRzOiBudW1iZXJbXSwgdmFsdWU6IG51bWJlcik6IG51bWJlciB7XG4gIGlmICh2YWx1ZSA8PSBidWNrZXRzWzBdKSB7XG4gICAgcmV0dXJuIC0xO1xuICB9XG4gIGxldCBpbmRleCA9IDA7XG5cbiAgbGV0IGkgPSAwO1xuICB3aGlsZSAoaSA8IGJ1Y2tldHMubGVuZ3RoKSB7XG4gICAgaWYgKHZhbHVlID4gYnVja2V0c1tpXSkge1xuICAgICAgaW5kZXggPSBpO1xuICAgIH1cbiAgICBpZiAodmFsdWUgPD0gYnVja2V0c1tpXSkge1xuICAgICAgYnJlYWs7XG4gICAgfVxuICAgIGkgKz0gMTtcbiAgfVxuICByZXR1cm4gaW5kZXg7XG59XG5cblxuZXhwb3J0IGZ1bmN0aW9uIGRldGVybWluZUhvdEluZGV4KGJ1Y2tldHM6IG51bWJlcltdLCBrZXk6IHN0cmluZywgaGVhcDogSGVhcDwoc3RyaW5nIHwgbnVtYmVyKVtdPikge1xuICAvL2NvbnNvbGUubG9nKGJ1Y2tldHMsIGtleSwgaGVhcCk7XG4gIGxldCBpbmRleCA9IDA7XG4gIGZvciAobGV0IGkgPSAwOyBpIDwgYnVja2V0cy5sZW5ndGg7IGkgKz0gMSkge1xuICAgIGZvciAobGV0IGogPSAwOyBqIDwgYnVja2V0c1tpXTsgaiArPSAxKSB7XG4gICAgICBsZXQgcG9wID0gaGVhcC5wb3AoKTtcbiAgICAgIGNvbnNvbGUubG9nKHBvcCk7XG4gICAgICBpZiAocG9wICE9PSB1bmRlZmluZWQpIHtcbiAgICAgICAgaWYgKGtleSA9PT0gcG9wWzBdKSB7XG4gICAgICAgICAgcmV0dXJuIGluZGV4O1xuICAgICAgICB9XG4gICAgICB9IGVsc2Uge1xuICAgICAgICByZXR1cm4gLTE7XG4gICAgICB9XG4gICAgfVxuICAgIGluZGV4ICs9IDE7XG4gIH1cbiAgcmV0dXJuIC0xO1xufVxuXG5cbmV4cG9ydCBmdW5jdGlvbiBnZXRIb3RsaXN0KHVzZXJuYW1lczogKHN0cmluZyB8IHVuZGVmaW5lZClbXSkge1xuICBsZXQgaG90bGlzdDogTWFwPHN0cmluZywgbnVtYmVyPiA9IG5ldyBNYXA8c3RyaW5nLCBudW1iZXI+O1xuICBmb3IgKGxldCBpID0gMDsgaSA8IHVzZXJuYW1lcy5sZW5ndGg7IGkgKz0gMSkge1xuICAgIGxldCB1c2VybmFtZSA9IHVzZXJuYW1lc1tpXTtcbiAgICBpZiAodXNlcm5hbWUgIT09IHVuZGVmaW5lZCkge1xuICAgICAgaWYgKGhvdGxpc3QuaGFzKHVzZXJuYW1lKSkge1xuICAgICAgICBsZXQgdmFsdWUgPSBob3RsaXN0LmdldCh1c2VybmFtZSk7XG4gICAgICAgIGlmICh2YWx1ZSAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgICAgaG90bGlzdC5zZXQodXNlcm5hbWUsIHZhbHVlICsgMSk7XG4gICAgICAgIH1cbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGhvdGxpc3Quc2V0KHVzZXJuYW1lLCAxKTtcbiAgICAgIH1cbiAgICB9IGVsc2Uge1xuICAgICAgcmV0dXJuIHVuZGVmaW5lZDtcbiAgICB9XG4gIH1cbiAgcmV0dXJuIEFycmF5LmZyb20oaG90bGlzdCk7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBjb21wYXJlRnVuY3Rpb24oYTogKHN0cmluZyB8IG51bWJlcilbXSwgYjogKHN0cmluZyB8IG51bWJlcilbXSkge1xuICByZXR1cm4gYVsxXSA+PSBiWzFdID8gLTEgOiAxO1xufVxuIl19
+exports.LeaderboardBadger = LeaderboardBadger;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibGVhZGVyYm9hcmQtYmFkZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2xlYWRlcmJvYXJkLWJhZGdlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxxQ0FBa0M7QUFFbEMsTUFBYSxpQkFBa0IsU0FBUSxlQUFNO0lBQ3BDLEtBQUssQ0FBQyxpQkFBaUI7UUFDNUIsTUFBTSxRQUFRLEdBQUcsTUFBTSxJQUFJLENBQUMsaUJBQWlCLEVBQUUsQ0FBQztRQUNoRCxJQUFJLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxRQUFRLENBQUMsRUFBRTtZQUNyQyxPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksUUFBUSx3Q0FBd0MsQ0FBQyxDQUFDO1lBQzFFLE9BQU87U0FDUjtRQUVELE1BQU0sWUFBWSxHQUFHLE1BQU0sSUFBSSxDQUFDLHVCQUF1QixFQUFFLENBQUM7UUFDMUQsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxZQUFZLENBQUMsQ0FBQztRQUNoRCxNQUFNLElBQUksQ0FBQyxRQUFRLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDM0IsTUFBTSxJQUFJLENBQUMsWUFBWSxDQUFDLEtBQUssRUFBRSxRQUFRLENBQUMsQ0FBQztJQUMzQyxDQUFDO0lBRU0sY0FBYyxDQUFDLGFBQW9CO1FBQ3hDLE9BQU8sQ0FBQyxHQUFHLENBQUMsa0RBQWtELENBQUMsQ0FBQztRQUNoRSxPQUFPLENBQUMsQ0FBQztJQUNYLENBQUM7Q0FDRjtBQWxCRCw4Q0FrQkMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBCYWRnZXIgfSBmcm9tICcuL2JhZGdlcic7XG5cbmV4cG9ydCBjbGFzcyBMZWFkZXJib2FyZEJhZGdlciBleHRlbmRzIEJhZGdlciB7XG4gIHB1YmxpYyBhc3luYyBydW5CYWRnZXJXb3JrZmxvdygpIHtcbiAgICBjb25zdCB1c2VybmFtZSA9IGF3YWl0IHRoaXMuZ2V0R2l0SHViVXNlcm5hbWUoKTtcbiAgICBpZiAodGhpcy5pZ25vcmVUaGlzVXNlcm5hbWUodXNlcm5hbWUpKSB7XG4gICAgICBjb25zb2xlLmxvZyhgRGV0ZWN0ZWQgJHt1c2VybmFtZX0gaW4gdGhlIGxpc3Qgb2YgaWdub3JlZCB1c2Vycy4gRXhpdGluZ2ApO1xuICAgICAgcmV0dXJuO1xuICAgIH1cblxuICAgIGNvbnN0IHB1bGxSZXF1ZXN0cyA9IGF3YWl0IHRoaXMuZ2V0UmVsZXZhbnRQdWxsUmVxdWVzdHMoKTtcbiAgICBjb25zdCBiYWRnZSA9IHRoaXMuZGV0ZXJtaW5lQmFkZ2UocHVsbFJlcXVlc3RzKTtcbiAgICBhd2FpdCB0aGlzLmFkZExhYmVsKGJhZGdlKTtcbiAgICBhd2FpdCB0aGlzLndyaXRlQ29tbWVudChiYWRnZSwgdXNlcm5hbWUpO1xuICB9XG5cbiAgcHVibGljIGRldGVybWluZUJhZGdlKF9wdWxsUmVxdWVzdHM6IGFueVtdKTogbnVtYmVyIHtcbiAgICBjb25zb2xlLmxvZygnU29ycnksIHRoaXMgZmVhdHVyZSBoYXMgbm90IGJlZW4gaW1wbGVtZW50ZWQgeWV0Jyk7XG4gICAgcmV0dXJuIDA7XG4gIH1cbn0iXX0=
 
 /***/ }),
 
@@ -5142,929 +5053,6 @@ function checkEncoding(name) {
         .replace(/^us[\-_]?ascii$/i, 'ASCII')
         .toUpperCase();
 }
-
-
-/***/ }),
-
-/***/ 8973:
-/***/ (function(__unused_webpack_module, exports) {
-
-(function (global, factory) {
-     true ? factory(exports) :
-    0;
-})(this, (function (exports) { 'use strict';
-
-    var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-        function verb(n) { return function (v) { return step([n, v]); }; }
-        function step(op) {
-            if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-                if (y = 0, t) op = [op[0] & 2, t.value];
-                switch (op[0]) {
-                    case 0: case 1: t = op; break;
-                    case 4: _.label++; return { value: op[1], done: false };
-                    case 5: _.label++; y = op[1]; op = [0]; continue;
-                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                    default:
-                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                        if (t[2]) _.ops.pop();
-                        _.trys.pop(); continue;
-                }
-                op = body.call(thisArg, _);
-            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-        }
-    };
-    var __read = (undefined && undefined.__read) || function (o, n) {
-        var m = typeof Symbol === "function" && o[Symbol.iterator];
-        if (!m) return o;
-        var i = m.call(o), r, ar = [], e;
-        try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-        }
-        catch (error) { e = { error: error }; }
-        finally {
-            try {
-                if (r && !r.done && (m = i["return"])) m.call(i);
-            }
-            finally { if (e) throw e.error; }
-        }
-        return ar;
-    };
-    var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-            if (ar || !(i in from)) {
-                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-                ar[i] = from[i];
-            }
-        }
-        return to.concat(ar || Array.prototype.slice.call(from));
-    };
-    var toInt = function (n) { return ~~n; };
-    /**
-     * Heap
-     * @type {Class}
-     */
-    var Heap = /** @class */ (function () {
-        /**
-         * Heap instance constructor.
-         * @param  {Function} compare Optional comparison function, defaults to Heap.minComparator<number>
-         */
-        function Heap(compare) {
-            if (compare === void 0) { compare = Heap.minComparator; }
-            var _this = this;
-            this.compare = compare;
-            this.heapArray = [];
-            this._limit = 0;
-            /**
-             * Alias of add
-             */
-            this.offer = this.add;
-            /**
-             * Alias of peek
-             */
-            this.element = this.peek;
-            /**
-             * Alias of pop
-             */
-            this.poll = this.pop;
-            /**
-             * Returns the inverse to the comparison function.
-             * @return {Function}
-             */
-            this._invertedCompare = function (a, b) {
-                return -1 * _this.compare(a, b);
-            };
-        }
-        /*
-                  Static methods
-         */
-        /**
-         * Gets children indices for given index.
-         * @param  {Number} idx     Parent index
-         * @return {Array(Number)}  Array of children indices
-         */
-        Heap.getChildrenIndexOf = function (idx) {
-            return [idx * 2 + 1, idx * 2 + 2];
-        };
-        /**
-         * Gets parent index for given index.
-         * @param  {Number} idx  Children index
-         * @return {Number | undefined}      Parent index, -1 if idx is 0
-         */
-        Heap.getParentIndexOf = function (idx) {
-            if (idx <= 0) {
-                return -1;
-            }
-            var whichChildren = idx % 2 ? 1 : 2;
-            return Math.floor((idx - whichChildren) / 2);
-        };
-        /**
-         * Gets sibling index for given index.
-         * @param  {Number} idx  Children index
-         * @return {Number | undefined}      Sibling index, -1 if idx is 0
-         */
-        Heap.getSiblingIndexOf = function (idx) {
-            if (idx <= 0) {
-                return -1;
-            }
-            var whichChildren = idx % 2 ? 1 : -1;
-            return idx + whichChildren;
-        };
-        /**
-         * Min heap comparison function, default.
-         * @param  {any} a     First element
-         * @param  {any} b     Second element
-         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
-         */
-        Heap.minComparator = function (a, b) {
-            if (a > b) {
-                return 1;
-            }
-            else if (a < b) {
-                return -1;
-            }
-            else {
-                return 0;
-            }
-        };
-        /**
-         * Max heap comparison function.
-         * @param  {any} a     First element
-         * @param  {any} b     Second element
-         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
-         */
-        Heap.maxComparator = function (a, b) {
-            if (b > a) {
-                return 1;
-            }
-            else if (b < a) {
-                return -1;
-            }
-            else {
-                return 0;
-            }
-        };
-        /**
-         * Min number heap comparison function, default.
-         * @param  {Number} a     First element
-         * @param  {Number} b     Second element
-         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
-         */
-        Heap.minComparatorNumber = function (a, b) {
-            return a - b;
-        };
-        /**
-         * Max number heap comparison function.
-         * @param  {Number} a     First element
-         * @param  {Number} b     Second element
-         * @return {Number}    0 if they're equal, positive if `a` goes up, negative if `b` goes up
-         */
-        Heap.maxComparatorNumber = function (a, b) {
-            return b - a;
-        };
-        /**
-         * Default equality function.
-         * @param  {any} a    First element
-         * @param  {any} b    Second element
-         * @return {Boolean}  True if equal, false otherwise
-         */
-        Heap.defaultIsEqual = function (a, b) {
-            return a === b;
-        };
-        /**
-         * Prints a heap.
-         * @param  {Heap} heap Heap to be printed
-         * @returns {String}
-         */
-        Heap.print = function (heap) {
-            function deep(i) {
-                var pi = Heap.getParentIndexOf(i);
-                return Math.floor(Math.log2(pi + 1));
-            }
-            function repeat(str, times) {
-                var out = '';
-                for (; times > 0; --times) {
-                    out += str;
-                }
-                return out;
-            }
-            var node = 0;
-            var lines = [];
-            var maxLines = deep(heap.length - 1) + 2;
-            var maxLength = 0;
-            while (node < heap.length) {
-                var i = deep(node) + 1;
-                if (node === 0) {
-                    i = 0;
-                }
-                // Text representation
-                var nodeText = String(heap.get(node));
-                if (nodeText.length > maxLength) {
-                    maxLength = nodeText.length;
-                }
-                // Add to line
-                lines[i] = lines[i] || [];
-                lines[i].push(nodeText);
-                node += 1;
-            }
-            return lines
-                .map(function (line, i) {
-                var times = Math.pow(2, maxLines - i) - 1;
-                return (repeat(' ', Math.floor(times / 2) * maxLength) +
-                    line
-                        .map(function (el) {
-                        // centered
-                        var half = (maxLength - el.length) / 2;
-                        return repeat(' ', Math.ceil(half)) + el + repeat(' ', Math.floor(half));
-                    })
-                        .join(repeat(' ', times * maxLength)));
-            })
-                .join('\n');
-        };
-        /*
-                  Python style
-         */
-        /**
-         * Converts an array into an array-heap, in place
-         * @param  {Array}    arr      Array to be modified
-         * @param  {Function} compare  Optional compare function
-         * @return {Heap}              For convenience, it returns a Heap instance
-         */
-        Heap.heapify = function (arr, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = arr;
-            heap.init();
-            return heap;
-        };
-        /**
-         * Extract the peek of an array-heap
-         * @param  {Array}    heapArr  Array to be modified, should be a heap
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Returns the extracted peek
-         */
-        Heap.heappop = function (heapArr, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = heapArr;
-            return heap.pop();
-        };
-        /**
-         * Pushes a item into an array-heap
-         * @param  {Array}    heapArr  Array to be modified, should be a heap
-         * @param  {any}      item     Item to push
-         * @param  {Function} compare  Optional compare function
-         */
-        Heap.heappush = function (heapArr, item, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = heapArr;
-            heap.push(item);
-        };
-        /**
-         * Push followed by pop, faster
-         * @param  {Array}    heapArr  Array to be modified, should be a heap
-         * @param  {any}      item     Item to push
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Returns the extracted peek
-         */
-        Heap.heappushpop = function (heapArr, item, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = heapArr;
-            return heap.pushpop(item);
-        };
-        /**
-         * Replace peek with item
-         * @param  {Array}    heapArr  Array to be modified, should be a heap
-         * @param  {any}      item     Item as replacement
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Returns the extracted peek
-         */
-        Heap.heapreplace = function (heapArr, item, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = heapArr;
-            return heap.replace(item);
-        };
-        /**
-         * Return the `n` most valuable elements of a heap-like Array
-         * @param  {Array}    heapArr  Array, should be an array-heap
-         * @param  {number}   n        Max number of elements
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Elements
-         */
-        Heap.heaptop = function (heapArr, n, compare) {
-            if (n === void 0) { n = 1; }
-            var heap = new Heap(compare);
-            heap.heapArray = heapArr;
-            return heap.top(n);
-        };
-        /**
-         * Return the `n` least valuable elements of a heap-like Array
-         * @param  {Array}    heapArr  Array, should be an array-heap
-         * @param  {number}   n        Max number of elements
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Elements
-         */
-        Heap.heapbottom = function (heapArr, n, compare) {
-            if (n === void 0) { n = 1; }
-            var heap = new Heap(compare);
-            heap.heapArray = heapArr;
-            return heap.bottom(n);
-        };
-        /**
-         * Return the `n` most valuable elements of an iterable
-         * @param  {number}   n        Max number of elements
-         * @param  {Iterable} Iterable Iterable list of elements
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Elements
-         */
-        Heap.nlargest = function (n, iterable, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = __spreadArray([], __read(iterable), false);
-            heap.init();
-            return heap.top(n);
-        };
-        /**
-         * Return the `n` least valuable elements of an iterable
-         * @param  {number}   n        Max number of elements
-         * @param  {Iterable} Iterable Iterable list of elements
-         * @param  {Function} compare  Optional compare function
-         * @return {any}               Elements
-         */
-        Heap.nsmallest = function (n, iterable, compare) {
-            var heap = new Heap(compare);
-            heap.heapArray = __spreadArray([], __read(iterable), false);
-            heap.init();
-            return heap.bottom(n);
-        };
-        /*
-                  Instance methods
-         */
-        /**
-         * Adds an element to the heap. Aliases: `offer`.
-         * Same as: push(element)
-         * @param {any} element Element to be added
-         * @return {Boolean} true
-         */
-        Heap.prototype.add = function (element) {
-            this._sortNodeUp(this.heapArray.push(element) - 1);
-            this._applyLimit();
-            return true;
-        };
-        /**
-         * Adds an array of elements to the heap.
-         * Similar as: push(element, element, ...).
-         * @param {Array} elements Elements to be added
-         * @return {Boolean} true
-         */
-        Heap.prototype.addAll = function (elements) {
-            var _a;
-            var i = this.length;
-            (_a = this.heapArray).push.apply(_a, __spreadArray([], __read(elements), false));
-            for (var l = this.length; i < l; ++i) {
-                this._sortNodeUp(i);
-            }
-            this._applyLimit();
-            return true;
-        };
-        /**
-         * Return the bottom (lowest value) N elements of the heap.
-         *
-         * @param  {Number} n  Number of elements.
-         * @return {Array}     Array of length <= N.
-         */
-        Heap.prototype.bottom = function (n) {
-            if (n === void 0) { n = 1; }
-            if (this.heapArray.length === 0 || n <= 0) {
-                // Nothing to do
-                return [];
-            }
-            else if (this.heapArray.length === 1) {
-                // Just the peek
-                return [this.heapArray[0]];
-            }
-            else if (n >= this.heapArray.length) {
-                // The whole heap
-                return __spreadArray([], __read(this.heapArray), false);
-            }
-            else {
-                // Some elements
-                var result = this._bottomN_push(~~n);
-                return result;
-            }
-        };
-        /**
-         * Check if the heap is sorted, useful for testing purposes.
-         * @return {Undefined | Element}  Returns an element if something wrong is found, otherwise it's undefined
-         */
-        Heap.prototype.check = function () {
-            var _this = this;
-            return this.heapArray.find(function (el, j) { return !!_this.getChildrenOf(j).find(function (ch) { return _this.compare(el, ch) > 0; }); });
-        };
-        /**
-         * Remove all of the elements from this heap.
-         */
-        Heap.prototype.clear = function () {
-            this.heapArray = [];
-        };
-        /**
-         * Clone this heap
-         * @return {Heap}
-         */
-        Heap.prototype.clone = function () {
-            var cloned = new Heap(this.comparator());
-            cloned.heapArray = this.toArray();
-            cloned._limit = this._limit;
-            return cloned;
-        };
-        /**
-         * Returns the comparison function.
-         * @return {Function}
-         */
-        Heap.prototype.comparator = function () {
-            return this.compare;
-        };
-        /**
-         * Returns true if this queue contains the specified element.
-         * @param  {any}      o   Element to be found
-         * @param  {Function} fn  Optional comparison function, receives (element, needle)
-         * @return {Boolean}
-         */
-        Heap.prototype.contains = function (o, fn) {
-            if (fn === void 0) { fn = Heap.defaultIsEqual; }
-            return this.heapArray.findIndex(function (el) { return fn(el, o); }) >= 0;
-        };
-        /**
-         * Initialise a heap, sorting nodes
-         * @param  {Array} array Optional initial state array
-         */
-        Heap.prototype.init = function (array) {
-            if (array) {
-                this.heapArray = __spreadArray([], __read(array), false);
-            }
-            for (var i = Math.floor(this.heapArray.length); i >= 0; --i) {
-                this._sortNodeDown(i);
-            }
-            this._applyLimit();
-        };
-        /**
-         * Test if the heap has no elements.
-         * @return {Boolean} True if no elements on the heap
-         */
-        Heap.prototype.isEmpty = function () {
-            return this.length === 0;
-        };
-        /**
-         * Get the leafs of the tree (no children nodes)
-         */
-        Heap.prototype.leafs = function () {
-            if (this.heapArray.length === 0) {
-                return [];
-            }
-            var pi = Heap.getParentIndexOf(this.heapArray.length - 1);
-            return this.heapArray.slice(pi + 1);
-        };
-        Object.defineProperty(Heap.prototype, "length", {
-            /**
-             * Length of the heap.
-             * @return {Number}
-             */
-            get: function () {
-                return this.heapArray.length;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(Heap.prototype, "limit", {
-            /**
-             * Get length limit of the heap.
-             * @return {Number}
-             */
-            get: function () {
-                return this._limit;
-            },
-            /**
-             * Set length limit of the heap.
-             * @return {Number}
-             */
-            set: function (_l) {
-                this._limit = ~~_l;
-                this._applyLimit();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        /**
-         * Top node. Aliases: `element`.
-         * Same as: `top(1)[0]`
-         * @return {any} Top node
-         */
-        Heap.prototype.peek = function () {
-            return this.heapArray[0];
-        };
-        /**
-         * Extract the top node (root). Aliases: `poll`.
-         * @return {any} Extracted top node, undefined if empty
-         */
-        Heap.prototype.pop = function () {
-            var last = this.heapArray.pop();
-            if (this.length > 0 && last !== undefined) {
-                return this.replace(last);
-            }
-            return last;
-        };
-        /**
-         * Pushes element(s) to the heap.
-         * @param  {...any} elements Elements to insert
-         * @return {Boolean} True if elements are present
-         */
-        Heap.prototype.push = function () {
-            var elements = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                elements[_i] = arguments[_i];
-            }
-            if (elements.length < 1) {
-                return false;
-            }
-            else if (elements.length === 1) {
-                return this.add(elements[0]);
-            }
-            else {
-                return this.addAll(elements);
-            }
-        };
-        /**
-         * Same as push & pop in sequence, but faster
-         * @param  {any} element Element to insert
-         * @return {any}  Extracted top node
-         */
-        Heap.prototype.pushpop = function (element) {
-            var _a;
-            if (this.compare(this.heapArray[0], element) < 0) {
-                _a = __read([this.heapArray[0], element], 2), element = _a[0], this.heapArray[0] = _a[1];
-                this._sortNodeDown(0);
-            }
-            return element;
-        };
-        /**
-         * Remove an element from the heap.
-         * @param  {any}   o      Element to be found
-         * @param  {Function} fn  Optional function to compare
-         * @return {Boolean}      True if the heap was modified
-         */
-        Heap.prototype.remove = function (o, fn) {
-            if (fn === void 0) { fn = Heap.defaultIsEqual; }
-            if (this.length > 0) {
-                if (o === undefined) {
-                    this.pop();
-                    return true;
-                }
-                else {
-                    var idx = this.heapArray.findIndex(function (el) { return fn(el, o); });
-                    if (idx >= 0) {
-                        if (idx === 0) {
-                            this.pop();
-                        }
-                        else if (idx === this.length - 1) {
-                            this.heapArray.pop();
-                        }
-                        else {
-                            this.heapArray.splice(idx, 1, this.heapArray.pop());
-                            this._sortNodeUp(idx);
-                            this._sortNodeDown(idx);
-                        }
-                        return true;
-                    }
-                }
-            }
-            return false;
-        };
-        /**
-         * Pop the current peek value, and add the new item.
-         * @param  {any} element  Element to replace peek
-         * @return {any}         Old peek
-         */
-        Heap.prototype.replace = function (element) {
-            var peek = this.heapArray[0];
-            this.heapArray[0] = element;
-            this._sortNodeDown(0);
-            return peek;
-        };
-        /**
-         * Size of the heap
-         * @return {Number}
-         */
-        Heap.prototype.size = function () {
-            return this.length;
-        };
-        /**
-         * Return the top (highest value) N elements of the heap.
-         *
-         * @param  {Number} n  Number of elements.
-         * @return {Array}    Array of length <= N.
-         */
-        Heap.prototype.top = function (n) {
-            if (n === void 0) { n = 1; }
-            if (this.heapArray.length === 0 || n <= 0) {
-                // Nothing to do
-                return [];
-            }
-            else if (this.heapArray.length === 1 || n === 1) {
-                // Just the peek
-                return [this.heapArray[0]];
-            }
-            else if (n >= this.heapArray.length) {
-                // The whole peek
-                return __spreadArray([], __read(this.heapArray), false);
-            }
-            else {
-                // Some elements
-                var result = this._topN_push(~~n);
-                return result;
-            }
-        };
-        /**
-         * Clone the heap's internal array
-         * @return {Array}
-         */
-        Heap.prototype.toArray = function () {
-            return __spreadArray([], __read(this.heapArray), false);
-        };
-        /**
-         * String output, call to Array.prototype.toString()
-         * @return {String}
-         */
-        Heap.prototype.toString = function () {
-            return this.heapArray.toString();
-        };
-        /**
-         * Get the element at the given index.
-         * @param  {Number} i Index to get
-         * @return {any}       Element at that index
-         */
-        Heap.prototype.get = function (i) {
-            return this.heapArray[i];
-        };
-        /**
-         * Get the elements of these node's children
-         * @param  {Number} idx Node index
-         * @return {Array(any)}  Children elements
-         */
-        Heap.prototype.getChildrenOf = function (idx) {
-            var _this = this;
-            return Heap.getChildrenIndexOf(idx)
-                .map(function (i) { return _this.heapArray[i]; })
-                .filter(function (e) { return e !== undefined; });
-        };
-        /**
-         * Get the element of this node's parent
-         * @param  {Number} idx Node index
-         * @return {any}     Parent element
-         */
-        Heap.prototype.getParentOf = function (idx) {
-            var pi = Heap.getParentIndexOf(idx);
-            return this.heapArray[pi];
-        };
-        /**
-         * Iterator interface
-         */
-        Heap.prototype[Symbol.iterator] = function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.length) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.pop()];
-                    case 1:
-                        _a.sent();
-                        return [3 /*break*/, 0];
-                    case 2: return [2 /*return*/];
-                }
-            });
-        };
-        /**
-         * Returns an iterator. To comply with Java interface.
-         */
-        Heap.prototype.iterator = function () {
-            return this.toArray();
-        };
-        /**
-         * Limit heap size if needed
-         */
-        Heap.prototype._applyLimit = function () {
-            if (this._limit && this._limit < this.heapArray.length) {
-                var rm = this.heapArray.length - this._limit;
-                // It's much faster than splice
-                while (rm) {
-                    this.heapArray.pop();
-                    --rm;
-                }
-            }
-        };
-        /**
-         * Return the bottom (lowest value) N elements of the heap, without corner cases, unsorted
-         *
-         * @param  {Number} n  Number of elements.
-         * @return {Array}     Array of length <= N.
-         */
-        Heap.prototype._bottomN_push = function (n) {
-            // Use an inverted heap
-            var bottomHeap = new Heap(this.compare);
-            bottomHeap.limit = n;
-            bottomHeap.heapArray = this.heapArray.slice(-n);
-            bottomHeap.init();
-            var startAt = this.heapArray.length - 1 - n;
-            var parentStartAt = Heap.getParentIndexOf(startAt);
-            var indices = [];
-            for (var i = startAt; i > parentStartAt; --i) {
-                indices.push(i);
-            }
-            var arr = this.heapArray;
-            while (indices.length) {
-                var i = indices.shift();
-                if (this.compare(arr[i], bottomHeap.peek()) > 0) {
-                    bottomHeap.replace(arr[i]);
-                    if (i % 2) {
-                        indices.push(Heap.getParentIndexOf(i));
-                    }
-                }
-            }
-            return bottomHeap.toArray();
-        };
-        /**
-         * Move a node to a new index, switching places
-         * @param  {Number} j First node index
-         * @param  {Number} k Another node index
-         */
-        Heap.prototype._moveNode = function (j, k) {
-            var _a;
-            _a = __read([this.heapArray[k], this.heapArray[j]], 2), this.heapArray[j] = _a[0], this.heapArray[k] = _a[1];
-        };
-        /**
-         * Move a node down the tree (to the leaves) to find a place where the heap is sorted.
-         * @param  {Number} i Index of the node
-         */
-        Heap.prototype._sortNodeDown = function (i) {
-            var _this = this;
-            var moveIt = i < this.heapArray.length - 1;
-            var self = this.heapArray[i];
-            var getPotentialParent = function (best, j) {
-                if (_this.heapArray.length > j && _this.compare(_this.heapArray[j], _this.heapArray[best]) < 0) {
-                    best = j;
-                }
-                return best;
-            };
-            while (moveIt) {
-                var childrenIdx = Heap.getChildrenIndexOf(i);
-                var bestChildIndex = childrenIdx.reduce(getPotentialParent, childrenIdx[0]);
-                var bestChild = this.heapArray[bestChildIndex];
-                if (typeof bestChild !== 'undefined' && this.compare(self, bestChild) > 0) {
-                    this._moveNode(i, bestChildIndex);
-                    i = bestChildIndex;
-                }
-                else {
-                    moveIt = false;
-                }
-            }
-        };
-        /**
-         * Move a node up the tree (to the root) to find a place where the heap is sorted.
-         * @param  {Number} i Index of the node
-         */
-        Heap.prototype._sortNodeUp = function (i) {
-            var moveIt = i > 0;
-            while (moveIt) {
-                var pi = Heap.getParentIndexOf(i);
-                if (pi >= 0 && this.compare(this.heapArray[pi], this.heapArray[i]) > 0) {
-                    this._moveNode(i, pi);
-                    i = pi;
-                }
-                else {
-                    moveIt = false;
-                }
-            }
-        };
-        /**
-         * Return the top (highest value) N elements of the heap, without corner cases, unsorted
-         * Implementation: push.
-         *
-         * @param  {Number} n  Number of elements.
-         * @return {Array}     Array of length <= N.
-         */
-        Heap.prototype._topN_push = function (n) {
-            // Use an inverted heap
-            var topHeap = new Heap(this._invertedCompare);
-            topHeap.limit = n;
-            var indices = [0];
-            var arr = this.heapArray;
-            while (indices.length) {
-                var i = indices.shift();
-                if (i < arr.length) {
-                    if (topHeap.length < n) {
-                        topHeap.push(arr[i]);
-                        indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i)), false));
-                    }
-                    else if (this.compare(arr[i], topHeap.peek()) < 0) {
-                        topHeap.replace(arr[i]);
-                        indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i)), false));
-                    }
-                }
-            }
-            return topHeap.toArray();
-        };
-        /**
-         * Return the top (highest value) N elements of the heap, without corner cases, unsorted
-         * Implementation: init + push.
-         *
-         * @param  {Number} n  Number of elements.
-         * @return {Array}     Array of length <= N.
-         */
-        Heap.prototype._topN_fill = function (n) {
-            // Use an inverted heap
-            var heapArray = this.heapArray;
-            var topHeap = new Heap(this._invertedCompare);
-            topHeap.limit = n;
-            topHeap.heapArray = heapArray.slice(0, n);
-            topHeap.init();
-            var branch = Heap.getParentIndexOf(n - 1) + 1;
-            var indices = [];
-            for (var i = branch; i < n; ++i) {
-                indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i).filter(function (l) { return l < heapArray.length; })), false));
-            }
-            if ((n - 1) % 2) {
-                indices.push(n);
-            }
-            while (indices.length) {
-                var i = indices.shift();
-                if (i < heapArray.length) {
-                    if (this.compare(heapArray[i], topHeap.peek()) < 0) {
-                        topHeap.replace(heapArray[i]);
-                        indices.push.apply(indices, __spreadArray([], __read(Heap.getChildrenIndexOf(i)), false));
-                    }
-                }
-            }
-            return topHeap.toArray();
-        };
-        /**
-         * Return the top (highest value) N elements of the heap, without corner cases, unsorted
-         * Implementation: heap.
-         *
-         * @param  {Number} n  Number of elements.
-         * @return {Array}     Array of length <= N.
-         */
-        Heap.prototype._topN_heap = function (n) {
-            var topHeap = this.clone();
-            var result = [];
-            for (var i = 0; i < n; ++i) {
-                result.push(topHeap.pop());
-            }
-            return result;
-        };
-        /**
-         * Return index of the top element
-         * @param list
-         */
-        Heap.prototype._topIdxOf = function (list) {
-            if (!list.length) {
-                return -1;
-            }
-            var idx = 0;
-            var top = list[idx];
-            for (var i = 1; i < list.length; ++i) {
-                var comp = this.compare(list[i], top);
-                if (comp < 0) {
-                    idx = i;
-                    top = list[i];
-                }
-            }
-            return idx;
-        };
-        /**
-         * Return the top element
-         * @param list
-         */
-        Heap.prototype._topOf = function () {
-            var list = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                list[_i] = arguments[_i];
-            }
-            var heap = new Heap(this.compare);
-            heap.init(list);
-            return heap.peek();
-        };
-        return Heap;
-    }());
-
-    exports.Heap = Heap;
-    exports["default"] = Heap;
-    exports.toInt = toInt;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-}));
 
 
 /***/ }),

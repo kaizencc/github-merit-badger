@@ -3,7 +3,7 @@ const project = new GitHubActionTypeScriptProject({
   defaultReleaseBranch: 'main',
   devDeps: ['projen-github-action-typescript'],
   deps: ['heap-js'],
-  name: 'github-merit-badges',
+  name: 'github-merit-badger',
   actionMetadata: {
     inputs: {
       'github-token': {
@@ -26,7 +26,7 @@ const project = new GitHubActionTypeScriptProject({
         description: 'filter for pull requests merged in the last X number of days',
         required: false,
       },
-      'ignore': {
+      'ignore-usernames': {
         description: 'ignore pull requests from these authors',
         required: false,
       },

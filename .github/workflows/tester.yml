@@ -12,20 +12,20 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: kaizencc/contributor-badge@main
-        id: contributor-badge-total
+      - uses: kaizencc/github-merit-badger@main
+        id: badger
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'getting-started,all-star'
-          buckets: '0,2'
-          label-meanings: 'Have 3 PRs merged to get a special label!|You are an all star!'
-          category: 'total'
-      - uses: kaizencc/contributor-badge@main
-        id: contributor-badge-hotlist
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          labels: '1 :trophy:,top 3 :fire:,top 5 :sunglasses:'
-          buckets: '1,2,2'
-          label-meanings: 'You''re top 2 and you''re not number 2!|You are on the podium!|You have broken into the top 5!'
-          days: 30
-          category: 'hotlist'
+          badges: '[getting-started,all-star]'
+          thresholds: '[0,2]'
+          badge-descriptions: '[Have 2 PRs merged to get a special label!|You are an all star!]'
+          badge-type: 'achievement'
+      # - uses: kaizencc/github-merit-badger@main
+      #   id: contributor-badge-hotlist
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     labels: '1 :trophy:,top 3 :fire:,top 5 :sunglasses:'
+      #     buckets: '1,2,2'
+      #     label-meanings: 'You''re top 2 and you''re not number 2!|You are on the podium!|You have broken into the top 5!'
+      #     days: 30
+      #     category: 'hotlist'

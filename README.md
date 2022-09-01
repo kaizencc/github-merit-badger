@@ -1,6 +1,8 @@
-## GitHub Merit Badges
+# <span style="font-size:8em;">🦡</span>
 
-Welcome to GitHub Merit Badges! This is a GitHub Action that can add well-known
+# GitHub Merit Badger
+
+Welcome to the GitHub Merit Badger! This is a GitHub Action that can add well-known
 merit badges to pull requests that come in to your repository. It will gamify
 contributions and galvanize the open-source community to contribute more and more
 to your project!
@@ -14,9 +16,8 @@ The below example calls this GitHub Action with the following rules:
 - Contributors with 5+ merged PRs are labeled `allstar-contributor`.
 
 ```yaml
-name: add-merit-badges
+name: add-merit-badger
 on:
-  workflow_dispatch: {}
   pull_request_target:
     types:
       - opened
@@ -27,15 +28,15 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: kaizencc/github-merit-badges@main
-        id: github-merit-badges
+      - uses: kaizencc/github-merit-badger@main
+        id: github-merit-badger
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           badges: '[first-time-contributor,repeat-contributor,allstar-contributor]'
           thresholds: '[0,1,5]'
 ```
 
-When pull requests are opened in a repository with this action, the `github-merit-badges`
+When pull requests are opened in a repository with this action, the `github-merit-badger`
 action will run and a label with the correct badge name will be added to the pull request.
 
 ## Badge Descriptions
@@ -47,8 +48,8 @@ to 1 with the `badges` parameter:
 
 ```yaml
 steps:
-  - uses: kaizencc/github-merit-badges@main
-    id: github-merit-badges
+  - uses: kaizencc/github-merit-badger@main
+    id: github-merit-badger
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       badges: '[first-time-contributor,repeat-contributor,allstar-contributor]'
@@ -76,8 +77,8 @@ Specify a number of days you want the Action to look at. For example, if you spe
 
 ```yaml
 steps:
-  - uses: kaizencc/github-merit-badges@main
-    id: github-merit-badges
+  - uses: kaizencc/github-merit-badger@main
+    id: github-merit-badger
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       badges: '[first-time-contributor,repeat-contributor,allstar-contributor]'
@@ -89,20 +90,20 @@ In the above example, your badge is only valid on contributions from the past ye
 is similar to airline frequent flyer programs. If you don't continue to contribute, your
 badge may be removed!
 
-### Ignore
+### Ignore Usernames
 
 Specify a list of usernames that the Action should ignore. This is useful if you want to
 create badges for the community, but you don't want to add labels to the core maintainers.
 
 ```yaml
 steps:
-  - uses: kaizencc/github-merit-badges@main
-    id: github-merit-badges
+  - uses: kaizencc/github-merit-badger@main
+    id: github-merit-badger
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       badges: '[first-time-contributor,repeat-contributor,allstar-contributor]'
       thresholds: '[0,1,5]'
-      ignore: '[kaizencc]'
+      ignore-usernames: '[kaizencc]'
 ```
 
 ### Badge Type
@@ -114,8 +115,8 @@ If you specify `leaderboard`, then the Action returns badges related to _how a u
 
 ```yaml
 steps:
-  - uses: kaizencc/github-merit-badges@main
-    id: github-merit-badges
+  - uses: kaizencc/github-merit-badger@main
+    id: github-merit-badger
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       badges: '1st! :trophy:,top 3 :fire:,top 5 :sunglasses:'
