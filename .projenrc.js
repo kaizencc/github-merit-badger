@@ -16,7 +16,7 @@ const project = new GitHubActionTypeScriptProject({
       },
       'badge-descriptions': {
         description: 'badge descriptions corresponding 1-1 with badges',
-        required: true,
+        required: false,
       },
       'thresholds': {
         description: 'thresholds corresponding 1-1 with badges',

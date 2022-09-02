@@ -20,7 +20,7 @@ async function run() {
     return;
   }
 
-  if (badgeDescriptions.length !== badges.length || badges.length !== thresholds.length) {
+  if (badges.length !== thresholds.length || (badgeDescriptions.length > 0 && badgeDescriptions.length !== badges.length)) {
     core.setFailed('badge, badgeDescriptions, and thresholds must be lists with the same number of elements');
     return;
   }
@@ -31,7 +31,7 @@ async function run() {
       token,
       badges,
       thresholds,
-      badgeDescriptions,
+      badgeDescriptions: badgeDescriptions.length === 0 ? undefined : badgeDescriptions,
       ignoreUsernames,
       days,
     });
@@ -40,7 +40,7 @@ async function run() {
       token,
       badges,
       thresholds,
-      badgeDescriptions,
+      badgeDescriptions: badgeDescriptions.length === 0 ? undefined : badgeDescriptions,
       ignoreUsernames,
       days,
     });

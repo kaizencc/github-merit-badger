@@ -7,14 +7,14 @@ export interface BadgerProps {
   readonly days?: number;
   readonly token: string;
   readonly badges: string[];
-  readonly badgeDescriptions: string[];
+  readonly badgeDescriptions?: string[];
   readonly thresholds: number[];
   readonly ignoreUsernames: string[];
 }
 
 interface BadgeInfo {
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly threshold: number;
 }
 
@@ -24,6 +24,7 @@ export abstract class Badger {
   private pullRequestNumber: number;
   private timestampDate?: Date;
   private ignoreUsernames?: string[];
+  private doWriteComment: boolean;
   public badges: BadgeInfo[] = [];
 
   constructor(props: BadgerProps) {
@@ -39,11 +40,12 @@ export abstract class Badger {
 
     this.timestampDate = props.days ? daysToDate(props.days) : undefined;
     this.ignoreUsernames = props.ignoreUsernames;
+    this.doWriteComment = props.badgeDescriptions ? true : false;
 
     for (let i = 0; i < props.badges.length; i++) {
       this.badges.push({
         name: props.badges[i],
-        description: props.badgeDescriptions[i],
+        description: props.badgeDescriptions ? props.badgeDescriptions[i] : undefined,
         threshold: props.thresholds[i],
       });
     }
@@ -131,6 +133,8 @@ export abstract class Badger {
   }
 
   protected async writeComment(badgeIndex: number, username: string, additionalInfo?: string) {
+    if (!this.doWriteComment) { return; }
+
     const badge = this.badges[badgeIndex];
     const comment = [
       `${BADGER_METADATA}\n`,
