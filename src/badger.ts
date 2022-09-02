@@ -59,10 +59,10 @@ export abstract class Badger {
    * This function will be implemented by subclasses of Badger with the intent that it
    * will calculate a number that will be compared to the thresholds supplied to the action.
    *
-   * For example, if the thresholds given are [0,3,5] and determineThreshold returns 4, then
+   * For example, if the thresholds given are [0,3,5] and determineRating() returns 4, then
    * it will be matched with the middle bucket.
    */
-  public abstract determineThreshold(pullRequests: any[], username?: string): number;
+  public abstract determineRating(pullRequests: any[], username?: string): number;
 
   protected ignoreThisUsername(username: string) {
     return this.ignoreUsernames?.includes(username);

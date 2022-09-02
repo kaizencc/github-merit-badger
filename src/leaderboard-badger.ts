@@ -1,5 +1,11 @@
 import { Badger } from './badger';
 
+/**
+ * A Badger that measures how many merged PRs a user has made to a repository compared
+ * to other contributors. For example, if a user has 5 merged PRs, and that is good for
+ * 10th out of all other contributors, then the result of `determineRating()` will be
+ * 10.
+ */
 export class LeaderboardBadger extends Badger {
   public async runBadgerWorkflow() {
     const username = await this.getGitHubUsername();
@@ -9,12 +15,12 @@ export class LeaderboardBadger extends Badger {
     }
 
     const pullRequests = await this.getRelevantPullRequests();
-    const badgeIndex = this.determineBadge(this.determineThreshold(pullRequests, username));
+    const badgeIndex = this.determineBadge(this.determineRating(pullRequests, username));
     await this.addLabel(badgeIndex);
     await this.writeComment(badgeIndex, username);
   }
 
-  public determineThreshold(pullRequests: any[], username?: string): number {
+  public determineRating(pullRequests: any[], username?: string): number {
     const usernames: Record<string, number> = {};
     for (const pull of pullRequests) {
       if (usernames[pull.user.login]) {

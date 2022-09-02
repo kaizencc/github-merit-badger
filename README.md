@@ -7,9 +7,10 @@ merit badges to pull requests that come in to your repository. It will gamify
 contributions and galvanize the open-source community to contribute more and more
 to your project!
 
-## Basic Use Case
+## Getting Started
 
-The below example calls this GitHub Action with the following rules:
+This Action is meant to be run on pull requests only. The below example calls this
+GitHub Action with the following rules:
 
 - Contributors with no merged PRs in the repository are labeled `first-time-contributor`.
 - Contributors with 1 - 4 merged PRs are labeled `repeat-contributor`.
@@ -38,6 +39,41 @@ jobs:
 
 When pull requests are opened in a repository with this action, the `github-merit-badger`
 action will run and a label with the correct badge name will be added to the pull request.
+
+## Different Kinds of Badgers
+
+The way this action works is that it exposes different classes of Badgers via the `badge-type`
+property. Right now, there are 2 classes of Badgers available: `AchievementBadger` and `LeaderboardBadger`.
+
+### Achievement Badger
+
+`AchievementBadger` is the default, so examples without a `badge-type` property will utilize the
+`AchievementBadger`. This Badger calculates a rating based on how many pull requests a user
+has successfully merged to the repository. This rating is then compared to the values inside `threshold`,
+resulting in the corresponding badge being labeled on the incoming pull request.
+
+### Leaderboard Badger
+
+`LeaderboardBadger` can be used by setting `badge-type: 'leaderboard'` in the GitHub Workflow. This Badger
+will calculate a value based on how a user compares to other contributors in the repository. For example,
+if a user has successfully merged 5 pull requests prior to opening the newest one, `LeaderboardBadger` will
+see how that ranks against other contributors and return a value based on that. If 5 pull requests is good
+for 8th place, then the value of 8 is returned and compared to the values inside `threshold`.
+
+Consider the following example usage:
+
+```yaml
+steps:
+  - uses: kaizencc/github-merit-badger@main
+    id: github-merit-badger
+    with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      badges: '[1st! :trophy:,top 3 :fire:,top 5 :sunglasses:]'
+      thresholds: '[1,3,5]'
+      badge-type: 'leaderboard'
+```
+
+When kaizencc@ submits a PR, the Action will find that he has submitted 25 lifetime PRs to the repository, which is good for 2nd place. kaizencc@ will thus receive the `top 3 :fire:` badge on their PR.
 
 ## Badge Descriptions
 
@@ -105,24 +141,3 @@ steps:
       thresholds: '[0,1,5]'
       ignore-usernames: '[kaizencc]'
 ```
-
-### Badge Type
-
-This is an ad-hoc property that allows you to toggle between different types of badge
-allocation mechanisms, now and in the future. The currently accepted values are `achievement`
-(the default) and `leaderboard`.
-
-If you specify `leaderboard`, then the Action returns badges related to _how a user compares to other contributors in the repository_. Consider the following example usage:
-
-```yaml
-steps:
-  - uses: kaizencc/github-merit-badger@main
-    id: github-merit-badger
-    with:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      badges: '[1st! :trophy:,top 3 :fire:,top 5 :sunglasses:]'
-      thresholds: '[1,3,5]'
-      badge-type: 'leaderboard'
-```
-
-When kaizencc@ submits a PR, the Action will find that he has submitted 25 lifetime PRs to the repository, which is good for 2nd place. kaizencc@ will thus receive the `top 3 :fire:` badge on their PR.
