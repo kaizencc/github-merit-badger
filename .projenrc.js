@@ -26,6 +26,10 @@ const project = new GitHubActionTypeScriptProject({
         description: 'filter for pull requests merged in the last X number of days',
         required: false,
       },
+      'title-prefixes': {
+        description: 'filter for pull requests with titles that start with these prefixes',
+        required: false,
+      },
       'ignore-usernames': {
         description: 'ignore pull requests from these authors',
         required: false,

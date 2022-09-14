@@ -10,6 +10,7 @@ export interface BadgerProps {
   readonly badgeDescriptions?: string[];
   readonly thresholds: number[];
   readonly ignoreUsernames: string[];
+  readonly prefixes?: string[];
 }
 
 interface BadgeInfo {
@@ -25,6 +26,8 @@ export abstract class Badger {
   private timestampDate?: Date;
   private ignoreUsernames?: string[];
   private doWriteComment: boolean;
+  private prefixes?: string[];
+
   public badges: BadgeInfo[] = [];
 
   constructor(props: BadgerProps) {
@@ -41,6 +44,7 @@ export abstract class Badger {
     this.timestampDate = props.days ? daysToDate(props.days) : undefined;
     this.ignoreUsernames = props.ignoreUsernames;
     this.doWriteComment = props.badgeDescriptions ? true : false;
+    this.prefixes = props.prefixes;
 
     for (let i = 0; i < props.badges.length; i++) {
       this.badges.push({
@@ -113,11 +117,17 @@ export abstract class Badger {
       return [];
     }
 
-    console.log(JSON.stringify(issues));
-
-    return issues.filter((isMerged) => {
-      const mergedAt = isMerged.pull_request?.merged_at;
+    return issues.filter((issue) => {
+      // filter out issues that are not pull requests and not merged
+      const mergedAt = issue.pull_request?.merged_at;
       if (!mergedAt) { return false; }
+
+      // filter out pull requests that do not start with the given list of prefixes
+      if (this.prefixes && !this.prefixes?.some((prefix) => issue.title.startsWith(prefix))) {
+        return false;
+      }
+
+      // filter out pull requests that are merged before a timestamp
       if (!this.timestampDate) { return true; }
       return this.timestampDate < new Date(mergedAt);
     });

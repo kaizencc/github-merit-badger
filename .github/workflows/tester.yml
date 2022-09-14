@@ -12,19 +12,19 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      # - uses: kaizencc/github-merit-badger@main
-      #   id: badger
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     badges: '[first,second,third]'
-      #     thresholds: '[0,1,2]'
-      #     badge-descriptions: '[you are first!,you are second!,you are third!]'
-      #     badge-type: 'achievement'
-      #     ignore-usernames: '[Tianyi-W]'
       - uses: kaizencc/github-merit-badger@main
-        id: contributor-badge-hotlist
+        id: badger
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          badges: '[1 :trophy:,top 3 :fire:,top 5 :sunglasses:]'
-          thresholds: '[1,2,3]'
-          badge-type: 'leaderboard'
+          badges: '[first,second,third]'
+          thresholds: '[0,1,2]'
+          prefixes: '[chore, feat]'
+          badge-type: 'achievement'
+          ignore-usernames: '[Tianyi-W]'
+      # - uses: kaizencc/github-merit-badger@main
+      #   id: contributor-badge-hotlist
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     badges: '[1 :trophy:,top 3 :fire:,top 5 :sunglasses:]'
+      #     thresholds: '[1,2,3]'
+      #     badge-type: 'leaderboard'
