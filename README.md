@@ -141,3 +141,20 @@ steps:
       thresholds: '[0,1,5]'
       ignore-usernames: '[kaizencc]'
 ```
+
+### Title Prefixes
+
+Specify a list of title prefixes that the Action should accept. For example, the below code
+will only count PRs with titles that begin with `feat` or `fix`. It will ignore PRs with other
+titles like `chore` or `refactor`.
+
+```yaml
+steps: 
+  - uses: kaizencc/github-merit-badger@main
+    id: github-merit-badger
+    with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      badges: '[first-time-contributor,repeat-contributor,allstar-contributor]'
+      thresholds: '[0,1,5]'
+      title-prefixes: '[feat,fix]'
+```
