@@ -123,7 +123,7 @@ export abstract class Badger {
       if (!mergedAt) { return false; }
 
       // filter out pull requests that do not start with the given list of prefixes
-      if (this.prefixes && !this.prefixes?.some((prefix) => issue.title.startsWith(prefix))) {
+      if (this.prefixes && this.prefixes.length > 0 && !this.prefixes?.some((prefix) => issue.title.startsWith(prefix))) {
         return false;
       }
 
