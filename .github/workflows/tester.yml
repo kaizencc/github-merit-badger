@@ -18,7 +18,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           badges: '[first,second,third]'
           thresholds: '[0,1,2]'
-          prefixes: '[chore, feat]'
+          title-prefixes: '[chore, feat]'
           badge-type: 'achievement'
           ignore-usernames: '[Tianyi-W]'
       # - uses: kaizencc/github-merit-badger@main
