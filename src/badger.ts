@@ -76,10 +76,9 @@ export abstract class Badger {
 
   protected determineBadge(thresholdNumber: number) {
     for (let i = 0; i < this.badges.length; i++) {
-      if (this.badges[i].threshold < thresholdNumber) {
-        continue;
+      if (this.badges[i].threshold > thresholdNumber) {
+        return i-1;
       }
-      return i;
     }
 
     return this.badges.length-1;
