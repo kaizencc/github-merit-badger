@@ -58,7 +58,7 @@ async function run() {
  * input is not defined, so treating the empty string like undefined.
  */
 function renderListInput(rawInput: string): string[] {
-  return (rawInput === '' || rawInput === '[]') ? [] : rawInput.replace(/\[|\]/gi, '').split(',');
+  return (rawInput === '' || rawInput === '[]') ? [] : rawInput.slice(1, -1).split(',');
 }
 
 function toNumberList(list: string[]): number[] {

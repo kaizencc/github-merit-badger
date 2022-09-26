@@ -34,6 +34,7 @@ export abstract class Badger {
     this.octokit = github.getOctokit(props.token);
     this.repo = github.context.repo;
 
+    console.log(github.context.actor);
     if (github.context.payload.pull_request) {
       this.pullRequestNumber = github.context.payload.pull_request.number;
     } else {
