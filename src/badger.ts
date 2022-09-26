@@ -92,6 +92,7 @@ export abstract class Badger {
     });
 
     const user = data.user?.login;
+    console.log('username: ', user);
 
     if (!user) {
       core.setFailed(`No GitHub username found for pull request number ${this.pullRequestNumber}`);
