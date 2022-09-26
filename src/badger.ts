@@ -92,7 +92,6 @@ export abstract class Badger {
     });
 
     const user = data.user?.login;
-    console.log('username: ', user);
 
     if (!user) {
       core.setFailed(`No GitHub username found for pull request number ${this.pullRequestNumber}`);
@@ -134,6 +133,7 @@ export abstract class Badger {
   }
 
   protected async addLabel(badgeIndex: number) {
+    console.log(`Labeling PR with ${this.badges[badgeIndex].name}`);
     await this.octokit.rest.issues.addLabels({
       owner: this.repo.owner,
       repo: this.repo.repo,

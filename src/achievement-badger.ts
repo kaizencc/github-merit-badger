@@ -12,11 +12,13 @@ export class AchievementBadger extends Badger {
     if (this.ignoreThisUsername(username)) {
       console.log(`Detected ${username} in the list of ignored users. Exiting`);
       return;
+    } else {
+      console.log(`User ${username} is not ignored. Continuing`);
     }
 
     const pullRequests = await this.getRelevantPullRequests(username);
 
-    console.log(JSON.stringify(pullRequests));
+    // console.log(JSON.stringify(pullRequests));
     const badgeIndex = this.determineBadge(this.determineRating(pullRequests));
     await this.addLabel(badgeIndex);
     await this.writeComment(badgeIndex, username);
