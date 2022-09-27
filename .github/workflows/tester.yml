@@ -19,7 +19,7 @@ jobs:
           badges: '[first,second,third]'
           thresholds: '[0,1,2]'
           badge-type: 'achievement'
-          ignore-usernames: '[Tianyi-W]'
+          ignore-usernames: '[Tianyi-W,dependabot[bot]]'
       # - uses: kaizencc/github-merit-badger@main
       #   id: contributor-badge-hotlist
       #   with:
