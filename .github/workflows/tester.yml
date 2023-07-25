@@ -1,6 +1,9 @@
 name: contributer-badge
 on:
   workflow_dispatch: {}
+  workflow_run:
+    workflows:
+      - pr-linter-trigger
   pull_request_target:
     types:
       - opened
@@ -16,7 +19,7 @@ jobs:
         id: badger
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          badges: '[first,second,third]'
+          badges: '[a,b,c]'
           thresholds: '[0,1,2]'
           badge-type: 'achievement'
           ignore-usernames: '[Tianyi-W,dependabot[bot]]'

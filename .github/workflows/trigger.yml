@@ -1,0 +1,12 @@
+on: 
+  pull_request_review:
+    types:
+      - submitted
+name: pr-linter-trigger
+jobs:
+  dummy-workflow:
+    runs-on: ubuntu-latest
+    name: trigger
+    steps:
+      - name: Explanation
+        run: echo "this is a dummy workflow that triggers a workflow_run; it's necessary because otherwise the repo secrets will not be in scope for externally forked pull requests"
