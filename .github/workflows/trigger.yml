@@ -1,7 +1,6 @@
-on: 
-  pull_request_review:
-    types:
-      - submitted
+on:
+  issue_comment:
+    types: [created]
 name: pr-linter-trigger
 jobs:
   dummy-workflow:
