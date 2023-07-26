@@ -8,10 +8,11 @@ on:
       - completed
 
 jobs:
-  download:
+  download-if-workflow-run:
     runs-on: ubuntu-latest
     outputs:
       pr_number: ${{ steps.pr_output.outputs.pr_number }}
+      pr_sha: ${{ steps.pr_output.outputs.pr_sha }}
     steps:
       - name: 'Download artifact'
         if: github.event_name == 'workflow_run'
@@ -24,7 +25,7 @@ jobs:
                run_id: context.payload.workflow_run.id,
             });
             let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "pr_number"
+              return artifact.name == "pr_info"
             })[0];
             let download = await github.rest.actions.downloadArtifact({
                owner: context.repo.owner,
@@ -33,11 +34,11 @@ jobs:
                archive_format: 'zip',
             });
             let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_number.zip`, Buffer.from(download.data));
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_info.zip`, Buffer.from(download.data));
 
       - name: 'Unzip artifact'
         if: github.event_name == 'workflow_run'
-        run: unzip pr_number.zip
+        run: unzip pr_info.zip
 
       - name: 'make env var'
         if: github.event_name == 'workflow_run'
@@ -45,11 +46,16 @@ jobs:
         run: |
           cat pr_number
           echo "pr_number=$(cat pr_number)" >> "$GITHUB_OUTPUT"
+          cat pr_sha
+          echo "pr_sha=$(cat pr_sha)" >> "$GITHUB_OUTPUT"
 
   secondjob:
     runs-on: ubuntu-latest
-    needs: download
+    needs: download-if-workflow-run
     steps:
       - env:
-          PR_NUMBER: ${{needs.download.outputs.pr_number}}
-        run: echo "$PR_NUMBER"
+          PR_NUMBER: ${{needs.download-if-workflow-run.outputs.pr_number}}
+          PR_SHA: ${{needs.download-if-workflow-run.outputs.pr_sha}}
+        run: |
+          echo "$PR_NUMBER"
+          echo "$PR_SHA"
