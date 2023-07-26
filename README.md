@@ -11,7 +11,7 @@ to your project!
 
 This Action is meant to be run on pull requests only. The below example calls this
 GitHub Action with the following rules:
-
+dfsa
 - Contributors with no merged PRs in the repository are labeled `first-time-contributor`.
 - Contributors with 1 - 4 merged PRs are labeled `repeat-contributor`.
 - Contributors with 5+ merged PRs are labeled `allstar-contributor`.
