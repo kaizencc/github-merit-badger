@@ -3,7 +3,7 @@ name: Use the data
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [Upload data]
+    workflows: [Pr Linter Trigger]
     types:
       - completed
 
