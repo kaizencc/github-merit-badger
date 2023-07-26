@@ -9,6 +9,9 @@ on:
 jobs:
   download:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_review'
+    outputs:
+      pr_number: ${{ steps.pr_output.outputs.pr_number }}
     steps:
       - name: 'Download artifact'
         uses: actions/github-script@v6
@@ -34,16 +37,16 @@ jobs:
       - name: 'Unzip artifact'
         run: unzip pr_number.zip
 
-      - name: 'Comment on PR'
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            let fs = require('fs');
-            let issue_number = Number(fs.readFileSync('./pr_number'));
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issue_number,
-              body: 'Thank you for the PR!'
-            });
+      - name: 'make env var'
+        id: 'pr_output'
+        run: |
+          cat ./pr_number
+          echo "pr_number=$(cat ./pr_number) >> "GITHUB_OUTPUT"
+
+  secondjob:
+    runs-on: ubuntu-latest
+    needs: download
+    steps:
+      - env:
+          PR_NUMBER: ${{needs.download.outputs.pr_number}}
+        run: echo "PR_NUMBER"
