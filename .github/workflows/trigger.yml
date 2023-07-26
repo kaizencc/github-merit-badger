@@ -1,25 +1,20 @@
-name: Receive PR
+name: Upload data
+
 on:
   pull_request_review:
-    types: [submitted]
 
 jobs:
-  build:
-    # if: github.event.review.state == 'approved'
+  upload:
     runs-on: ubuntu-latest
 
-    steps:        
-      # - uses: actions/checkout@v2
-
-      # # imitation of a build process
-      # - name: Build
-      #   run: /bin/bash ./build.sh
-
+    steps:
       - name: Save PR number
+        env:
+          PR_NUMBER: ${{ github.event.number }}
         run: |
           mkdir -p ./pr
-          echo ${{ github.event.number }} > ./pr/NR
+          echo $PR_NUMBER > ./pr/pr_number
       - uses: actions/upload-artifact@v3
         with:
-          name: pr
+          name: pr_number
           path: pr/
