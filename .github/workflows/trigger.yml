@@ -11,9 +11,10 @@ jobs:
     steps:
       - name: Save PR number
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           mkdir -p ./pr
+          echo $PR_NUMBER
           echo $PR_NUMBER > ./pr/pr_number
       - uses: actions/upload-artifact@v3
         with:
