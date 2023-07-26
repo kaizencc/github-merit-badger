@@ -1,6 +1,7 @@
 name: Use the data
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: [Upload data]
     types:
@@ -9,11 +10,11 @@ on:
 jobs:
   download:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_run'
     outputs:
       pr_number: ${{ steps.pr_output.outputs.pr_number }}
     steps:
       - name: 'Download artifact'
+        if: github.event_name == 'workflow_run'
         uses: actions/github-script@v6
         with:
           script: |
@@ -35,9 +36,11 @@ jobs:
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_number.zip`, Buffer.from(download.data));
 
       - name: 'Unzip artifact'
+        if: github.event_name == 'workflow_run'
         run: unzip pr_number.zip
 
       - name: 'make env var'
+        if: github.event_name == 'workflow_run'
         id: 'pr_output'
         run: |
           cat pr_number
@@ -49,4 +52,4 @@ jobs:
     steps:
       - env:
           PR_NUMBER: ${{needs.download.outputs.pr_number}}
-        run: echo "PR_NUMBER"
+        run: echo "$PR_NUMBER"
