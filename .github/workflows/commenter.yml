@@ -9,7 +9,7 @@ on:
 jobs:
   download:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_review'
+    if: github.event_name == 'workflow_run'
     outputs:
       pr_number: ${{ steps.pr_output.outputs.pr_number }}
     steps:
