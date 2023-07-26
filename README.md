@@ -6,7 +6,7 @@ Welcome to the GitHub Merit Badger! This is a GitHub Action that can add well-kn
 merit badges to pull requests that come in to your repository. It will gamify
 contributions and galvanize the open-source community to contribute more and more
 to your project!
-
+blah
 ## Getting Started
 
 This Action is meant to be run on pull requests only. The below example calls this
