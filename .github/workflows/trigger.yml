@@ -1,11 +1,29 @@
+# https://octokit.github.io/rest.js
+# https://github.com/actions/toolkit/blob/master/packages/github/src/context.ts
+
+name: PR Linter
 on:
-  issue_comment:
-    types: [created]
-name: pr-linter-trigger
+  pull_request_review:
+    types:
+      - submitted
+      - edited
+  status:
+
 jobs:
-  dummy-workflow:
+  validate-pr:
+    # Necessary to have sufficient permissions to write to the PR
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: read
+      issues: read
     runs-on: ubuntu-latest
-    name: trigger
     steps:
-      - name: Explanation
-        run: echo "this is a dummy workflow that triggers a workflow_run; it's necessary because otherwise the repo secrets will not be in scope for externally forked pull requests"
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Validate
+        run: echo ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          REPO_ROOT: ${{ github.workspace }}
