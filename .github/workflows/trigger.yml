@@ -1,34 +1,25 @@
-# https://octokit.github.io/rest.js
-# https://github.com/actions/toolkit/blob/master/packages/github/src/context.ts
-
-name: PR Linter
+name: Receive PR
 on:
   pull_request_review:
-    types:
-      - submitted
-      - edited
-  issue_comment:
-    types:
-      - created
-      - edited
-      - deleted
-  status:
+    types: [submitted]
 
 jobs:
-  validate-pr:
-    # Necessary to have sufficient permissions to write to the PR
-    permissions:
-      contents: read
-      pull-requests: write
-      statuses: read
-      issues: read
+  build:
+    # if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
 
-      - name: Validate
-        run: echo ${{ secrets.PROJEN_GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-          REPO_ROOT: ${{ github.workspace }}
+    steps:        
+      # - uses: actions/checkout@v2
+
+      # # imitation of a build process
+      # - name: Build
+      #   run: /bin/bash ./build.sh
+
+      - name: Save PR number
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: pr/
