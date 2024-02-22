@@ -13,3 +13,7 @@ jobs:
       pull-requests: read
     steps:
     - run: exit 1
+  otherwise:
+    runs-on: ubuntu-latest
+    steps:
+    - run: exit 0
