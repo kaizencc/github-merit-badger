@@ -7,13 +7,9 @@ on:
 
 jobs:
   do-not-merge:
-    if: contains(github.event.pull_request.labels.*.name, 'pr/do-not-merge')
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
     steps:
-    - run: exit 1
-  otherwise:
-    runs-on: ubuntu-latest
-    steps:
-    - run: exit 0
+    - if: contains(github.event.pull_request.labels.*.name, 'pr/do-not-merge')
+      run: exit 1
