@@ -1,0 +1,15 @@
+name: Has PR do-not-merge label
+on:
+  pull_request_target:
+    types:
+      - labeled
+      - unlabeled
+
+jobs:
+  do-not-merge:
+    if: contains(github.event.pull_request.labels.*.name, 'pr/do-not-merge')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+    - run: exit 1
