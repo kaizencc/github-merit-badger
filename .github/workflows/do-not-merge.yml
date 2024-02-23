@@ -1,9 +1,6 @@
 name: Has PR do-not-merge label
 on:
-  pull_request_target:
-    types:
-      - labeled
-      - unlabeled
+  pull_request: {}
 
 jobs:
   do-not-merge:
