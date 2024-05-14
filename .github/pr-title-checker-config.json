@@ -1,0 +1,11 @@
+{
+  "LABEL": {
+    "name": "invalid pr title",
+    "color": "FF0000"
+  },
+  "CHECKS": {
+    "regex": "^(feat|fix|build|chore|ci|docs|style|refactor|perf|test|(r|R)evert)(\\([\\w_-]+\\))?: [^A-Z]"
+  }
+}
+
+
