@@ -12,6 +12,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
-      - run: echo "Hello"
+      - if: github.event_name != 'pull_request_target'
+        run: echo "Hello"
       
